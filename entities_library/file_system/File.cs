@@ -2,7 +2,7 @@ namespace entities_library.file_system;
 
 public class File
 {
-    public long Id {get; set}
+    public long Id {get; set;}
 
     public required string Path {get; set;}
 
