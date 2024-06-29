@@ -1,6 +1,6 @@
 namespace entities_library.login;
 
-public class User : Persona
+public class User : Person
 {
     public string Password { get; set;}
 

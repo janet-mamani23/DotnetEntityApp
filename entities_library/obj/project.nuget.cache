@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "D8rmRWaJYSziAEg0Jr6xXxx1OEwcd2LgTZ1769AaEXsScBHk7vA6c9rqOyybGtBt8lqLfcpK9BOxhmiQ9FvD7Q==",
+  "dgSpecHash": "6SszaJ7l/vrIEZKUKsBqynufu73ryXX9tWQa1Kbs3eSR2GhkARNft5szpmagIwqEgu0iA7GTVfIhEAH7KN2BxA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\enzom\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\entities_library.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\enzom\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.19\\microsoft.netcore.app.ref.7.0.19.nupkg.sha512",
-    "C:\\Users\\enzom\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.19\\microsoft.windowsdesktop.app.ref.7.0.19.nupkg.sha512",
-    "C:\\Users\\enzom\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.19\\microsoft.aspnetcore.app.ref.7.0.19.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\entities_library.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

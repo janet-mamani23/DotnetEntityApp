@@ -1,6 +1,6 @@
 namespace entities_library.login;
 
-public class Persona
+public class Person
 {   
     public UserStatus UserStatus {get; set;} = UserStatus.Active;
     public long Id {get; set;}
