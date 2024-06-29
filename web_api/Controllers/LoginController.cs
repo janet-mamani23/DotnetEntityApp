@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using web_api.dto.login;
 
 namespace web_api.Controllers;
 
@@ -23,7 +22,7 @@ public class LoginController : ControllerBase
             name = "Enzo",
             surname = "Piedrasanta",
             description = "Soyestudiante de programacion",
-            urlAvatar = "https://m.media-amazon.com/images/I/7186AqfE-ML._AC_SL1500_.jpg"
+            urlAvatar = "https://m.media-amazon.com/images/I/7186AqfE-ML._AC_SL1500_.jpg",
             mail = "enzomedina630@gmail.com"
         });
     }
