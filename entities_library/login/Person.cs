@@ -9,7 +9,7 @@ public class Person
 
     public required string LastName {get; set;}
 
-    public required string Mail {get; set;}
+    public required string Email {get; set;}
 
     public DateTime? Birthdate {get;set;}
 }
