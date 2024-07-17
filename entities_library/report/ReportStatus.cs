@@ -2,6 +2,9 @@ namespace entities_library.post;
 
 public enum ReportStatus
 {
-    Active,
-    Inactive
+    Pending,
+    Dismissed,
+    UserLocked,
+    UserBanned,
+    PostLocked
 }

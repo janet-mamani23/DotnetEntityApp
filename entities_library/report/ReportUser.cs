@@ -1,12 +1,8 @@
 using entities_library.login;
 
+namespace entities_library.report;
 
-public class ReportUser
+public class ReportUser : Report
 {
-    public long Id {get; set;} //Identificacion del Reporte
-
-    public User IdUser {get; set;} //Usuario que reporta.
-
-    public User IdUsertoInspect {get; set;} //Usuario que será banneado.
-    
+    public required User ReportedUser { get; set; }
 }
