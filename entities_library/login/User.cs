@@ -1,4 +1,5 @@
 namespace entities_library.login;
+using entities_library.report;
 
 public class User : Person
 {
