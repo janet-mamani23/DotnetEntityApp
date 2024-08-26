@@ -8,7 +8,7 @@ public class Post
 {
     public long Id {get; set;}
 
-    public required string text {get; set;}
+    public required string Text {get; set;}
 
 
     public List<Comment> Comments {get; set;} = new List<Comment>();

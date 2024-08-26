@@ -1,9 +1,12 @@
+using web_api.dto.common;
 using entities_library.login;
 
-namespace entities_library.Qualify;
-public class Qualify
+namespace web_api.dto.qualify;
+
+public class UserQualifyDTO : RequestDTO
 {
     public required Person Name {get; set;}
 
     public required int Star {get; set;}
+
 }

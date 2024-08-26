@@ -6,11 +6,11 @@ public class Movie
 
     public string Name {get; set;}
 
-    public string LastName {get; set;}
-
     public string Actor {get; set;}
 
     public string Director {get; set;}
     public bool Oscar {get; set;}
+
+    public long Star {get; set;}
 
 }

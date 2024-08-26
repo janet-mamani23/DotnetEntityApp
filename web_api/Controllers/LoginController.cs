@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using web_api.dto.common;
 using web_api.dto.login;
-namespace web_api.Controllers;
 using web_api.mock;
 using entities_library.login;
+
+namespace web_api.Controllers;
 
 [ApiController] // Anotaciobn,Indica que es un controlador de API(manejan solicitudes y generan respuestas).
 [Route("[controller]")] // Anotacion, Define la ruta base para las rutas de este controlador.
