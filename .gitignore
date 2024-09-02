@@ -1,0 +1,14 @@
+# Ignorar carpetas de compilación
+bin/
+obj/
+
+# Ignorar archivos de configuración de usuario
+*.user
+*.suo
+
+# Ignorar archivos de logs
+*.log
+
+# Ignorar archivos de configuración de IDE
+.vscode/
+.idea/
