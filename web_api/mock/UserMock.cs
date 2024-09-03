@@ -32,7 +32,6 @@ public class UserMock
             Name = name,
             LastName = lastName,
             Email = mail,
-            
             Birthdate = birthdate,
             UserStatus = UserStatus.Active
         };

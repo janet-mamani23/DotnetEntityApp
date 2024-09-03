@@ -1,3 +1,6 @@
+using entities_library.comment;
+
+namespace entities_library.movie;
 public class Movie
 {
     public long Id {get; set;}
@@ -12,5 +15,7 @@ public class Movie
     public bool Oscar {get; set;}
 
     public long Star {get; set;}
+
+    public List<Comment> Comments { get; set; } = new List<Comment>();
 
 }
