@@ -1,6 +1,7 @@
 using entities_library.report;
 
 namespace entities_library.login;
+using entities_library.report;
 
 public class User : Person
 {
@@ -8,8 +9,9 @@ public class User : Person
 
     public UserStatus UserStatus {get; set;} = UserStatus.Active;
 
-    public entities_library.file_system.File? File {get; set;}
+    //public entities_library.file_system.File? File {get; set;}
 
+    public  string FileAvatar {get; set;}
     public string Description {get; set;} = "";
 
     public List<ReportUser> ReportCounter {get; set;} = new List<ReportUser>(); //Va a llevar el conteo de reportes , si pasa los 3 reportes ese usuario sera banneado. Ademas de con la lista podremos acceder a detalles de cada reporte que se agrege a la lista.

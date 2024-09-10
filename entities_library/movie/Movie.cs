@@ -7,4 +7,8 @@ public class Movie
     public string? description {get; set;}
     public string? Genero {get; set;}
 
+    public long Star {get; set;}
+
+    public List<Comment> Comments { get; set; } = new List<Comment>();
+
 }
