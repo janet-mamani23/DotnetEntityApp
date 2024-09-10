@@ -1,8 +1,10 @@
+using entities_library.report;
+
 namespace entities_library.login;
 
 public class User : Person
 {
-    public string Password { get; set;}
+    public string? Password { get; set;}
 
     public UserStatus UserStatus {get; set;} = UserStatus.Active;
 

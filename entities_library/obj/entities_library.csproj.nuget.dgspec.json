@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\entities_library.csproj": {}
+    "C:\\Users\\maman\\ENTITIES\\entities_library\\entities_library.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\entities_library.csproj": {
+    "C:\\Users\\maman\\ENTITIES\\entities_library\\entities_library.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\entities_library.csproj",
+        "projectUniqueName": "C:\\Users\\maman\\ENTITIES\\entities_library\\entities_library.csproj",
         "projectName": "entities_library",
-        "projectPath": "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\entities_library.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\obj\\",
+        "projectPath": "C:\\Users\\maman\\ENTITIES\\entities_library\\entities_library.csproj",
+        "packagesPath": "C:\\Users\\maman\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\maman\\ENTITIES\\entities_library\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\maman\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.408\\RuntimeIdentifierGraph.json"
         }
       }
     }

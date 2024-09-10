@@ -485,19 +485,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "C:\\Users\\maman\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\web_api\\web_api.csproj",
+      "projectUniqueName": "C:\\Users\\maman\\ENTITIES\\web_api\\web_api.csproj",
       "projectName": "web_api",
-      "projectPath": "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\web_api\\web_api.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\web_api\\obj\\",
+      "projectPath": "C:\\Users\\maman\\ENTITIES\\web_api\\web_api.csproj",
+      "packagesPath": "C:\\Users\\maman\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\maman\\ENTITIES\\web_api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\maman\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -509,8 +509,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\entities_library.csproj": {
-              "projectPath": "C:\\Users\\User\\OneDrive\\Escritorio\\web_api\\DotnetEntityApp\\entities_library\\entities_library.csproj"
+            "C:\\Users\\maman\\ENTITIES\\entities_library\\entities_library.csproj": {
+              "projectPath": "C:\\Users\\maman\\ENTITIES\\entities_library\\entities_library.csproj"
             }
           }
         }
@@ -553,7 +553,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.408\\RuntimeIdentifierGraph.json"
       }
     }
   }
