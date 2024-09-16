@@ -29,8 +29,5 @@ public class QualifyController : ControllerBase
 
             return new HttpStatusCodeResult(200, "Rating added/updated successfully");
         }
-    }
 }
-
-
-}
+    

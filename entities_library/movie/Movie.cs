@@ -1,4 +1,5 @@
 namespace entities_library.movie;
+using entities_library.comment;
 
 public class Movie
 {

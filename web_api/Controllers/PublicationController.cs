@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using entities_library.post;
+/*using Microsoft.AspNetCore.Mvc;
 using web_api.mock;
 using web_api.dto.common;
-using web_api.dto.post.CreatePostDTO;
-using entities_library.report;
+
 
 namespace web_api.Controllers;
 
@@ -56,4 +54,4 @@ public class PublicationController : ControllerBase
         return CreatedAtAction(nameof(CreatePost), new { id = nuevaPublicacion.Id }, nuevaPublicacion);
     }
 
-        }
+        } */
