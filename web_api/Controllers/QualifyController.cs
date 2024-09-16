@@ -10,7 +10,7 @@ namespace web_api.Controllers;
 [Route("[controller]")]
 
 public class QualifyController : ControllerBase
-{}
+{
 
      [HttpPost]
         public ActionResult QualifyMovie(int userId, int movieId, int star)
