@@ -1,15 +1,9 @@
-namespace entities_library.movie;
-
-public class Genero
+namespace entities_library.movie
 {
-    public int Id { get; set; } // Identificador único para el género
-    public TypeGenero Tipo { get; set; } // Tipo de género basado en la enumeración
-    public string Descripcion { get; set; } = string.Empty; // Descripción opcional
-
-        // Constructor básico
-    public Genero(int id, TypeGenero tipo)
+    public class Genero
     {
-        Id = id;
-        Tipo = tipo;
+        public long Id { get; set; }
+        public string? Name { get; set; }
+        public TypeGenero TipoGenero { get; set; } // Enum TipoGenero
     }
 }
