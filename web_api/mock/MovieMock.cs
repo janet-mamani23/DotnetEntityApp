@@ -1,81 +1,61 @@
-using entities_library.comment;
 using entities_library.movie;
+using web_api.dto.movie;
 
-namespace web_api.mock;
-
-public class MoviesMock
+namespace web_api.mock
 {
-    private  static MoviesMock? _instance;
-
-    //private MoviesMock() { }
-    private MoviesMock()
+    public class MoviesMock
     {
-        AddMovie();
-    }
+        private static MoviesMock? _instance;
 
-    public static MoviesMock Instance
-    {
-        get
+        private MoviesMock()
         {
-            if(_instance == null) _instance = new MoviesMock();
-            return _instance;
+            AddMovies();
         }
-    }
-    private List<Movie> _movies = new List<Movie>();
 
-    public long CreateMovieMock(string genre,string name,string actor, string director, bool oscar, long star,List<Comment> comments)
-    {
-        Movie movie = new Movie
+        public static MoviesMock Instance
         {
-         Genre = genre,
-         Name = name,
-         Actor = actor,
-         Director = director,
-         Oscar = oscar,
-         Star = star,
-         Comments = comments
-        };
-
-        movie.Id = this._movies.Count + 1;
-        this._movies.Add(movie);
-
-        return movie.Id;
-    }
-
-    // Agregar películas inicial
-
-    private void AddMovie()
-    {
-        CreateMovieMock("Action", "Inception", "Leonardo DiCaprio", "Christopher Nolan", true, 5, new List<Comment>());
-        CreateMovieMock("Sci-Fi", "The Matrix", "Keanu Reeves", "The Wachowskis", true, 5, new List<Comment>());
-    }
-
-    public Movie GetMovieById(int id)
-    {
-        return _movies.FirstOrDefault(m => m.Id == id);
-    }
-
-    public void AddCommentToMovie(long movieId, Comment comment)
-    {
-        // Buscar la película por su Id
-        var movie = _movies.FirstOrDefault(m => m.Id == movieId);
-        if (movie != null)
-        {
-            Comment newComment = new Comment
+            get
             {
-                Text = comment.Text,
-                User = comment.User,
-                Movie = comment.Movie,
-                CreatedAt = comment.CreatedAt
-            };
-            // Agregar el nuevo comentario a la lista de comentarios
-            movie.Comments.Add(newComment);
+                if (_instance == null)
+                {
+                    _instance = new MoviesMock();
+                }
+                return _instance;
+            }
         }
-    }
 
-    public List<Movie> GetMovies()
-    {
-        return _movies;
+        private List<Movie> _movies = new List<Movie>();
+
+        private void AddMovies()
+        {
+            _movies.Add(new Movie { Id = 1, title = "Inception", Genero = "Action" });
+            _movies.Add(new Movie { Id = 2, title = "The Matrix", Genero = "Sci-Fi" });
+            _movies.Add(new Movie { Id = 3, title = "Titanic", Genero = "Drama" });
+        }
+
+        // Método para devolver las  películas
+        public List<MovieResponseDTO> GetMovies()
+        {
+            return _movies.Select(m => new MovieResponseDTO
+            {
+                Id = m.Id,
+                Title = m.title,
+                Genre = m.Genero
+            }).ToList();
+        }
+
+        // Método para devolver películas por género.
+        public List<MovieResponseDTO> GetMoviesByGenero(string genero)
+        {
+            return _movies.Where(m => m.Genero == genero)
+                          .Select(m => new MovieResponseDTO
+                          {
+                              Id = m.Id,
+                              Title = m.title,
+                              Genre = m.Genero
+                          }).ToList();
+        }
     }
 }
+
 

@@ -15,4 +15,4 @@ public static class Rating
             user.Ratings.Add(new Rating { MovieId = movie.Id, Value = rating });
         }
     }
-}
+}  
