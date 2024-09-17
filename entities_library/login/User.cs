@@ -4,11 +4,9 @@ public class User : Person
 {
     public string? Password { get; set;}
 
-    public UserStatus Userstatus {get; set;} = UserStatus.Active;
+    public entities_library.file_system.File? File {get; set;}
 
-    //public entities_library.file_system.File? File {get; set;}
-
-    public  string FileAvatar {get; set;}= "";
+    public  string Avatar {get; set;}= "";
     public string Description {get; set;} = "";
 
     /*public List<ReportUser> ReportCounter {get; set;} = new List<ReportUser>(); //Va a llevar el conteo de reportes , si pasa 
