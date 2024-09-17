@@ -1,13 +1,17 @@
 namespace entities_library.movie;
 using entities_library.comment;
+using entities_library.file_system;
 
 public class Movie
 {
     public long Id {get; set;}
-    public string? title {get; set;}
-    public string? description {get; set;}
-    public string? gender {get; set;}
-    public long star {get; set;}
+    public string? Title {get; set;}
+    public string? Description {get; set;}
+    //Encapsulamiento: 
+    public Genero? Genre {get; set;}
+      //Genre es un atributo de Genero, osea Genero no es una propiedad de pelicula por que es un objeto. pelicula y genero son dos entities.
+    public File? Image{get; set;}
+    public long Star {get; set;}
     public List<Comment> Comments { get; set; } = new List<Comment>();
 
 }
