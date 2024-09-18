@@ -1,4 +1,4 @@
-using web_api.dto.login;
+/*using web_api.dto.login;
 using entities_library.login;
 
 namespace web_api.mock;
@@ -42,4 +42,4 @@ public class UserMock
 
         return user.Id;
     }
-}
+}*/
