@@ -7,16 +7,17 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 using entities_library.login;
 using entities_library.comment;
 using entities_library.movie;
-
+/*
 [ApiController]
 [Route("api/[controller]")]
+
 
 public class CommentsController : ControllerBase
 {
     /*private readonly IMapper _mapper;
     private readonly List<Comment> _comments;
     private readonly List<User> _users;
-    private readonly List<Movie> _movies;*/
+    private readonly List<Movie> _movies;* ESTO ESTABA COMENTADO
 
 
     [HttpPut("{movieId}/comment")]
@@ -30,7 +31,7 @@ public class CommentsController : ControllerBase
 
     // Obtener la instancia de MoviesMock para que halla pelicula registrada
     MoviesMock moviesMock = MoviesMock.Instance;
-
+    }}}
     long commentId = CommentsMock.Instance.CreateCommentMock(      //creacion de un comentario en memoria.
             requestCommentDTO.Text,
             requestCommentDTO.User,
@@ -76,7 +77,7 @@ public class CommentsController : ControllerBase
         return Ok(movie.Comments);
     }
  
-}
+} */
 
 
 

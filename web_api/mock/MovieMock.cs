@@ -1,6 +1,6 @@
 using entities_library.movie;
 using web_api.dto.movie;
-
+/*
 namespace web_api.mock
 {
     public class MoviesMock
@@ -25,12 +25,12 @@ namespace web_api.mock
         }
 
         private List<Movie> _movies = new List<Movie>();
-
+    }};
         private void AddMovies()
         {
-            _movies.Add(new Movie { Id = 1, title = "Inception", Genero = "Action" });
-            _movies.Add(new Movie { Id = 2, title = "The Matrix", Genero = "Sci-Fi" });
-            _movies.Add(new Movie { Id = 3, title = "Titanic", Genero = "Drama" });
+            _movies.Add(new Movie { Id = 1, Title = "Inception", Genre = "Action" });
+            _movies.Add(new Movie { Id = 2, Title = "The Matrix", Genre = "Sci-Fi" });
+            _movies.Add(new Movie { Id = 3, Title = "Titanic", Genre = "Drama" });
         }
 
         // Método para devolver las  películas
@@ -39,15 +39,15 @@ namespace web_api.mock
             return _movies.Select(m => new MovieResponseDTO
             {
                 Id = m.Id,
-                Title = m.title,
-                Genre = m.Genero
+                Title = m.Title,
+                Genre = m.Genre
             }).ToList();
         }
 
         // Método para devolver películas por género.
         public List<MovieResponseDTO> GetMoviesByGenero(string genero)
         {
-            return _movies.Where(m => m.Genero == genero)
+            return _movies.Where(m => m.Genre == genero)
                           .Select(m => new MovieResponseDTO
                           {
                               Id = m.Id,
@@ -56,6 +56,6 @@ namespace web_api.mock
                           }).ToList();
         }
     }
-}
+}*/
 
 

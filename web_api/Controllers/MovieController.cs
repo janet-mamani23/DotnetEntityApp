@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using web_api.dto.movie;
 using web_api.mock;
-
+/*
 namespace web_api.Controllers
 {
     [ApiController]
@@ -46,5 +46,5 @@ namespace web_api.Controllers
         }
     }
 }
-
+*/
 

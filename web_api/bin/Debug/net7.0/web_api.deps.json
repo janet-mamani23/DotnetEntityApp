@@ -10,6 +10,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "7.0.18",
           "Swashbuckle.AspNetCore": "6.5.0",
+          "dao_library": "1.0.0",
           "entities_library": "1.0.0"
         },
         "runtime": {
@@ -74,6 +75,14 @@
           }
         }
       },
+      "dao_library/1.0.0": {
+        "dependencies": {
+          "entities_library": "1.0.0"
+        },
+        "runtime": {
+          "dao_library.dll": {}
+        }
+      },
       "entities_library/1.0.0": {
         "runtime": {
           "entities_library.dll": {}
@@ -135,6 +144,11 @@
       "sha512": "sha512-OvbvxX+wL8skxTBttcBsVxdh73Fag4xwqEU2edh4JMn7Ws/xJHnY/JB1e9RoCb6XpDxUF3hD9A0Z1lEUx40Pfw==",
       "path": "swashbuckle.aspnetcore.swaggerui/6.5.0",
       "hashPath": "swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+    },
+    "dao_library/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "entities_library/1.0.0": {
       "type": "project",
