@@ -11,5 +11,5 @@ public class Person
 
     public required string Email {get; set;}
 
-    public DateTime? Birthdate {get;set;}
+    public required DateTime Birthdate {get;set;}
 }

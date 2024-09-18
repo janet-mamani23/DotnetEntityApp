@@ -9,6 +9,6 @@ public class Comment
     public required string Text { get; set; }
     public  required User User { get; set; }
     public required Movie Movie { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
 
 }

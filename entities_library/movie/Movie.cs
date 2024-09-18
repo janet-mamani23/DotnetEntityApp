@@ -6,13 +6,13 @@ using entities_library.Qualify;
 public class Movie
 {
     public long Id {get; set;}
-    public string? Title {get; set;}
-    public string? Description {get; set;}
+    public required string Title {get; set;}
+    public required string Description {get; set;}
     //Encapsulamiento: 
-    public Genero? Genre {get; set;}
+    public required Genero Genre {get; set;}
     //Genre es un atributo de Genero, osea Genero no es una propiedad de pelicula por que es un objeto. pelicula y genero son dos entities.
-    public File? Image{get; set;}
-    public File? Video{get; set;}
+    public required File Image{get; set;}
+    public required File Video{get; set;}
     public Qualify? Star {get; set;}
     public List<Comment> Comments { get; set; } = new List<Comment>();
 

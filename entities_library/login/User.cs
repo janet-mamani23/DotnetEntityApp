@@ -2,9 +2,9 @@ namespace entities_library.login;
 
 public class User : Person
 {
-    public string? Password { get; set;}
-    public entities_library.file_system.File? Avatar {get; set;}
-    public string Description {get; set;} = "";
+    public required string Password { get; set;}
+    public file_system.File? Avatar {get; set;}
+    public string? Description {get; set;}
     public void Encrypt(string password)
     {
         this.Password = this.encrypt(password);
