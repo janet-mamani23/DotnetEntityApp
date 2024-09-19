@@ -11,8 +11,8 @@ public class Movie
     //Encapsulamiento: 
     public required Genero Genre {get; set;}
     //Genre es un atributo de Genero, osea Genero no es una propiedad de pelicula por que es un objeto. pelicula y genero son dos entities.
-    public required File Image{get; set;}
-    public required File Video{get; set;}
+    public required FileEntity Image{get; set;}
+    public required FileEntity Video{get; set;}
     public Qualify? Star {get; set;}
     public List<Comment> Comments { get; set; } = new List<Comment>();
 

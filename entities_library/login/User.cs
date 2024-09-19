@@ -3,7 +3,7 @@ namespace entities_library.login;
 public class User : Person
 {
     public required string Password { get; set;}
-    public file_system.File? Avatar {get; set;}
+    public file_system.FileEntity? Avatar {get; set;}
     public string? Description {get; set;}
     public void Encrypt(string password)
     {

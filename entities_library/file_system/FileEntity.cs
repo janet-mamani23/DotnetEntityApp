@@ -1,6 +1,6 @@
 namespace entities_library.file_system;
 
-public class File
+public class FileEntity
 {
     public long Id {get; set;}
 

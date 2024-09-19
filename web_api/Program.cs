@@ -1,3 +1,7 @@
+using dao_library;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+options.UseMySql(
+    "Server=localhost;Database=Red_Poderosa;Uid=root;Pwd=2103;",
+    new MySqlServerVersion(
+        new Version (8, 0, 35)
+    )
+));
 
 var app = builder.Build();
 
