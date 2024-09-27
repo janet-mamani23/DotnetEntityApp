@@ -19,7 +19,7 @@ public class ApplicationDbContext: DbContext
     public DbSet<Person>? Persons {get;}
     public DbSet<User>? Users {get;}
     public DbSet<UserBan>? UserBans {get;}
-    public DbSet<Genero>? Generos {get;}
+    public DbSet<Genre>? Genres {get;}
     public DbSet<Movie>? Movies {get;}
     public DbSet<Qualify>? Qualifies {get;}
 }
