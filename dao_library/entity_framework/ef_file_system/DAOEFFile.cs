@@ -1,7 +1,7 @@
 using dao_library.Interfaces.file_system;
 using entities_library.file_system;
 
-namespace dao_library.entity_framework.file_system;
+namespace dao_library.entity_framework.ef_file_system;
 
 public class DAOEFFile: IDAOFileEntity
 {

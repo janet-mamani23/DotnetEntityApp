@@ -1,14 +1,14 @@
 using dao_library.Interfaces;
 using dao_library.Interfaces.login;
-using dao_library.entity_framework.login;
+using dao_library.entity_framework.ef_login;
 using dao_library.Interfaces.comment;
-using dao_library.entity_framework.comment;
+using dao_library.entity_framework.ef_comment;
 using dao_library.Interfaces.movie;
-using dao_library.entity_framework.movie;
+using dao_library.entity_framework.ef_movie;
 using dao_library.Interfaces.qualify;
-using dao_library.entity_framework.qualify;
+using dao_library.entity_framework.ef_qualify;
 using dao_library.Interfaces.file_system;
-using dao_library.entity_framework.file_system;
+using dao_library.entity_framework.ef_file_system;
 
 namespace dao_library.entity_framework;
 

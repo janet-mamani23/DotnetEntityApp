@@ -1,7 +1,7 @@
 using dao_library.Interfaces.login;
 using entities_library.login;
 
-namespace dao_library.entity_framework.login;
+namespace dao_library.entity_framework.ef_login;
 
 public class DAOEFPerson : IDAOPerson
 {

@@ -1,7 +1,7 @@
 using dao_library.Interfaces.comment;
 using entities_library.comment;
 
-namespace dao_library.entity_framework.comment;
+namespace dao_library.entity_framework.ef_comment;
 
 public class DAOEFComment: IDAOComment
 {

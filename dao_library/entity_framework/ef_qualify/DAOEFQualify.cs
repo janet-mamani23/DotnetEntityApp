@@ -1,7 +1,7 @@
 using dao_library.Interfaces.qualify;
 using entities_library.Qualify;
 
-namespace dao_library.entity_framework.qualify;
+namespace dao_library.entity_framework.ef_qualify;
 
 public class DAOEFQualify: IDAOQualify
 {

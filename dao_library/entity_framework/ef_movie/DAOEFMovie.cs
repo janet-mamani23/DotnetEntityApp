@@ -1,33 +1,33 @@
 using dao_library.Interfaces.movie;
 using entities_library.movie;
 
-namespace dao_library.entity_framework.movie;
+namespace dao_library.entity_framework.ef_movie;
 
-public class DAOEFGenre: IDAOGenre
+public class DAOEFMovie: IDAOMovie
 {
     private readonly ApplicationDbContext context;
 
-    public DAOEFGenre(ApplicationDbContext context)
+    public DAOEFMovie(ApplicationDbContext context)
     {
         this.context = context;
     }
 
-    public Task Delete(Genre genre)
+    public Task Delete(Movie movie)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Genre>> GetAll()
+    public Task<IEnumerable<Movie>> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public Task<Genre> GetById(long id)
+    public Task<Movie> GetById(long id)
     {
         throw new NotImplementedException();
     }
 
-    public Task Save(Genre genre)
+    public Task Save(Movie movie)
     {
         throw new NotImplementedException();
     }
