@@ -1,4 +1,6 @@
 using dao_library;
+using dao_library.entity_framework;
+using dao_library.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -18,6 +20,8 @@ options.UseMySql(
         new Version (8, 0, 35)
     )
 ));
+
+builder.Services.AddScoped<IDAOFactory, DAOEFFactory>();
 
 var app = builder.Build();
 
