@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using web_api.dto.common;
 using web_api.dto.login;
 using web_api.mock;
-/*
+
 namespace web_api.Controllers;
 
 [ApiController] // Anotaciobn,Indica que es un controlador de API(manejan solicitudes y generan respuestas).
@@ -89,4 +89,4 @@ public class UserController : ControllerBase
             mail = userPostRequestDTO.mail
         });
     }
-}*/
+}

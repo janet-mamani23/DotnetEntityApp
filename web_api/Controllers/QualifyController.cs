@@ -5,14 +5,14 @@ using web_api.mock;
 using entities_library.login;
 
 namespace web_api.Controllers;
-/*
+
 [ApiController] 
 [Route("[controller]")]
 
 public class QualifyController : ControllerBase
 {
 
-     [HttpPost]
+    [HttpPost]
         public ActionResult QualifyMovie(int userId, int movieId, int star)
         {
 
@@ -30,4 +30,3 @@ public class QualifyController : ControllerBase
             return new HttpStatusCodeResult(200, "Rating added/updated successfully");
         }
 }
-    */

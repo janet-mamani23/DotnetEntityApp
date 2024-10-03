@@ -1,4 +1,4 @@
-/*using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using web_api.mock;
 using web_api.dto.common;
 
@@ -54,4 +54,4 @@ public class PublicationController : ControllerBase
         return CreatedAtAction(nameof(CreatePost), new { id = nuevaPublicacion.Id }, nuevaPublicacion);
     }
 
-        } */
+        } 
