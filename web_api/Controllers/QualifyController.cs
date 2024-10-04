@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+/*using Microsoft.AspNetCore.Mvc;
 using web_api.dto.common;
 using web_api.dto.qualify;
 using web_api.mock;
@@ -29,4 +29,4 @@ public class QualifyController : ControllerBase
 
             return new HttpStatusCodeResult(200, "Rating added/updated successfully");
         }
-}
+}*/

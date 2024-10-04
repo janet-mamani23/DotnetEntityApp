@@ -1,5 +1,6 @@
 using dao_library.Interfaces.login;
 using entities_library.login;
+using Microsoft.EntityFrameworkCore;
 
 namespace dao_library.entity_framework.ef_login;
 
@@ -16,11 +17,18 @@ public class DAOEFUser : IDAOUser
     {
         throw new NotImplementedException();
     }
-
-    public Task<User> Get(string userName, string password)
+    public async Task<User?> Get(string userName, string password)
     {
-        throw new NotImplementedException();
+        if(userName == null) return null;
+        if(context.Users == null) return null;
+
+        User? user = await context.Users
+            .Where(user => user.Email.ToLower() == userName.ToLower())
+            .FirstOrDefaultAsync();
+
+        return user;
     }
+
 
     public Task<(IEnumerable<User>, int)> GetAll(string? query, int page, int pageSize)
     {

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+/*using Microsoft.AspNetCore.Mvc;
 using web_api.dto.common;
 using web_api.dto.login;
 using web_api.mock;
@@ -89,4 +89,4 @@ public class UserController : ControllerBase
             mail = userPostRequestDTO.mail
         });
     }
-}
+}*/

@@ -15,5 +15,5 @@ public interface IDAOUser
     
     //NO PROGRAMAR
     Task Delete(User user);
-    Task<User> Get(string userName, string password);
+    Task<User>Get(string userName, string password);
 }

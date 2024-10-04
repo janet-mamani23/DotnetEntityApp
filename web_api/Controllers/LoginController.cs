@@ -30,12 +30,12 @@ public class LoginController : ControllerBase
         IDAOUser daoUser = daoFactory.CreateDAOUser();
         
         User user = await daoUser.Get(
-            loginRequestDTO.Email,
-            loginRequestDTO.Password
+            loginRequestDTO.email,
+            loginRequestDTO.password
         );
 
         if( user != null &&
-            user.IsPassword(loginRequestDTO.Password))
+            user.IsPassword(loginRequestDTO.password))
         {
             return Ok(new LoginResponseDTO 
             {
