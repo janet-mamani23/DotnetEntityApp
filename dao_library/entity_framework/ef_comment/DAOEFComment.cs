@@ -37,7 +37,7 @@ public class DAOEFComment: IDAOComment
     )
     {
         IQueryable<Comment>? commentQuery = context.Comments;
-
+        
         commentQuery = commentQuery.Where(p => p.Movie.Id == movieId)
         .Include(c => c.User)
         .Include(c => c.Movie);
