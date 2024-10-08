@@ -11,4 +11,12 @@ public class Comment
     public required Movie Movie { get; set; }
     public required DateTime CreatedAt { get; set; }
 
+    public Comment(string text, User user, Movie movie, DateTime createdAt)
+    {
+        Text = text;
+        User = user;
+        Movie = movie;
+        CreatedAt = createdAt;
+    }
+
 }

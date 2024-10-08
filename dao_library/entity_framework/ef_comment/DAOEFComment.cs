@@ -1,5 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using dao_library.Interfaces.comment;
 using entities_library.comment;
+using entities_library.login;
+using entities_library.movie;
+
 
 namespace dao_library.entity_framework.ef_comment;
 
@@ -12,23 +16,67 @@ public class DAOEFComment: IDAOComment
         this.context = context;
     }
 
-    public Task Delete(Comment comment)
+    public async Task Delete(long id)
     {
-        throw new NotImplementedException();
+        var comment = await context.Comments.FindAsync(id);
+        if (comment != null)
+        {
+            context.Comments.Remove(comment);
+            await context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new Exception("Comentario no encontrado");
+        }
     }
 
-    public Task<IEnumerable<Comment>> GetAll()
+    public async Task<(IEnumerable<Comment>,int)> GetAll(
+        int movieId,
+        int page, 
+        int pageSize
+    )
     {
-        throw new NotImplementedException();
+        IQueryable<Comment>? commentQuery = context.Comments;
+
+        commentQuery = commentQuery.Where(p => p.Movie.Id == movieId)
+        .Include(c => c.User)
+        .Include(c => c.Movie);
+
+        int totalRecords = await commentQuery.CountAsync();
+
+        var comment = await commentQuery
+        .Skip((page - 1)* pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
+        return (comment, totalRecords);    
     }
 
     public Task<Comment> GetById(long id)
     {
-        throw new NotImplementedException();
+        Comment? comment = context.Comments?.Find(id);
+        return Task.FromResult(comment);
     }
 
-    public Task Save(Comment comment)
+    public async Task Save(Comment comment)
     {
-        throw new NotImplementedException();
+        context.Comments?.Add(comment);
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Update(long id, string newText)
+    {
+        var comment = await context.Comments.FindAsync(id);
+        if (comment != null)
+        {
+            comment.Text = newText;
+
+            await context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new Exception("Comentario no encontrado");
+        }
     }
 }
