@@ -17,13 +17,9 @@ namespace web_api.Controllers;
 
 public class CommentController : ControllerBase
 {
-    private readonly ILogger _comment;
     private readonly IDAOFactory daoFactory;
-    public CommentController( 
-        ILogger<CommentController> comment,
-        IDAOFactory daoFactory)
+    public CommentController(IDAOFactory daoFactory)
     {
-        _comment = comment;
         this.daoFactory = daoFactory;
     }
 

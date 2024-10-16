@@ -20,6 +20,6 @@ public class ApplicationDbContext: DbContext
     public DbSet<User>? Users {get;}
     public DbSet<UserBan>? UserBans {get;}
     public DbSet<Genre>? Genres {get;}
-    public DbSet<Movie>? Movies {get;}
+    public DbSet<Movie>? Movies {get;} //repositorio de daos movie
     public DbSet<Qualify>? Qualifies {get;}
 }

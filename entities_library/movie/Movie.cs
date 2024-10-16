@@ -7,8 +7,8 @@ using entities_library.Qualify;
 public class Movie
 {
     public long Id {get; set;}
-    public required string Title {get; set;}
-    public required string Description {get; set;}
+    public string Title {get; set;} = "";
+    public  string Description {get; set;}  = "";
     //Encapsulamiento: 
     public required Genre Genre {get; set;}
     //Genre es un atributo de Genero, osea Genero no es una propiedad de pelicula por que es un objeto. pelicula y genero son dos entities.
@@ -17,5 +17,6 @@ public class Movie
     public required User User { get; set; }
     public Qualify? Star {get; set;}
     public List<Comment> Comments { get; set; } = new List<Comment>();
+    public bool HasOscar { get; set; } // Indica si la película ha ganado un Oscar
 
 }

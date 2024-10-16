@@ -43,7 +43,7 @@ public class DAOEFFactory : IDAOFactory
 
     public IDAOMovie CreateDAOMovie()
     {
-        return new DAOEFMovie(context);
+        return new DAOEFMovie(context); //me devuelve todos los accesos a datos
     }
 
     public IDAOGenre CreateDAOGenre()
