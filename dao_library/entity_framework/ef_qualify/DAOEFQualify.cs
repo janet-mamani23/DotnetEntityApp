@@ -17,11 +17,6 @@ public class DAOEFQualify: IDAOQualify
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Qualify>> GetAll()
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<Qualify> GetById(long id)
     {
         throw new NotImplementedException();
@@ -31,4 +26,5 @@ public class DAOEFQualify: IDAOQualify
     {
         throw new NotImplementedException();
     }
+    //TODO-LARA: agregar metodo de actualizar calificacion.
 }

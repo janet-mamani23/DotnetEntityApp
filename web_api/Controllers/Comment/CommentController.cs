@@ -8,7 +8,6 @@ using entities_library.comment;
 using dao_library.Interfaces.login;
 using dao_library.Interfaces.movie;
 using entities_library.movie;
-using web_api.Controllers.comment;
 
 namespace web_api.Controllers;
 
@@ -106,23 +105,30 @@ public class CommentController : ControllerBase
             return StatusCode(500, new { message = ex.Message }); 
         }
     }
-
-    /*[HttpGet("{id}/comments")]
-    public async Task<IActionResult> Get([FromQuery] ResponseGetAllCommentDTO request)
+    //TODO - Enzo
+    /*[HttpGet]
+    public async Task<ActionResult> Get(
+        int page = 1,
+        int pageSize = 10,
+        int movieId)
     {
-        IDAOComment daoComment = daoFactory.CreateDAOComment();
-        var (comment, totalRecords) = await daoComment.GetAll(
-            request.movieId,
-            request.page,
-            request.pageSize);
+        Movie movie = await daoFactory.DAOMovie.Get(movieId);  
+    
+        var (comments, totalRecords) = await daoFactory.DAOMovie.GetAll(movie, page, pageSize);
 
-        
+        List<GetCommentsResponseDTO> data = new List<GetCommentsResponseDTO>();
 
-        return Ok(new ResponseCommentDTO)
+        foreach(...) { //arman los dto response }
+
+        var response = new
         {
-            avatarUser = "",
+            TotalRecords = totalRecords,
+            Page = page,
+            PageSize = pageSize,
+            Comments = data
+        };
 
-        }
-        //TODO - enzo : como se mostrarán esos comentarios?
-    }*/
+        return Ok(response);
+    }
+    */
 }
