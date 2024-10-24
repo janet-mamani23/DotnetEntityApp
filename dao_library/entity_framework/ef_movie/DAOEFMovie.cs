@@ -93,16 +93,24 @@ public class DAOEFMovie: IDAOMovie
             
         return (oscarMovies, totalRecords);
     }
-    public async Task<IEnumerable<Movie>> GetTopRated(int count)
+    public async Task<(IEnumerable<Movie>,int totalRecords)> GetTopRated(
+        string? query, 
+        int page, 
+        int pageSize
+    )
     {
         if (context.Movies == null)
-    {
-        return Enumerable.Empty<Movie>(); 
-    }
-        return await context.Movies
+        {
+        return (Enumerable.Empty<Movie>(),0); 
+        }
+        var totalRecords = await context.Movies.CountAsync();
+        var movies = await context.Movies
             .OrderByDescending(m => m.Star) //Las películas se ordenan en orden descendente dependiendo Star
-            .Take( count) //luego se define la cantidad de resultados a devolver
+            .Skip((page - 1) * pageSize)
+            .Take( pageSize) //cantidad de resultados a devolver
             .ToListAsync(); // Devuelve las count películas más calificadas
+        
+        return (movies, totalRecords);
     }
 
     public Task Save(Movie movie)

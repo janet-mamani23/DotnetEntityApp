@@ -3,7 +3,7 @@ using web_api.dto.common;
 namespace web_api.dto.login;
 
 
-public class LoginResponseDTO : ResponsetDTO
+public class LoginResponseDTO : ResponseDTO
 {
     public long id {get; set;}
     public string name {get; set;} = "";

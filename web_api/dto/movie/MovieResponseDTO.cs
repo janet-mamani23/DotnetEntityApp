@@ -1,7 +1,7 @@
 using web_api.dto.common;
 using web_api.dto.comment;
 namespace web_api.dto.movie;
-public class MovieResponseDTO : ResponsetDTO
+public class MovieResponseDTO : ResponseDTO
 {
     public long Id { get; set; } // Identificador de la película
     public string ?Title { get; set; } // Título de la película

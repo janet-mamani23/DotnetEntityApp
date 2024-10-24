@@ -1,8 +1,8 @@
 namespace web_api.dto.common;
 
-public class ResponsetDTO
+public class ResponseDTO
 {
-    public bool success { get; set; } = false;
+    public bool Success { get; set; } = false;
 
-    public string message { get; set; } = "";
+    public string Message { get; set; } = "";
 }

@@ -21,7 +21,7 @@ public class MovieController: ControllerBase
         this.daoFactory = daoFactory;
     }
 
-    [HttpGet(Name = "movies")]  // obtengo las peliculas
+    [HttpGet(Name = "movies")] 
     public async Task<IActionResult> GetAllMovies(MoviesRequestDTO moviesRequestDTO, [FromQuery] MovieGetAllRequestDTO request)
     {
         IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
@@ -79,12 +79,17 @@ public class MovieController: ControllerBase
         });
     }
 
-    [HttpGet("topRating-movies")] // Endpoint para obtener películas con mejor calificación
-    public async Task<IActionResult> GetTopRatedMovies(MoviesRequestDTO moviesRequestDTO)
+    [HttpGet("topRating-movies")] // Endpoint
+    public async Task<IActionResult> GetTopRatedMovies(MoviesRequestDTO moviesRequestDTO, MovieGetAllRequestDTO request)
     {
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
 
-        var movies = await daoMovie.GetAll(); // Obtener todas las películas
+        var (movies, totalRecords) = await daoMovie.GetAll(
+            request.query,
+            request.page,
+            request.pageSize
+
+        ); // Obtener todas las películas
 
         if (!string.IsNullOrEmpty(moviesRequestDTO.Genre) && moviesRequestDTO.Genre.ToLower() != "all")
         {
@@ -115,8 +120,8 @@ public class MovieController: ControllerBase
 
         return Ok (new MovieResponseDTO
         {
-            success = true,
-            message = "La peliculas es: ",
+            Success = true,
+            Message = "La peliculas es: ",
             Id = movie.Id,
             Title = movie.Title,
             Genre = movie.Genre.Name,

@@ -1,6 +1,6 @@
 namespace web_api.dto.common;
 
-public class ErrorResponseDTO : ResponsetDTO
+public class ErrorResponseDTO : ResponseDTO
 {
     
 }

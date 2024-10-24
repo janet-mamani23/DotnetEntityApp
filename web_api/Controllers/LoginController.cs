@@ -38,8 +38,8 @@ public class LoginController : ControllerBase
         {
             return Ok(new LoginResponseDTO 
             {
-                success = true,
-                message = "",
+                Success = true,
+                Message = "",
                 id = user.Id,
                 name = user.Name,
                 lastname = user.LastName,
@@ -51,8 +51,8 @@ public class LoginController : ControllerBase
         
         return Unauthorized(new ErrorResponseDTO
         {
-            success = false,
-            message = "Invalid mail or password"
+            Success = false,
+            Message = "Invalid mail or password"
         });
     }
 }

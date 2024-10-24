@@ -30,8 +30,8 @@ public class CommentController : ControllerBase
         {
             return BadRequest(new ErrorResponseDTO
             {
-                success = false,
-                message = "Datos ingresados erroneos"
+                Success = false,
+                Message = "Datos ingresados erroneos"
             });
         }
 
@@ -39,8 +39,8 @@ public class CommentController : ControllerBase
         {
             return BadRequest(new ErrorResponseDTO
             {
-                success = false,
-                message = "Debe contener caracteres en el campo"
+                Success = false,
+                Message = "Debe contener caracteres en el campo"
             });
         }
 
@@ -55,8 +55,8 @@ public class CommentController : ControllerBase
         {
             return NotFound(new ErrorResponseDTO
             {
-                success = false,
-                message = "Usuario o película no encontrados"
+                Success = false,
+                Message = "Usuario o película no encontrados"
             });
         }
         
