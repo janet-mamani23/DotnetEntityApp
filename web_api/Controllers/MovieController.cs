@@ -21,24 +21,32 @@ public class MovieController: ControllerBase
         this.daoFactory = daoFactory;
     }
 
-    [HttpGet(Name = "movies")]  // obtengo todos los elementos
-    public async Task<IActionResult> GetAllMovies(MoviesRequestDTO moviesRequestDTO)
+    [HttpGet(Name = "movies")]  // obtengo las peliculas
+    public async Task<IActionResult> GetAllMovies(MoviesRequestDTO moviesRequestDTO, [FromQuery] MovieGetAllRequestDTO request)
     {
-        IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
+        IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
 
-        var movies = await daoMovie.GetAll();
+        var (movies, totalRecords) = await daoMovie.GetAll(
+            request.query,
+            request.page,
+            request.pageSize);
 
-        if (!string.IsNullOrEmpty(moviesRequestDTO.Genre) && moviesRequestDTO.Genre.ToLower() != "all")
+        if (!string.IsNullOrEmpty(moviesRequestDTO.Genre) && moviesRequestDTO.Genre.ToLower() != "all") //aca no especifico el genero
         {
-            movies = movies.Where(m => m.Genre.Name == moviesRequestDTO.Genre).ToList(); //filtro por el nombre del genero
+            movies = movies.Where(m => m.Genre.Name == moviesRequestDTO.Genre).ToList(); // caso contrario se filtra por genero
         }
-        return Ok (movies.Select(movi => new MoviesResponseDTO
+
+        var moviesResponse = movies.Select(movi => new MoviesResponseDTO
         {
             Id = movi.Id,
-            ImageUrl = movi.Image.Path //¿duda con el path?
-        }).ToList()
-        );
-    
+            ImageUrl = movi.Image.Path
+        }).ToList();
+
+        return Ok(new  // Retornar las películas paginadas mas la cantidad total de registros
+        {
+            Movies = moviesResponse,  
+            TotalRecords = totalRecords
+        });
     }
 
     [HttpGet("oscar-movies")] 

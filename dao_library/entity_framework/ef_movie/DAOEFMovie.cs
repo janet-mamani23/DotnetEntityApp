@@ -17,16 +17,32 @@ public class DAOEFMovie: IDAOMovie
     {
         throw new NotImplementedException();
     }
-
-    public async Task<IEnumerable<Movie>> GetAll() // Llama al GetAll en el DAO
+    public async Task<(IEnumerable<Movie>,int)> GetAll(
+        string? query, 
+        int page, 
+        int pageSize)
     {
         if (context.Movies == null)
-    {
-        return Enumerable.Empty<Movie>(); // si mi context.movie es null devuelve una lista vacia.
-    }
+        {
+            return (Enumerable.Empty<Movie>(),0); // si mi context.movie es null devuelve una lista vacia.
+        }
 
-    return await context.Movies.ToListAsync(); //caso contrario devuelve una lista de peliculas.
-        
+        IQueryable<Movie> moviesQuery = context.Movies;
+        if (query != null)
+        {
+            moviesQuery = moviesQuery.Where(m => 
+                m.Title.Contains(query) || m.Description.Contains(query)
+            );
+        }
+        int totalRecords = await moviesQuery.CountAsync(); // Obtener el número total de películas antes de aplicar paginación
+
+        var movies = await moviesQuery // Aplicar la paginación
+            .Skip((page - 1) * pageSize) // Salta las películas de las páginas anteriores
+            .Take(pageSize) // Tomar el número de películas especificadas por pageSize
+            .ToListAsync(); // Ejecutar la consulta
+
+        // Retornar las películas paginadas y el total de registros
+        return (movies, totalRecords);
     }
 
     public async Task<Movie> GetById(long id)
@@ -49,16 +65,38 @@ public class DAOEFMovie: IDAOMovie
         }
         return movie;
     }
-    
-    public async Task<IEnumerable<Movie>> GetOscarWinners()
+    public async Task<(IEnumerable<Movie>,int)> GetOscarWinners(
+        string query, 
+        int page, 
+        int pageSize)
     {
         if (context.Movies == null)
         {
-            return Enumerable.Empty<Movie>();
+            return (Enumerable.Empty<Movie>(), 0); // Devuelve una lista vacía y un total de 0
         }
-        return await context.Movies
-            .Where(m => m.HasOscar) 
+        IQueryable<Movie> oscarMoviesQuery = context.Movies
+            .Where(m => m.HasOscar);
+
+        if (query != null)
+        {
+            oscarMoviesQuery = oscarMoviesQuery.Where(m =>
+                m.Title.Contains(query) || m.Description.Contains(query)
+            );
+        }
+
+        int totalRecords = await oscarMoviesQuery.CountAsync();
+
+        var oscarMovies = await oscarMoviesQuery
+            .Skip((page - 1) * pageSize) // Saltar las películas de las páginas anteriores
+            .Take(pageSize) // Tomar el número de películas especificadas por pageSize
             .ToListAsync();
+            
+        return (oscarMovies, totalRecords);
+    }
+
+    public Task<(IEnumerable<Movie>, int)> GetOscarWinners()
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<Movie>> GetTopRated(int count)
@@ -82,4 +120,5 @@ public class DAOEFMovie: IDAOMovie
     {
         throw new NotImplementedException();
     }
+
 }
