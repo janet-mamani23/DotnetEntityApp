@@ -1,4 +1,6 @@
 using dao_library.Interfaces.qualify;
+using entities_library.login;
+using entities_library.movie;
 using entities_library.Qualify;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,15 +28,15 @@ public class DAOEFQualify: IDAOQualify
             throw new Exception("Calificación no encontrado");
         }
     }
-
+    /*
     public async Task<(IEnumerable<Qualify>,int)> GetAll(
-        int movieId,
+        int qualifyId,
         int page, 
         int pageSize
     )
     {
         IQueryable<Qualify>? qualifyQuery = context.Qualifies;        
-        qualifyQuery = qualifyQuery.Where(p => p.Movie.Id == movieId)
+        qualifyQuery = qualifyQuery.Where(p => p.Movie.Id == qualifyId)
         .Include(c => c.User)
         .Include(c => c.Movie);
 
@@ -46,7 +48,7 @@ public class DAOEFQualify: IDAOQualify
         .ToListAsync();
 
         return (qualify, totalQualifies);    
-    }
+    }*/
 
     public Task<Qualify> GetById(long id)
     {
@@ -61,13 +63,43 @@ public class DAOEFQualify: IDAOQualify
         await context.SaveChangesAsync();
     }
 
-    Task IDAOQualify.Delete(Qualify qualify)
+    public async Task<IEnumerable<Qualify>> GetUserQualificationsForMovie(long idUser, long idMovie)
     {
-        throw new NotImplementedException();
+        return await context.Qualifies
+            .Where(q => q.User.Id == idUser && q.Movie.Id == idMovie)
+            .ToListAsync();
     }
 
-    Task<IEnumerable<Qualify>> IDAOQualify.GetAll()
+    public async Task<bool> HasUserQualifiedMovie(long idUser, long idMovie)
     {
-        throw new NotImplementedException();
+        return await context.Qualifies
+            .AnyAsync(q => q.User.Id == idUser && q.Movie.Id == idMovie);
     }
+
+    public async Task<IEnumerable<Qualify>> GetByMovieId(long movieId)
+    {
+        // Obtiene todas las calificaciones asociadas con una película
+        var qualifies = await context.Qualifies
+            .Where(q => q.Movie.Id == movieId)  // Filtra por ID de la película
+            .Include(q => q.User)  // Incluye la información del usuario
+            .ToListAsync();  // Convierte el resultado en una lista
+
+        return qualifies;
+    }
+
+    public async Task<bool> Update(Qualify qualify)
+    {
+        var existingQualify = await context.Qualifies
+            .FirstOrDefaultAsync(q => q.Id == qualify.Id);
+
+        if (existingQualify != null)
+        {
+            existingQualify.Star = qualify.Star;
+            context.Qualifies.Update(existingQualify);
+            await context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
+
 }
