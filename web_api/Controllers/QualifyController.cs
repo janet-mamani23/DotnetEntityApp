@@ -1,79 +1,105 @@
-using Microsoft.AspNetCore.Mvc;
-using web_api.dto.common;
-using web_api.dto.qualify;
-using web_api.mock;
-using entities_library.login;
-using dao_library.Interfaces;
 using dao_library.Interfaces.qualify;
+using web_api.dto.qualify;
+using Microsoft.AspNetCore.Mvc;
+using dao_library.Interfaces;
+using dao_library.Interfaces.login;
+using entities_library.login;
+using web_api.dto.login;
+//using dao_library.entity_framework.ef_qualify;
+using entities_library.Qualify;
 
-namespace web_api.Controllers;
-/*
-[ApiController] 
-[Route("[controller]")]
-
-public class QualifyController : ControllerBase
+namespace web_api.controllers
 {
-
-    [HttpPost]
-        public ActionResult QualifyMovie(int userId, int movieId, int star)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class QualifyController : ControllerBase
+    {
+        private readonly ILogger<QualifyController> _logger;
+        private readonly IDAOFactory daoFactory;
+        public QualifyController(
+            ILogger<QualifyController> logger,
+            IDAOFactory daoFactory)
         {
+            _logger = logger;
+            this.daoFactory = daoFactory;
+        }
 
-            var user = _context.Users.Include("Ratings").FirstOrDefault(u => u.Id == userId);
-            var movie = _context.Movies.FirstOrDefault(m => m.Id == movieId);
+        [HttpPost(Name = "CreateQualify")]
+        public async Task<IActionResult> CreateQualify([FromBody] QualifyRequestDTO qualifyRequest, LoginRequestDTO loginRequestDTO, IDAOQualify dAOQualify)
+        {
+            IDAOQualify DAOQualify = daoFactory.CreateDAOQualify();
 
-            if (user == null || movie == null)
+            // 1. Verificar si el usuario está logueado
+            IDAOUser daoUser = daoFactory.CreateDAOUser();
+            User user = await daoUser.Get(loginRequestDTO.email, loginRequestDTO.password);
+
+            if (user == null || !user.IsPassword(loginRequestDTO.password))
             {
-                return HttpNotFound();
+                return Unauthorized("Usuario no logueado.");
             }
 
-            RatingHelper.AddOrUpdateRating(user, movie, rating);
-            _context.SaveChanges();
+            // 2. Verificar si el usuario ya ha calificado esta película
+            bool hasQualified = await dAOQualify.HasUserQualifiedMovie(loginRequestDTO.id, qualifyRequest.Movie.Id);
+            if (hasQualified)
+            {
+                return BadRequest("El usuario ya ha calificado esta película.");
+            }
 
-            return new HttpStatusCodeResult(200, "Rating added/updated successfully");
-        }
-}*/
+            // 3. Crear la nueva calificación
+            var qualify = new Qualify
+            {
+                User = user,
+                Movie = qualifyRequest.Movie, // Película a calificar
+                Star = qualifyRequest.Star // Calificación
+            };
 
-[ApiController]
-[Route("[controller]")]
-public class QualifyController : ControllerBase
-{
-    private readonly ILogger<QualifyController> _logger;
-    private readonly IDAOFactory daoFactory;
+            // 4. Guardar la calificación en la base de datos
+            await dAOQualify.Save(qualify);
 
-    public QualifyController(
-        ILogger<LoginController> logger,
-        IDAOFactory daoFactory)
-    {
-        _logger = logger;
-        this.daoFactory = daoFactory;
-    }
-
-    [HttpPost(Name = "Qualify")]
-    public async Task<IActionResult> Post(QualifyRequestDTO qualifyRequestDTO)
-    {
-        IDAOQualify daoQualify = daoFactory.CreateDAOQualify();
-        
-        User user = await daoQualify.Get(
-            qualifyRequestDTO.Name,
-            qualifyRequestDTO.Star
-        );
-
-        if( qualifyRequestDTO != null &&
-            qualifyRequestDTO.IsPassword(loginRequestDTO.password))
-        {
-            return Ok(new QualifyResponseDTO
+            // 5. Obtener el nuevo promedio de calificaciones
+            var averageStars = qualify.Movie.GetAverage(); // Llama al método de la entidad Movie para obtener el promedio
+            
+            return Ok(new QualifyResponseDTO 
             {
                 success = true,
                 message = "",
-                id = qualify.Id,
-                Start = qualify.Star
+                Id = qualify.Id,
+                Star = qualify.Star,
+                AverageStars = (int)averageStars
             });
         }
-        
-        return Unauthorized(new ErrorResponseDTO
+
+
+        [HttpPut(Name = "UpdateQualify")]
+        public async Task<IActionResult> UpdateQualify([FromBody] QualifyRequestDTO qualifyRequest, LoginRequestDTO loginRequestDTO)
         {
-            success = false,
-            message = "Invalid mail or password"
-        });
+            // 1. Verificar si el usuario está logueado
+            IDAOUser daoUser = daoFactory.CreateDAOUser();
+            User user = await daoUser.Get(loginRequestDTO.email, loginRequestDTO.password);
+
+            if (user == null || !user.IsPassword(loginRequestDTO.password))
+            {
+                return Unauthorized("Usuario no logueado.");
+            }
+
+            // 2. Buscar la calificación existente
+            IDAOQualify daoQualify = daoFactory.CreateDAOQualify();
+            var qualifyToUpdate = new Qualify
+            {
+                User = user,
+                Movie = qualifyRequest.Movie,
+                Star = qualifyRequest.Star
+            };
+
+            // 3. Actualizar la calificación
+            bool updated = await daoQualify.Update(qualifyToUpdate);
+
+            if (!updated)
+            {
+                return NotFound("Calificación no encontrada.");
+            }
+            
+            return Ok("Calificación actualizada exitosamente.");
+        }
     }
 }
