@@ -113,6 +113,11 @@ public class DAOEFMovie: IDAOMovie
         return (movies, totalRecords);
     }
 
+    public Task<IEnumerable<Movie>> GetTopRated(int count)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Save(Movie movie)
     {
         throw new NotImplementedException();
