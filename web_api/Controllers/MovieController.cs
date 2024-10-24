@@ -50,11 +50,15 @@ public class MovieController: ControllerBase
     }
 
     [HttpGet("oscar-movies")] 
-    public async Task<IActionResult> GetOscarNominatedMovies(MoviesRequestDTO moviesRequestDTO)
+    public async Task<IActionResult> GetOscarNominatedMovies(MoviesRequestDTO moviesRequestDTO, [FromQuery] MovieGetAllRequestDTO request)
     {
-        IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
+        IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
 
-        var movies = await daoMovie.GetAll();
+        var (movies, totalRecords) = await daoMovie.GetAll(
+            request.query,
+            request.page,
+            request.pageSize
+        );
 
         movies = movies.Where(m => m.HasOscar == true).ToList();
         if (!string.IsNullOrEmpty(moviesRequestDTO.Genre) && moviesRequestDTO.Genre.ToLower() != "all")
@@ -65,11 +69,14 @@ public class MovieController: ControllerBase
         var responseMovies = movies.Select(movi => new MoviesResponseDTO
         {
             Id = movi.Id,
-            ImageUrl = movi.Image.Path // Asegúrate de que esta propiedad sea la correcta
+            ImageUrl = movi.Image.Path
         }).ToList();
-
-        // Retornar la lista de películas nominadas al Oscar
-        return Ok(responseMovies);
+        
+        return Ok( new
+        {
+            Movies = responseMovies,
+            TotalRecords = totalRecords // Devuelvo también la cantidad total de registros
+        });
     }
 
     [HttpGet("topRating-movies")] // Endpoint para obtener películas con mejor calificación

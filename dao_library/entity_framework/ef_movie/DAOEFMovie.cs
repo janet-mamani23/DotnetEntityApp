@@ -66,7 +66,7 @@ public class DAOEFMovie: IDAOMovie
         return movie;
     }
     public async Task<(IEnumerable<Movie>,int)> GetOscarWinners(
-        string query, 
+        string? query, 
         int page, 
         int pageSize)
     {
@@ -93,12 +93,6 @@ public class DAOEFMovie: IDAOMovie
             
         return (oscarMovies, totalRecords);
     }
-
-    public Task<(IEnumerable<Movie>, int)> GetOscarWinners()
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<Movie>> GetTopRated(int count)
     {
         if (context.Movies == null)
