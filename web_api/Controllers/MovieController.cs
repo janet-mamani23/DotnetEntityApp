@@ -117,6 +117,8 @@ public class MovieController: ControllerBase
             ImageUrl = movie.Image?.Path,
             VideoUrl = movie.Video?.Path, //¿se incluye el genero y los comentarios y calificacion?
             Star = movie.Star?.Star,
+
+            //TODO-ENZO aplicar paginacioncomentarios(lo que paso el profe) dao.comment(get all)
             Comments = movie.Comments.Select(c => new CommentResponseDTO
             {
                 Id = c.Id,
