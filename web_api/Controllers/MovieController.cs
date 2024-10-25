@@ -118,6 +118,9 @@ public class MovieController: ControllerBase
             return NotFound("La película solicitada no fue encontrada.");
         }
 
+         // Obtener promedio de calificaciones usando el método GetAverage
+        double averageRating = movie.GetAverage();
+
         return Ok (new MovieResponseDTO
         {
             Success = true,
@@ -128,7 +131,8 @@ public class MovieController: ControllerBase
             Description = movie.Description, 
             ImageUrl = movie.Image?.Path,
             VideoUrl = movie.Video?.Path, //¿se incluye el genero y los comentarios y calificacion?
-            Star = movie.Star?.Star,
+            //Star = movie.Star?.Star,
+            AverageQualify = averageRating, // Promedio de calificaciones
 
             //TODO-ENZO aplicar paginacioncomentarios(lo que paso el profe) dao.comment(get all)
             Comments = movie.Comments.Select(c => new CommentResponseDTO
