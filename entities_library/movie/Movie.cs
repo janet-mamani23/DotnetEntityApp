@@ -17,6 +17,22 @@ public class Movie
     public required User User { get; set; }
     public Qualify? Star {get; set;}
     public List<Comment> Comments { get; set; } = new List<Comment>();
+    public List<Qualify> Stars { get; set; } = new List<Qualify>();
     public bool HasOscar { get; set; } // Indica si la película ha ganado un Oscar
+
+    public double GetAverage()
+    {
+        if (Stars.Count == 0) return 0; // Evita la división por 0
+
+
+        double suma = 0; // Inicializamos la suma
+        foreach(Qualify c in Stars) // Iteramos sobre la lista de calificaciones
+        {
+           suma += c.Star; // Sumamos las calificaciones
+        }
+
+        double average = suma / Stars.Count; // Calculamos el promedio
+        return average; // Retornamos el promedio
+    }
 
 }
