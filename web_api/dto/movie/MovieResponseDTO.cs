@@ -9,6 +9,6 @@ public class MovieResponseDTO : ResponseDTO
     public string ?Description { get; set; } // Breve descripción de la película
     public string ?ImageUrl {get; set;}
     public string ?VideoUrl { get; set; }
-    public int ? Star {get; set;}
+    public double? AverageQualify { get; set; } // Promedio de calificaciones
     public List<CommentResponseDTO> ?Comments { get; set; } = new List<CommentResponseDTO>(); // Lista de comentarios
 }
