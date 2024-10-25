@@ -15,7 +15,11 @@ public interface IDAOMovie
     
     //NO PROGRAMAR
     Task Delete(Movie movie); //quiero eliminar mi movie desde mi office
-    Task<IEnumerable<Movie>> GetTopRated(int count); // obtengo las ej: 5 películas más calificadas
+    Task<(IEnumerable<Movie>,int)> GetTopRated(
+        string? query,
+        int page,
+        int pageSize
+    ); // obtengo las ej: 5 películas más calificadas
     Task<(IEnumerable<Movie>,int)> GetOscarWinners(
         string? query,
         int page,

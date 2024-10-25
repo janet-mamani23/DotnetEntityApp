@@ -93,15 +93,14 @@ public class DAOEFMovie: IDAOMovie
             
         return (oscarMovies, totalRecords);
     }
-    public async Task<(IEnumerable<Movie>,int totalRecords)> GetTopRated(
+    public async Task<(IEnumerable<Movie>,int)> GetTopRated(
         string? query, 
         int page, 
-        int pageSize
-    )
+        int pageSize)
     {
         if (context.Movies == null)
         {
-        return (Enumerable.Empty<Movie>(),0); 
+            return (Enumerable.Empty<Movie>(),0); 
         }
         var totalRecords = await context.Movies.CountAsync();
         var movies = await context.Movies
@@ -112,12 +111,6 @@ public class DAOEFMovie: IDAOMovie
         
         return (movies, totalRecords);
     }
-
-    public Task<IEnumerable<Movie>> GetTopRated(int count)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task Save(Movie movie)
     {
         throw new NotImplementedException();
