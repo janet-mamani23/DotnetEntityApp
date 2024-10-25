@@ -10,10 +10,12 @@ public interface IDAOUser
         int pageSize
     );
 
-    Task<User> GetById(long id);
+    Task<User?> GetByUsername(string username);
+
+    Task<User?> GetById(long? id);
     Task Save(User user);
     
     //NO PROGRAMAR
     Task Delete(User user);
-    Task<User>Get(string userName, string password);
+    Task<User>Get(string emailUser, string password);
 }

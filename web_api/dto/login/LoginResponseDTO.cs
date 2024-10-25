@@ -5,15 +5,15 @@ namespace web_api.dto.login;
 
 public class LoginResponseDTO : ResponseDTO
 {
-    public long id {get; set;}
-    public string name {get; set;} = "";
+    public long Id {get; set;}
+    public string NameUser {get; set;} = "";
 
-    public string lastname {get; set;} = "";
+    public string LastnameUser {get; set;} = "";
 
-    public string description {get; set;} = "";
+    public string DescriptionUser {get; set;} = "";
 
-    public string urlAvatar{get; set;} = "";
+    public string UrlAvatar{get; set;} = "";
 
-    public string mail {get; set;} = "";
+    public string EmailUser {get; set;} = "";
 
 }

@@ -17,13 +17,14 @@ public class DAOEFUser : IDAOUser
     {
         throw new NotImplementedException();
     }
-    public async Task<User?> Get(string userName, string password)
+
+    public async Task<User?> Get(string emailUser, string password)
     {
-        if(userName == null) return null;
+        if(emailUser == null) return null;
         if(context.Users == null) return null;
 
         User? user = await context.Users
-            .Where(user => user.Email.ToLower() == userName.ToLower())
+            .Where(user => user.Email.ToLower() == emailUser.ToLower())
             .FirstOrDefaultAsync();
 
         return user;
@@ -35,9 +36,27 @@ public class DAOEFUser : IDAOUser
         throw new NotImplementedException();
     }
 
-    public Task<User> GetById(long id)
+    public async Task<User?> GetById(long? id)
     {
-        throw new NotImplementedException();
+        if (id == null) return null;
+        if (context.Users == null) return null;
+        User? userId = await context.Users
+            .Where(userId => userId.Id == id)
+            .FirstOrDefaultAsync();
+
+        return userId;
+    }
+
+    public async Task<User?> GetByUsername(string username)
+    {
+        if (username == null) return null;
+        if (context.Users == null) return null;
+
+        User? user = await context.Users
+            .Where(user => user.Email.ToLower() == username.ToLower())
+            .FirstOrDefaultAsync();
+
+        return user;
     }
 
     public Task Save(User user)

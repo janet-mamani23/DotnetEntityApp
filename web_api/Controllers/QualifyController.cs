@@ -25,21 +25,21 @@ namespace web_api.controllers
         }
 
         [HttpPost(Name = "CreateQualify")]
-        public async Task<IActionResult> CreateQualify([FromBody] QualifyRequestDTO qualifyRequest, LoginRequestDTO loginRequestDTO, IDAOQualify dAOQualify)
+        public async Task<IActionResult> CreateQualify([FromBody] QualifyRequestDTO qualifyRequest, [FromQuery]LoginRequestDTO loginRequestDTO,  [FromServices] IDAOQualify dAOQualify)
         {
             IDAOQualify DAOQualify = daoFactory.CreateDAOQualify();
 
             // 1. Verificar si el usuario está logueado
             IDAOUser daoUser = daoFactory.CreateDAOUser();
-            User user = await daoUser.Get(loginRequestDTO.email, loginRequestDTO.password);
+            User user = await daoUser.Get(loginRequestDTO.EmailUser, loginRequestDTO.PasswordUser);
 
-            if (user == null || !user.IsPassword(loginRequestDTO.password))
+            if (user == null || !user.IsPassword(loginRequestDTO.PasswordUser))
             {
                 return Unauthorized("User not logged in.");
             }
 
             // 2. Verificar si el usuario ya ha calificado esta película
-            bool hasQualified = await dAOQualify.HasUserQualifiedMovie(loginRequestDTO.email, qualifyRequest.Movie.Id);
+            bool hasQualified = await dAOQualify.HasUserQualifiedMovie(loginRequestDTO.EmailUser, qualifyRequest.Movie.Id);
             if (hasQualified)
             {
                 return BadRequest("The user has already rated this movie.");
@@ -71,13 +71,13 @@ namespace web_api.controllers
 
 
         [HttpPut(Name = "UpdateQualify")]
-        public async Task<IActionResult> UpdateQualify([FromBody] QualifyRequestDTO qualifyRequest, LoginRequestDTO loginRequestDTO)
+        public async Task<IActionResult> UpdateQualify([FromBody] QualifyRequestDTO qualifyRequest, [FromQuery] LoginRequestDTO loginRequestDTO)
         {
             // 1. Verificar si el usuario está logueado
             IDAOUser daoUser = daoFactory.CreateDAOUser();
-            User user = await daoUser.Get(loginRequestDTO.email, loginRequestDTO.password);
+            User user = await daoUser.Get(loginRequestDTO.EmailUser, loginRequestDTO.PasswordUser);
 
-            if (user == null || !user.IsPassword(loginRequestDTO.password))
+            if (user == null || !user.IsPassword(loginRequestDTO.PasswordUser))
             {
                 return Unauthorized("User not logged in.");
             }

@@ -28,24 +28,23 @@ public class LoginController : ControllerBase
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
         
-        User user = await daoUser.Get(
-            loginRequestDTO.email,
-            loginRequestDTO.password
+        User? user = await daoUser.Get(
+            loginRequestDTO.EmailUser,
+            loginRequestDTO.PasswordUser
         );
 
         if( user != null &&
-            user.IsPassword(loginRequestDTO.password))
+            user.IsPassword(loginRequestDTO.PasswordUser))
         {
             return Ok(new LoginResponseDTO 
             {
                 Success = true,
-                Message = "",
-                id = user.Id,
-                name = user.Name,
-                lastname = user.LastName,
-                description = user.Description,
-                urlAvatar = "",
-                mail = user.Email
+                Message = "Login Sucess",
+                Id = user.Id,
+                NameUser = user.Name,
+                EmailUser = user.Email,
+                UrlAvatar = "",
+    
             });
         }
         

@@ -80,7 +80,7 @@ public class MovieController: ControllerBase
     }
 
     [HttpGet("topRating-movies")] // Endpoint
-    public async Task<IActionResult> GetTopRatedMovies(MoviesRequestDTO moviesRequestDTO, MovieGetAllRequestDTO request)
+    public async Task<IActionResult> GetTopRatedMovies(MoviesRequestDTO moviesRequestDTO, [FromQuery] MovieGetAllRequestDTO request)
     {
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
 
