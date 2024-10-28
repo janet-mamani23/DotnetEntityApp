@@ -19,7 +19,8 @@ options.UseMySql(
     new MySqlServerVersion(
         new Version (8, 0, 35)
     )
-));
+).UseLazyLoadingProxies()
+);
 
 builder.Services.AddScoped<IDAOFactory, DAOEFFactory>();
 
