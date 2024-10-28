@@ -197,12 +197,12 @@ public class MovieController: ControllerBase
             Genre genreUno = await daoFactory.CreateDAOGenre().GetById(movieRequestDTO.GenreId);
 
             //creo una nueva entidad
-            Movie newMovie = new()
+            Movie newMovie = new Movie
             {
                 Title = movieRequestDTO.TitleMovie,
                 Description = movieRequestDTO.DescriptionMovie,
                 Genre = genreUno,
-                Image = movieRequestDTO.UrlImage,
+                Image = movieRequestDTO.Image,
                 Video = movieRequestDTO.VideoMovie,
                 
             };
@@ -217,8 +217,8 @@ public class MovieController: ControllerBase
                 Title = newMovie.Title,
                 Description = newMovie.Description,
                 Genre = newMovie.Genre.Name,
-                ImageUrl = newMovie.UrlImage,
-                VideoUrl= newMovie.Video,
+                ImageUrl = newMovie != null && newMovie != null ? newMovie.Image.Path : "",
+                VideoUrl= newMovie.Video.Path,
             });   
         }
 }   

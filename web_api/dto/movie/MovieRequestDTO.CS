@@ -8,7 +8,7 @@ namespace web_api.dto.movie;
         public string TitleMovie { get; set; } = "";//titulo del post
         public string DescriptionMovie{ get; set; } = "";
         public long GenreId {get; set;} = 0;
-        public FileType? UrlImage { get; set; }//url de la imagen
-        public FileType? VideoMovie { get; set; }//descripcn
+        public FileEntity? Image { get; set; }//url de la imagen
+        public FileEntity? VideoMovie { get; set; }//descripcn
         
     }
