@@ -190,13 +190,13 @@ public class MovieController: ControllerBase
                 return BadRequest(new ErrorResponseDTO
                 {
                     Success=false,
-                    Message = "The title of the post already exists." //El titulo del post ya existe.
+                    Message = "The title of already exists." //El titulo ya existe.
                 });
             }
 
             Genre genreUno = await daoFactory.CreateDAOGenre().GetById(movieRequestDTO.GenreId);
 
-            //crear una nueva entidad
+            //creo una nueva entidad
             Movie newMovie = new()
             {
                 Title = movieRequestDTO.TitleMovie,

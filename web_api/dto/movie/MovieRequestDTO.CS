@@ -1,3 +1,4 @@
+using entities_library.file_system;
 using web_api.dto.common;
 
 namespace web_api.dto.movie;
@@ -7,7 +8,7 @@ namespace web_api.dto.movie;
         public string TitleMovie { get; set; } = "";//titulo del post
         public string DescriptionMovie{ get; set; } = "";
         public long GenreId {get; set;} = 0;
-        public string UrlImage { get; set; } = "";//url de la imagen
-        public string VideoMovie { get; set; } = "";//descripcn
+        public FileType? UrlImage { get; set; }//url de la imagen
+        public FileType? VideoMovie { get; set; }//descripcn
         
     }
