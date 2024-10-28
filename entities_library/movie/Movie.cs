@@ -14,7 +14,7 @@ public class Movie
     //Genre es un atributo de Genero, osea Genero no es una propiedad de pelicula por que es un objeto. pelicula y genero son dos entities.
     public required FileEntity Image{get; set;}
     public required FileEntity Video{get; set;}
-    public required User User { get; set; }
+    public User? User { get; set; }
     public Qualify? Star {get; set;}
     public List<Comment> Comments { get; set; } = new List<Comment>();
     public List<Qualify> Stars { get; set; } = new List<Qualify>();

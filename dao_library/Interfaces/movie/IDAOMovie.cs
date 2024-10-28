@@ -25,4 +25,6 @@ public interface IDAOMovie
         int page,
         int pageSize
     ); //obtengo las mejores peliculas premiadas al oscar.
+    Task<Movie?> GetByTitle(string title);
+    Task<Movie> Create(string title, Genre genre);
 }  

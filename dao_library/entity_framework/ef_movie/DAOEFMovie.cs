@@ -13,10 +13,31 @@ public class DAOEFMovie: IDAOMovie
         this.context = context;
     }
 
+    public async Task<Movie> Create(Movie movie)
+    {
+        if(context.Movies == null){
+            throw new InvalidOperationException("Movies is null.");
+        }
+        await context.Movies.AddAsync(movie); // Agrega la película al contexto
+        await context.SaveChangesAsync(); // Guarda los cambios en la base de datos
+        return movie;;
+    }
+
+    public Task<Movie> Create(string title, Genre genre)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Delete(Movie movie)
     {
         throw new NotImplementedException();
     }
+
+    public Task<Movie?> Get(string title, Genre genre)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<(IEnumerable<Movie>,int)> GetAll(
         string? query, 
         int page, 
@@ -65,6 +86,12 @@ public class DAOEFMovie: IDAOMovie
         }
         return movie;
     }
+
+    public Task<Movie?> GetByTitle(string title)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<(IEnumerable<Movie>,int)> GetOscarWinners(
         string? query, 
         int page, 
@@ -111,9 +138,13 @@ public class DAOEFMovie: IDAOMovie
         
         return (movies, totalRecords);
     }
-    public Task Save(Movie movie)
-    {
-        throw new NotImplementedException();
+    public async Task Save(Movie movie)
+    {  
+        if (movie == null) throw new ArgumentNullException(nameof(movie));
+        if (context.Movies == null) throw new InvalidOperationException("Movies DbSet is not initialized.");
+
+        await context.Movies.AddAsync(movie);
+        await context.SaveChangesAsync();
     }
 
     public Task Update(Movie movie)

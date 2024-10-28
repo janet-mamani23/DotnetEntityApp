@@ -4,6 +4,7 @@ using web_api.dto.comment;
 using dao_library.Interfaces.movie;
 using dao_library.Interfaces;
 using entities_library.movie;
+using web_api.dto.common;
 
 namespace web_api.Controllers;
 
@@ -145,4 +146,79 @@ public class MovieController: ControllerBase
             }).ToList() // Comentarios asociados
         });
     }
+
+    [HttpPost(Name = "CreateMovie")]
+        public async Task<IActionResult> Post(MovieRequestDTO movieRequestDTO)
+        {
+            IDAOMovie daoMovie = daoFactory.CreateDAOMovie(); //usamos la interfaz para crear un movie/post
+            Genre genre = await daoFactory.CreateDAOGenre().GetById(movieRequestDTO.GenreId); //obtengo el objeto Genre
+
+            Movie? movie = await daoMovie.Create(movieRequestDTO.TitleMovie, genre); //aseguramos que la peli esta asociado a un gnre
+
+            if (movie != null && movie.Title == movieRequestDTO.TitleMovie)
+            {
+                return BadRequest(new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = "There is already a post with that title." //ya hay un post con ese titulo
+                });
+            }
+
+            if(movieRequestDTO == null)
+            {
+                return BadRequest(new ErrorResponseDTO
+                {
+                    Success = false, 
+                    Message = "The fields must be completed." //Se deben completar los campos.
+                });
+            }
+
+            if(string.IsNullOrEmpty(movieRequestDTO.TitleMovie))
+            {
+                return BadRequest(new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = "The title is a required field." //El titulo es un campo obligatorio.
+                });
+            }
+
+            // corroboramos si existe la pelicula;
+            Movie? existingMovie = await daoMovie.GetByTitle(movieRequestDTO.TitleMovie);
+
+            if(existingMovie != null)
+            {
+                return BadRequest(new ErrorResponseDTO
+                {
+                    Success=false,
+                    Message = "The title of the post already exists." //El titulo del post ya existe.
+                });
+            }
+
+            Genre genreUno = await daoFactory.CreateDAOGenre().GetById(movieRequestDTO.GenreId);
+
+            //crear una nueva entidad
+            Movie newMovie = new()
+            {
+                Title = movieRequestDTO.TitleMovie,
+                Description = movieRequestDTO.DescriptionMovie,
+                Genre = genreUno,
+                Image = movieRequestDTO.UrlImage,
+                Video = movieRequestDTO.VideoMovie,
+                
+            };
+
+            await daoMovie.Save(newMovie);
+
+            return Ok(new MovieResponseDTO
+            {
+                Success = true,
+                Message = "El post fue creado exitosamente.",
+                Id = newMovie.Id,
+                Title = newMovie.Title,
+                Description = newMovie.Description,
+                Genre = newMovie.Genre.Name,
+                ImageUrl = newMovie.UrlImage,
+                VideoUrl= newMovie.Video,
+            });   
+        }
 }   
