@@ -6,6 +6,6 @@ public class FileEntity
 
     public required string Path {get; set;}
 
-    public FileType? FileType{get; set;}
+    public virtual FileType? FileType{get; set;}
 
 }

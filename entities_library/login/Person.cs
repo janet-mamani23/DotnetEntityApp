@@ -2,7 +2,7 @@ namespace entities_library.login;
 
 public class Person
 {   
-    public UserStatus UserStatus {get; set;} = UserStatus.Active;
+    public  virtual UserStatus UserStatus {get; set;} = UserStatus.Active;
     public long Id {get; set;}
 
     public required string Name {get; set;}

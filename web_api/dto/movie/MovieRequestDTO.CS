@@ -10,5 +10,5 @@ namespace web_api.dto.movie;
         public long GenreId {get; set;} = 0;
         public FileEntity? Image { get; set; }//url de la imagen
         public FileEntity? VideoMovie { get; set; }//descripcn
-        
-    }
+    
+}

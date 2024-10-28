@@ -7,8 +7,8 @@ public class Comment
 {
     public long Id { get; set; }
     public  string Text { get; set; } 
-    public   User User { get; set; }
-    public  Movie Movie { get; set; }
+    public virtual User User { get; set; }
+    public virtual Movie Movie { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public Comment(string text, User user, Movie movie, DateTime createdAt)

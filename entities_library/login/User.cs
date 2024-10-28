@@ -6,17 +6,17 @@ public class User : Person
 {
     public required string Email { get; set; }
     public string Password { get; set;} = "";
-    public UserStatus userStatus { get; set; } = UserStatus.Active;
-    public file_system.FileEntity? Avatar {get; set;}
+    public virtual UserStatus userStatus { get; set; } = UserStatus.Active;
+    public virtual file_system.FileEntity? Avatar {get; set;}
     public string Description {get; set;} = "";
 
     #region Methods
-    public void Encrypt(string password)
+    public virtual void Encrypt(string password)
     {
         this.Password = this.encrypt(password);
     } 
 
-    public bool IsPassword(string password)
+    public virtual bool IsPassword(string password)
     {
         return this.encrypt(password) == this.Password;
     }

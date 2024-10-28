@@ -8,7 +8,7 @@ public class UserBan{
 
     public DateTime? EndtDateTime {get; set;}
 
-    public required User User {get; set;}
+    public virtual required User User {get; set;}
 
     public string? Reason {get; set;} //Razon por la cual se banea.
 
