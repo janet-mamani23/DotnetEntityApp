@@ -27,8 +27,13 @@ public class DAOEFFile: IDAOFileEntity
         throw new NotImplementedException();
     }
 
-    public Task Save(FileEntity fileEntity)
+    public async Task<FileEntity> Save(FileEntity fileEntity)
     {
-        throw new NotImplementedException();
+        if (context.Files == null){
+            throw new Exception ("error de acceso a la base de datos");
+        }
+        context.Files.Add(fileEntity);
+        await context.SaveChangesAsync();
+        return fileEntity;
     }
 }
