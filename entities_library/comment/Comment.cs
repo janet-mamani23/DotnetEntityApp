@@ -19,4 +19,13 @@ public class Comment
         CreatedAt = createdAt;
     }
 
+    public string GetName()
+    { 
+        return User.GetUserName();
+    }
+
+    public string UrlAvatar()
+    {
+        return User.GetUrlAvatar();
+    }
 }

@@ -8,6 +8,8 @@ using entities_library.comment;
 using dao_library.Interfaces.login;
 using dao_library.Interfaces.movie;
 using entities_library.movie;
+using web_api.Controllers.comment;
+
 
 namespace web_api.Controllers;
 
@@ -106,29 +108,37 @@ public class CommentController : ControllerBase
         }
     }
     //TODO - Enzo
-    /*[HttpGet]
-    public async Task<ActionResult> Get(
-        int page = 1,
-        int pageSize = 10,
-        int movieId)
+    [HttpGet]
+    public async Task<ActionResult> Get(GetCommentsRequestDTO request)
     {
-        Movie movie = await daoFactory.DAOMovie.Get(movieId);  
+        IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
+        Movie movie = await daoMovie.GetById(request.movieId); 
+
+        IDAOComment daoComment = daoFactory.CreateDAOComment();
     
-        var (comments, totalRecords) = await daoFactory.DAOMovie.GetAll(movie, page, pageSize);
+        var (comments, totalRecords) = await daoComment.GetAll(movie, request.page, request.pageSize);
 
         List<GetCommentsResponseDTO> data = new List<GetCommentsResponseDTO>();
-
-        foreach(...) { //arman los dto response }
+    
+        foreach( Comment comment  in comments) 
+        {
+            data.Add(new GetCommentsResponseDTO 
+            {
+                avatarUser = comment.UrlAvatar(),
+                nameUser = comment.GetName(),
+                textComment = comment.Text
+            });
+         } 
 
         var response = new
         {
             TotalRecords = totalRecords,
-            Page = page,
-            PageSize = pageSize,
+            Page = request.page,
+            PageSize = request.pageSize,
             Comments = data
         };
 
         return Ok(response);
     }
-    */
+    
 }

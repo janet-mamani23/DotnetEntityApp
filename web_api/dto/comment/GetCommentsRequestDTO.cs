@@ -1,5 +1,5 @@
 namespace web_api.Controllers.comment;
-public class ResponseGetAllCommentDTO
+public class GetCommentsRequestDTO
 {
     public int movieId {get; set;} 
     public int page {get; set;} = 1;

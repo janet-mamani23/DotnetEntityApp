@@ -3,6 +3,7 @@ using dao_library.Interfaces.comment;
 using entities_library.comment;
 using entities_library.login;
 using entities_library.movie;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace dao_library.entity_framework.ef_comment;
@@ -31,17 +32,15 @@ public class DAOEFComment: IDAOComment
     }
 
     public async Task<(IEnumerable<Comment>,int)> GetAll(
-        int movieId,
+        Movie movie,
         int page, 
         int pageSize
     )
     {
         IQueryable<Comment>? commentQuery = context.Comments;
         
-        commentQuery = commentQuery.Where(p => p.Movie.Id == movieId)
-        .Include(c => c.User)
-        .Include(c => c.Movie);
-
+        commentQuery = commentQuery.Where(p => p.Movie == movie);
+        
         int totalRecords = await commentQuery.CountAsync();
 
         var comment = await commentQuery

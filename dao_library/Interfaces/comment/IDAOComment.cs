@@ -8,7 +8,7 @@ namespace dao_library.Interfaces.comment;
 public interface IDAOComment
 {
     Task<(IEnumerable<Comment>,int)> GetAll(
-        int movieId,
+        Movie movie,
         int page,
         int pageSize
     );
@@ -19,4 +19,5 @@ public interface IDAOComment
     Task Delete(long id);
 
     Task Update(long id, string newText);
+
 }

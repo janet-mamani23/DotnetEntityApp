@@ -73,12 +73,8 @@ public class DAOEFMovie: IDAOMovie
             throw new InvalidOperationException("Movies set is not initialized.");
         }
         var movie = await context.Movies
-        .Include(m => m.Genre)       // Incluye el género
-        .Include(m => m.Comments)    // Incluye los comentarios relacionados
-        .Include(m => m.Image)       // Incluye la imagen
-        .Include(m => m.Video)       // Incluye el video
-        .Include(m => m.Star)        // Incluye las calificaciones (si es un objeto relacionado)
-        .FirstOrDefaultAsync(m => m.Id == id); // Busca la película por su ID
+        .Where(m => m.Id == id ) 
+        .FirstOrDefaultAsync(); // Busca la película por su ID
         
         if (movie == null)
         {
