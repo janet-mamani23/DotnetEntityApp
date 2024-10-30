@@ -1,4 +1,6 @@
 namespace entities_library.movie;
+
+using System;
 using entities_library.comment;
 using entities_library.file_system;
 using entities_library.login;
@@ -35,4 +37,17 @@ public class Movie
         return average; // Retornamos el promedio
     }
 
+    public string GetImage()
+    {
+        if(this.Image != null)
+        return this.Image.Path;
+        return "";  //AGREGAR UNA URL GENERICO
+    }
+
+    public string GetVideo()
+    {
+        if(this.Video != null)
+        return this.Video.Path;
+        return ""; //AGREGAR UNA URL GENERICO
+    }
 }

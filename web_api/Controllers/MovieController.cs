@@ -5,6 +5,7 @@ using dao_library.Interfaces.movie;
 using dao_library.Interfaces;
 using entities_library.movie;
 using web_api.dto.common;
+using entities_library.file_system;
 
 namespace web_api.Controllers;
 
@@ -22,8 +23,8 @@ public class MovieController: ControllerBase
         this.daoFactory = daoFactory;
     }
 
-    [HttpGet(Name = "movies")] 
-    public async Task<IActionResult> GetAllMovies(MoviesRequestDTO moviesRequestDTO, [FromQuery] MovieGetAllRequestDTO request)
+    [HttpGet(Name = "movies")]  //lo unico que cambia son los parametros, es una pelicula para todos.
+    public async Task<IActionResult> GetAllMovies(MoviesRequestDTO moviesRequestDTO, MovieGetAllRequestDTO request)
     {
         IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
 
@@ -37,6 +38,16 @@ public class MovieController: ControllerBase
             movies = movies.Where(m => m.Genre.Name == moviesRequestDTO.Genre).ToList(); // caso contrario se filtra por genero
         }
 
+        if (moviesRequestDTO.HasOscar)
+        {
+            movies = movies.Where(m => m.HasOscar).ToList(); // Filtra solo las que tienen Oscar
+        }
+
+        if (moviesRequestDTO.IsTopRated)
+        {
+            movies = movies.OrderByDescending(m => m.Star).ToList(); // Ordena de mayor a menor calificación
+        }
+
         var moviesResponse = movies.Select(movi => new MoviesResponseDTO
         {
             Id = movi.Id,
@@ -48,62 +59,6 @@ public class MovieController: ControllerBase
             Movies = moviesResponse,  
             TotalRecords = totalRecords
         });
-    }
-
-    [HttpGet("oscar-movies")] 
-    public async Task<IActionResult> GetOscarNominatedMovies(MoviesRequestDTO moviesRequestDTO, [FromQuery] MovieGetAllRequestDTO request)
-    {
-        IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
-
-        var (movies, totalRecords) = await daoMovie.GetAll(
-            request.query,
-            request.page,
-            request.pageSize
-        );
-
-        movies = movies.Where(m => m.HasOscar == true).ToList();
-        if (!string.IsNullOrEmpty(moviesRequestDTO.Genre) && moviesRequestDTO.Genre.ToLower() != "all")
-        {
-            movies = movies.Where(m => m.Genre.Name.ToLower() == moviesRequestDTO.Genre.ToLower()).ToList();
-        }
-
-        var responseMovies = movies.Select(movi => new MoviesResponseDTO
-        {
-            Id = movi.Id,
-            ImageUrl = movi.Image.Path
-        }).ToList();
-        
-        return Ok( new
-        {
-            Movies = responseMovies,
-            TotalRecords = totalRecords // Devuelvo también la cantidad total de registros
-        });
-    }
-
-    [HttpGet("topRating-movies")] // Endpoint
-    public async Task<IActionResult> GetTopRatedMovies(MoviesRequestDTO moviesRequestDTO, [FromQuery] MovieGetAllRequestDTO request)
-    {
-        IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
-
-        var (movies, totalRecords) = await daoMovie.GetAll(
-            request.query,
-            request.page,
-            request.pageSize
-
-        ); // Obtener todas las películas
-
-        if (!string.IsNullOrEmpty(moviesRequestDTO.Genre) && moviesRequestDTO.Genre.ToLower() != "all")
-        {
-            movies = movies.Where(m => m.Genre.Name == moviesRequestDTO.Genre).ToList(); // Filtrar por género
-        }
-        // Ordenar por calificación de mayor a menor
-        var topRatedMovies = movies.OrderByDescending(m => m.Star).ToList(); // Suponiendo que 'Star' es la propiedad que guarda la calificación
-
-        return Ok(topRatedMovies.Select(movi => new MoviesResponseDTO
-        {
-            Id = movi.Id,
-            ImageUrl = movi.Image.Path
-        }).ToList());
     }
 
 
@@ -194,16 +149,33 @@ public class MovieController: ControllerBase
                 });
             }
 
-            Genre genreUno = await daoFactory.CreateDAOGenre().GetById(movieRequestDTO.GenreId);
+            FileType imageType = await this.daoFactory.CreateDAOFileType().GetById(1);
+            FileType videoType = await this.daoFactory.CreateDAOFileType().GetById(2);
+            
+            FileEntity image = new FileEntity {
+                Path = movieRequestDTO.ImageUrl,
+                FileType = imageType,
+                Id = 0
+            };
+
+            await this.daoFactory.CreateDAOFileEntity().Save(image);
+
+            FileEntity video = new FileEntity {
+                Path = movieRequestDTO.VideoUrl,
+                FileType = videoType,
+                Id = 0
+            };
+
+            await this.daoFactory.CreateDAOFileEntity().Save(video);
 
             //creo una nueva entidad
             Movie newMovie = new Movie
             {
                 Title = movieRequestDTO.TitleMovie,
                 Description = movieRequestDTO.DescriptionMovie,
-                Genre = genreUno,
-                Image = movieRequestDTO.Image,
-                Video = movieRequestDTO.VideoMovie,
+                Genre = genre,
+                Image = image,
+                Video = video,
                 
             };
 
@@ -217,8 +189,8 @@ public class MovieController: ControllerBase
                 Title = newMovie.Title,
                 Description = newMovie.Description,
                 Genre = newMovie.Genre.Name,
-                ImageUrl = newMovie != null && newMovie != null ? newMovie.Image.Path : "",
-                VideoUrl= newMovie.Video.Path,
+                ImageUrl = newMovie.GetImage(),
+                VideoUrl= newMovie.GetVideo(),
             });   
         }
 }   
