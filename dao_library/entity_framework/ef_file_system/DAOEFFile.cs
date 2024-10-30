@@ -36,4 +36,9 @@ public class DAOEFFile: IDAOFileEntity
         await context.SaveChangesAsync();
         return fileEntity;
     }
+
+    Task IDAOFileEntity.Save(FileEntity fileEntity)
+    {
+        throw new NotImplementedException();
+    }
 }

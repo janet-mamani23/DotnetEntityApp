@@ -38,7 +38,7 @@ public class DAOEFMovie: IDAOMovie
         throw new NotImplementedException();
     }
 
-    public async Task<(IEnumerable<Movie>,int)> GetAll(
+    public async Task<(IEnumerable<Movie>movies, int totalRecords)> GetAll(
         string? query, 
         int page, 
         int pageSize)
@@ -90,53 +90,6 @@ public class DAOEFMovie: IDAOMovie
     public Task<Movie?> GetByTitle(string title)
     {
         throw new NotImplementedException();
-    }
-
-    public async Task<(IEnumerable<Movie>,int)> GetOscarWinners(
-        string? query, 
-        int page, 
-        int pageSize)
-    {
-        if (context.Movies == null)
-        {
-            return (Enumerable.Empty<Movie>(), 0); // Devuelve una lista vacía y un total de 0
-        }
-        IQueryable<Movie> oscarMoviesQuery = context.Movies
-            .Where(m => m.HasOscar);
-
-        if (query != null)
-        {
-            oscarMoviesQuery = oscarMoviesQuery.Where(m =>
-                m.Title.Contains(query) || m.Description.Contains(query)
-            );
-        }
-
-        int totalRecords = await oscarMoviesQuery.CountAsync();
-
-        var oscarMovies = await oscarMoviesQuery
-            .Skip((page - 1) * pageSize) // Saltar las películas de las páginas anteriores
-            .Take(pageSize) // Tomar el número de películas especificadas por pageSize
-            .ToListAsync();
-            
-        return (oscarMovies, totalRecords);
-    }
-    public async Task<(IEnumerable<Movie>,int)> GetTopRated(
-        string? query, 
-        int page, 
-        int pageSize)
-    {
-        if (context.Movies == null)
-        {
-            return (Enumerable.Empty<Movie>(),0); 
-        }
-        var totalRecords = await context.Movies.CountAsync();
-        var movies = await context.Movies
-            .OrderByDescending(m => m.Star) //Las películas se ordenan en orden descendente dependiendo Star
-            .Skip((page - 1) * pageSize)
-            .Take( pageSize) //cantidad de resultados a devolver
-            .ToListAsync(); // Devuelve las count películas más calificadas
-        
-        return (movies, totalRecords);
     }
     public async Task Save(Movie movie)
     {  

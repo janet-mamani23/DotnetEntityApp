@@ -4,7 +4,7 @@ namespace dao_library.Interfaces.movie;
 
 public interface IDAOMovie
 {
-    Task<(IEnumerable<Movie>, int)> GetAll(
+    Task<(IEnumerable<Movie> movies, int totalRecords)> GetAll(
         string? query,
         int page,
         int pageSize
@@ -15,16 +15,6 @@ public interface IDAOMovie
     
     //NO PROGRAMAR
     Task Delete(Movie movie); //quiero eliminar mi movie desde mi office
-    Task<(IEnumerable<Movie>,int)> GetTopRated(
-        string? query,
-        int page,
-        int pageSize
-    ); // obtengo las ej: 5 películas más calificadas
-    Task<(IEnumerable<Movie>,int)> GetOscarWinners(
-        string? query,
-        int page,
-        int pageSize
-    ); //obtengo las mejores peliculas premiadas al oscar.
     Task<Movie?> GetByTitle(string title);
     Task<Movie> Create(string title, Genre genre);
 }  
