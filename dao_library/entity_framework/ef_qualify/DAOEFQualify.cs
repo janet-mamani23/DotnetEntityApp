@@ -1,6 +1,4 @@
 using dao_library.Interfaces.qualify;
-using entities_library.login;
-using entities_library.movie;
 using entities_library.Qualify;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,12 +8,16 @@ public class DAOEFQualify: IDAOQualify
 {
     private readonly ApplicationDbContext context;
 
-
     public DAOEFQualify(ApplicationDbContext context)
     {
         this.context = context;
     }
 
+    public Task<Qualify> GetById(long id)
+    {
+        Qualify? qualify = context.Qualifies?.Find(id);
+        return Task.FromResult(qualify);
+    }
 
     public async Task Delete(long id)
     {
@@ -30,38 +32,6 @@ public class DAOEFQualify: IDAOQualify
             throw new Exception("Calificación no encontrado");
         }
     }
-/*
-    public async Task<(IEnumerable<Qualify>,int)> GetAll(
-        int qualifyId,
-        int page,
-        int pageSize
-    )
-    {
-        IQueryable<Qualify>? qualifyQuery = context.Qualifies;       
-        qualifyQuery = qualifyQuery.Where(p => p.Movie.Id == qualifyId)
-        .Include(c => c.User)
-        .Include(c => c.Movie);
-
-
-        int totalQualifies = await qualifyQuery.CountAsync();
-
-
-        var qualify = await qualifyQuery
-        .Skip((page - 1)* pageSize)
-        .Take(pageSize)
-        .ToListAsync();
-
-
-        return (qualify, totalQualifies);   
-    }*/
-
-
-    public Task<Qualify> GetById(long id)
-    {
-        Qualify? qualify = context.Qualifies?.Find(id);
-        return Task.FromResult(qualify);
-    }
-
 
     public async Task Save(Qualify qualify)
     {
@@ -71,19 +41,20 @@ public class DAOEFQualify: IDAOQualify
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Qualify>> GetUserQualificationsForMovie(long idUser, long idMovie)
+    public async Task<bool> Update(Qualify qualify)
     {
-        return await context.Qualifies
-            .Where(q => q.User.Id == idUser && q.Movie.Id == idMovie)
-            .ToListAsync();
-    }
+        var existingQualify = await context.Qualifies
+            .FirstOrDefaultAsync(q => q.Id == qualify.Id);
 
-    public async Task<bool> HasUserQualifiedMovie(string emailUser, long idMovie)
-    {
-        return await context.Qualifies
-            .AnyAsync(q => q.User.Email == emailUser && q.Movie.Id == idMovie);
+        if (existingQualify != null)
+        {
+            existingQualify.Stars = qualify.Stars;
+            context.Qualifies.Update(existingQualify);
+            await context.SaveChangesAsync();
+            return true;
+        }
+        return false;
     }
-
 
     public async Task<IEnumerable<Qualify>> GetByMovieId(long movieId)
     {
@@ -97,18 +68,15 @@ public class DAOEFQualify: IDAOQualify
         return qualifies;
     }
 
-    public async Task<bool> Update(Qualify qualify)
+    public async Task<Qualify?> GetQualifyByUserAndMovie(long userId, long movieId)
     {
-        var existingQualify = await context.Qualifies
-            .FirstOrDefaultAsync(q => q.Id == qualify.Id);
+        return await context.Qualifies
+        .FirstOrDefaultAsync(q => q.UserId == userId && q.MovieId == movieId);
+    }
 
-        if (existingQualify != null)
-        {
-            existingQualify.Star = qualify.Star;
-            context.Qualifies.Update(existingQualify);
-            await context.SaveChangesAsync();
-            return true;
-        }
-        return false;
-    } 
+    public async Task<bool> HasUserQualifiedMovie(string emailUser, long idMovie)
+    {
+        return await context.Qualifies
+            .AnyAsync(q => q.User.Email == emailUser && q.Movie.Id == idMovie);
+    }
 }
