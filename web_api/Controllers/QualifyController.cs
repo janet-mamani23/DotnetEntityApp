@@ -5,8 +5,8 @@ using dao_library.Interfaces;
 using dao_library.Interfaces.login;
 using entities_library.login;
 using web_api.dto.login;
-//using dao_library.entity_framework.ef_qualify;
 using entities_library.Qualify;
+using dao_library.Interfaces.movie;
 
 namespace web_api.controllers
 {
@@ -38,6 +38,14 @@ namespace web_api.controllers
                 return Unauthorized("User not logged in.");
             }
 
+            // Obtener la película a calificar desde el DAO
+            IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
+            var movie = await daoMovie.GetById(qualifyRequest.MovieId);
+            if (movie == null)
+            {
+                return NotFound("Movie not found.");
+            }
+
             // 2. Verificar si el usuario ya ha calificado esta película
             bool hasQualified = await dAOQualify.HasUserQualifiedMovie(loginRequestDTO.EmailUser, qualifyRequest.Movie.Id);
             if (hasQualified)
@@ -49,8 +57,9 @@ namespace web_api.controllers
             var qualify = new Qualify
             {
                 User = user,
-                Movie = qualifyRequest.Movie, // Película a calificar
-                Star = qualifyRequest.Star // Calificación
+                Stars = qualifyRequest.Star, // Calificación
+                MovieId = qualifyRequest.MovieId, // Película a calificar
+                Movie = movie
             };
 
             // 4. Guardar la calificación en la base de datos
@@ -62,13 +71,12 @@ namespace web_api.controllers
             return Ok(new QualifyResponseDTO 
             {
                 Success = true,
-                Message = "",
+                Message = "Rating created successfully",
                 Id = qualify.Id,
-                Star = qualify.Star,
+                Star = qualify.Stars,
                 AverageStars = (int)averageStars
             });
         }
-
 
         [HttpPut(Name = "UpdateQualify")]
         public async Task<IActionResult> UpdateQualify([FromBody] QualifyRequestDTO qualifyRequest, [FromQuery] LoginRequestDTO loginRequestDTO)
@@ -84,22 +92,42 @@ namespace web_api.controllers
 
             // 2. Buscar la calificación existente
             IDAOQualify daoQualify = daoFactory.CreateDAOQualify();
-            var qualifyToUpdate = new Qualify
-            {
-                User = user,
-                Movie = qualifyRequest.Movie,
-                Star = qualifyRequest.Star
-            };
+            var qualifyToUpdate = await daoQualify.GetQualifyByUserAndMovie(user.Id, qualifyRequest.MovieId);
 
-            // 3. Actualizar la calificación
+            if (qualifyToUpdate == null)
+            {
+                return NotFound("Rating not found.");
+            }
+
+             // Actualizar la calificación
+            qualifyToUpdate.Stars = qualifyRequest.Star;
             bool updated = await daoQualify.Update(qualifyToUpdate);
 
             if (!updated)
             {
-                return NotFound("Rating not found.");
+                return StatusCode(500, "Failed to update rating.");
             }
-            
-            return Ok("Rating successfully updated.");
+
+            //return Ok("Rating successfully updated.");
+
+            // 4. Obtener el promedio actualizado
+            IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
+            var movie = await daoMovie.GetById(qualifyRequest.MovieId);
+            if (movie == null)
+            {
+                return NotFound("Movie not found.");
+            }
+
+            var newAverageStars = movie.GetAverage(); // Llama al método de la entidad Movie para obtener el promedio
+
+            return Ok(new QualifyResponseDTO
+            {
+                Success = true,
+                Message = "Rating successfully updated.",
+                Id = qualifyToUpdate.Id,
+                Star = qualifyToUpdate.Stars,
+                AverageStars = (int)newAverageStars
+            });
         }
     }
 }
