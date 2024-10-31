@@ -14,7 +14,7 @@ public interface IDAOUser
     Task<User?> GetByUsername(string username);
 
     Task<User?> GetById(long? id);
-    Task Save(User user);
+    Task <long> Save(User user);
     
     //NO PROGRAMAR
     Task Delete(User user);
