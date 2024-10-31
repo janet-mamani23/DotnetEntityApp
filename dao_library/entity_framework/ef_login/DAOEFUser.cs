@@ -60,8 +60,10 @@ public class DAOEFUser : IDAOUser
         return user;
     }
 
-    public Task Save(User user)
+    public async Task<long> Save(User user)
     {
-        throw new NotImplementedException();
+        context.Users.Add(user);
+       await context.SaveChangesAsync(); // Guarda el usuario en la base de datos
+       return user.Id; // Retorna el ID del usuario guardado
     }
 }
