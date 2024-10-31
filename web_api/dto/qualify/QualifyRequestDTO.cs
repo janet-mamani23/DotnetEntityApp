@@ -10,6 +10,8 @@ public class QualifyRequestDTO : RequestDTO
 
     public required int Star {get; set;}
 
+    public required long MovieId {get; set;}
+
     public required Movie Movie{get; set;}
 
 }
