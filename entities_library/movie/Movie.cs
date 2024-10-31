@@ -17,23 +17,21 @@ public class Movie
     public virtual required FileEntity Image{get; set;}
     public virtual required FileEntity Video{get; set;}
     public virtual User? User { get; set; }
-    public virtual Qualify? Star {get; set;}
     public virtual List<Comment> Comments { get; set; } = new List<Comment>();
-    public virtual List<Qualify> Stars { get; set; } = new List<Qualify>();
+    public virtual List<Qualify> Qualifies { get; set; } = new List<Qualify>();
     public bool HasOscar { get; set; } // Indica si la película ha ganado un Oscar
 
     public virtual double GetAverage()
     {
-        if (Stars.Count == 0) return 0; // Evita la división por 0
-
+        if (Qualifies.Count == 0) return 0; // Evita la división por 0
 
         double suma = 0; // Inicializamos la suma
-        foreach(Qualify c in Stars) // Iteramos sobre la lista de calificaciones
+        foreach(Qualify star in Qualifies) // Iteramos sobre la lista de calificaciones
         {
-           suma += c.Star; // Sumamos las calificaciones
+           suma += star.Stars; // Sumamos las calificaciones de qualify
         }
 
-        double average = suma / Stars.Count; // Calculamos el promedio
+        double average = suma / Qualifies.Count; // Calculamos el promedio
         return average; // Retornamos el promedio
     }
 
