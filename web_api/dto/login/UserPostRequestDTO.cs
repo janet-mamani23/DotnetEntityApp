@@ -4,9 +4,9 @@ namespace web_api.dto.login;
 
 public class UserPostRequestDTO : RequestDTO
 {
-    public string name { get; set; } = "";
-    public string lastName { get; set; } = "";
-    public DateTime? birthdate { get; set; }
-    public string mail { get; set; } = "";
-    public string password { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string LastName { get; set; } = "";
+    public DateTime? Birthdate { get; set; }
+    public string Email { get; set; } = "";
+    public string Password { get; set; } = "";
 }
