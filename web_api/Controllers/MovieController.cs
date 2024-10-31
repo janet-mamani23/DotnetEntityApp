@@ -45,7 +45,7 @@ public class MovieController: ControllerBase
 
         if (moviesRequestDTO.IsTopRated)
         {
-            movies = movies.OrderByDescending(m => m.Star).ToList(); // Ordena de mayor a menor calificación
+            movies = movies.OrderByDescending(m => m.Qualifies).ToList(); // Ordena de mayor a menor calificación
         }
 
         var moviesResponse = movies.Select(movi => new MoviesResponseDTO
@@ -71,7 +71,7 @@ public class MovieController: ControllerBase
 
         if (movie == null)// Verifico si la película existe
         {
-            return NotFound("La película solicitada no fue encontrada.");
+            return NotFound("The requested movie was not found.");
         }
 
          // Obtener promedio de calificaciones usando el método GetAverage
@@ -80,7 +80,7 @@ public class MovieController: ControllerBase
         return Ok (new MovieResponseDTO
         {
             Success = true,
-            Message = "La peliculas es: ",
+            Message = "The movies is: ",
             Id = movie.Id,
             Title = movie.Title,
             Genre = movie.Genre.Name,
@@ -184,7 +184,7 @@ public class MovieController: ControllerBase
             return Ok(new MovieResponseDTO
             {
                 Success = true,
-                Message = "El post fue creado exitosamente.",
+                Message = "The post was created successfully.",
                 Id = newMovie.Id,
                 Title = newMovie.Title,
                 Description = newMovie.Description,
