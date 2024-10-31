@@ -5,8 +5,8 @@ namespace web_api.dto.login;
 
 public class UserPostResponseDTO : ResponseDTO
 {
-    public long id { get; set; }
-    public string name { get; set; } = "";
-    public string lastName { get; set; } = "";
-    public string mail { get; set; } = "";
+    public long Id { get; set; }
+    public string Name { get; set; } = "";
+    public string LastName { get; set; } = "";
+    public string Email { get; set; } = "";
 }
