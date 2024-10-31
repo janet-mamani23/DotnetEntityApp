@@ -93,7 +93,7 @@ public class CommentController : ControllerBase
 
 
     [HttpPut(Name = "UpdateComment")]
-    public async Task<IActionResult> Put(long id, [FromBody] RequestPutCommentDTO  requestPutCommentDTO )
+    public async Task<IActionResult> Put([FromBody] RequestPutCommentDTO  requestPutCommentDTO )
     {
         IDAOComment daoComment = daoFactory.CreateDAOComment();
 
