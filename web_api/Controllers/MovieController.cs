@@ -6,6 +6,9 @@ using dao_library.Interfaces;
 using entities_library.movie;
 using web_api.dto.common;
 using entities_library.file_system;
+using dao_library.Interfaces.comment;
+using web_api.Controllers.comment;
+using entities_library.comment;
 
 namespace web_api.Controllers;
 
@@ -24,7 +27,7 @@ public class MovieController: ControllerBase
     }
 
     [HttpGet(Name = "movies")]  //lo unico que cambia son los parametros, es una pelicula para todos.
-    public async Task<IActionResult> GetAllMovies(MoviesRequestDTO moviesRequestDTO, MovieGetAllRequestDTO request)
+    public async Task<IActionResult> GetAllMovies(  [FromQuery] MoviesRequestDTO moviesRequestDTO,  [FromQuery] MovieGetAllRequestDTO request)
     {
         IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
 
@@ -56,6 +59,8 @@ public class MovieController: ControllerBase
 
         return Ok(new  // Retornar las películas paginadas mas la cantidad total de registros
         {
+            Success = true,
+            Message = "Movies retrieved successfully",
             Movies = moviesResponse,  
             TotalRecords = totalRecords
         });
@@ -66,7 +71,6 @@ public class MovieController: ControllerBase
     public async Task<IActionResult> GetMovieById(long id)
     {
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
-
         Movie movie = await daoMovie.GetById(id);
 
         if (movie == null)// Verifico si la película existe
@@ -74,8 +78,21 @@ public class MovieController: ControllerBase
             return NotFound("The requested movie was not found.");
         }
 
-         // Obtener promedio de calificaciones usando el método GetAverage
-        double averageRating = movie.GetAverage();
+        double averageRating = movie.GetAverage();   // Obtener promedio de calificaciones usando el método GetAverage
+
+        List<CommentResponseDTO> commentsResponse = new List<CommentResponseDTO>();
+        
+        foreach (Comment comment in movie.Comments)
+        {
+            commentsResponse.Add(new CommentResponseDTO
+            {
+                Id = comment.Id,
+                AvatarUser = comment.UrlAvatar(),
+                UserName = comment.GetName(),
+                Text = comment.Text,
+                CreatedAt = comment.CreatedAt
+            });
+        }
 
         return Ok (new MovieResponseDTO
         {
@@ -86,20 +103,11 @@ public class MovieController: ControllerBase
             Genre = movie.Genre.Name,
             Description = movie.Description, 
             ImageUrl = movie.Image?.Path,
-            VideoUrl = movie.Video?.Path, //¿se incluye el genero y los comentarios y calificacion?
+            VideoUrl = movie.Video?.Path,
             //Star = movie.Star?.Star,
-            AverageQualify = averageRating, // Promedio de calificaciones
-
-            //TODO-ENZO aplicar paginacioncomentarios(lo que paso el profe) dao.comment(get all)
-            Comments = movie.Comments.Select(c => new CommentResponseDTO
-            {
-                Id = c.Id,
-                UserName = c.User.Name,
-                Text = c.Text,
-                CreatedAt = c.CreatedAt
-                
-            }).ToList() // Comentarios asociados
-        });
+            AverageQualify = averageRating,
+            Comments = commentsResponse,
+             });
     }
 
     [HttpPost(Name = "CreateMovie")]

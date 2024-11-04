@@ -55,7 +55,7 @@ public class User : Person
             }
         else 
             {
-            return "No existe un avatar de usuario registrado";
+            return "htttps://urlpaginacualquiera/userdefault.jpg";
             }
     }
 #endregion

@@ -1,3 +1,4 @@
+using dao_library.Interfaces.comment;
 using dao_library.Interfaces.movie;
 using entities_library.movie;
 using Microsoft.EntityFrameworkCore;
@@ -68,18 +69,18 @@ public class DAOEFMovie: IDAOMovie
 
     public async Task<Movie> GetById(long id)
     {
-        if (context.Movies == null) //corrobora si los movies son null
+        if (context.Movies == null) 
         {
             throw new InvalidOperationException("Movies set is not initialized.");
         }
-        var movie = await context.Movies
-        .Where(m => m.Id == id ) 
-        .FirstOrDefaultAsync(); // Busca la película por su ID
+        Movie? movie = await context.Movies
+        .FirstOrDefaultAsync(m => m.Id == id);
         
         if (movie == null)
         {
             throw new KeyNotFoundException($"Movie with Id {id} not found");
         }
+        
         return movie;
     }
 

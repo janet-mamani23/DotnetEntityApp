@@ -8,4 +8,13 @@ public class FileEntity
 
     public virtual FileType? FileType{get; set;}
 
+    public virtual string GetUrl() 
+    {
+        if(String.IsNullOrEmpty(this.Path)) 
+        {
+            return "htttps://urlpaginacualquiera/userdefault.jpg";
+        }
+        return this.Path;
+    }
+
 }
