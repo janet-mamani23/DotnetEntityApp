@@ -5,7 +5,7 @@ namespace web_api.dto.qualify;
 
 public class QualifyResponseDTO : ResponseDTO
 {
-    public long Id{get;set;}
-    public required int Star {get; set;}
-    public required int AverageStars {get; set;}
+    public long id{get;set;}
+    public required int star {get; set;}
+    public required int averageStars {get; set;}
 }
