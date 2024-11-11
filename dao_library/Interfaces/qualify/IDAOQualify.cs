@@ -1,3 +1,5 @@
+using entities_library.login;
+using entities_library.movie;
 using entities_library.Qualify;
 
 
@@ -18,5 +20,5 @@ public interface IDAOQualify
 
     Task<Qualify?> GetQualifyByUserAndMovie(long userId, long movieId);
 
-    Task <bool> HasUserQualifiedMovie(string Useremail, long movieId); //comprueba si el usuario ya calificó la película
+    Task <bool> HasUserQualifiedMovie(User user, Movie movie); //comprueba si el usuario ya calificó la película
 }

@@ -1,4 +1,7 @@
+using System.Reflection.Metadata.Ecma335;
 using dao_library.Interfaces.qualify;
+using entities_library.login;
+using entities_library.movie;
 using entities_library.Qualify;
 using Microsoft.EntityFrameworkCore;
 
@@ -74,9 +77,10 @@ public class DAOEFQualify: IDAOQualify
         .FirstOrDefaultAsync(q => q.UserId == userId && q.MovieId == movieId);
     }
 
-    public async Task<bool> HasUserQualifiedMovie(string emailUser, long idMovie)
+    public async Task<bool> HasUserQualifiedMovie(User user, Movie movie)
     {
         return await context.Qualifies
-            .AnyAsync(q => q.User.Email == emailUser && q.Movie.Id == idMovie);
+            .AnyAsync(q => q.User.Name == user.Name && q.Movie.Id == movie.Id);
     }
+
 }
