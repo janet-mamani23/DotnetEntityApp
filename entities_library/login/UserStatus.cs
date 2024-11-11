@@ -4,6 +4,6 @@ namespace entities_library.login;
 
 public enum UserStatus
 {
-    Active,
-    Banned
+    Active = 1,
+    Banned = 2
 }

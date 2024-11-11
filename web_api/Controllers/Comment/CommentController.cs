@@ -63,12 +63,15 @@ public class CommentController : ControllerBase
         }
         
 
-        Comment comment = new Comment(
-            requestPostCommentDTO.text,
-            user,
-            movie,
-            DateTime.Now
-        );
+        Comment comment = new Comment{
+            Text= requestPostCommentDTO.text,
+            User = user,
+            Movie = movie,
+            CreatedAt = DateTime.Now,
+            Id = 0
+
+
+        };
         
         await daoComment.Save(comment);
         return CreatedAtAction(nameof(Post), new { id = comment.Id }, comment);

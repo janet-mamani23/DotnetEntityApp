@@ -11,14 +11,6 @@ public class Comment
     public virtual Movie Movie { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public Comment(string text, User user, Movie movie, DateTime createdAt)
-    {
-        Text = text;
-        User = user;
-        Movie = movie;
-        CreatedAt = createdAt;
-    }
-
     public string GetName()
     { 
         return User.GetUserName();
