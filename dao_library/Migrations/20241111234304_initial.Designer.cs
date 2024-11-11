@@ -11,8 +11,8 @@ using dao_library;
 namespace daolibrary.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240919020652_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241111234304_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,9 @@ namespace daolibrary.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("entities_library.Qualify.Qualify", b =>
@@ -28,13 +31,18 @@ namespace daolibrary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Star")
+                    b.Property<long>("MovieId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Stars")
                         .HasColumnType("int");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
 
                     b.HasIndex("UserId");
 
@@ -117,10 +125,6 @@ namespace daolibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -128,9 +132,6 @@ namespace daolibrary.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("UserStatus")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -166,7 +167,7 @@ namespace daolibrary.Migrations
                     b.ToTable("UserBans");
                 });
 
-            modelBuilder.Entity("entities_library.movie.Genero", b =>
+            modelBuilder.Entity("entities_library.movie.Genre", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,7 +179,7 @@ namespace daolibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Generos");
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("entities_library.movie.Movie", b =>
@@ -194,15 +195,18 @@ namespace daolibrary.Migrations
                     b.Property<long>("GenreId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ImageId")
-                        .HasColumnType("bigint");
+                    b.Property<bool>("HasOscar")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<long?>("StarId")
+                    b.Property<long>("ImageId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("VideoId")
                         .HasColumnType("bigint");
@@ -213,7 +217,7 @@ namespace daolibrary.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.HasIndex("StarId");
+                    b.HasIndex("UserId");
 
                     b.HasIndex("VideoId");
 
@@ -228,11 +232,19 @@ namespace daolibrary.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("userStatus")
+                        .HasColumnType("int");
 
                     b.HasIndex("AvatarId");
 
@@ -241,11 +253,19 @@ namespace daolibrary.Migrations
 
             modelBuilder.Entity("entities_library.Qualify.Qualify", b =>
                 {
+                    b.HasOne("entities_library.movie.Movie", "Movie")
+                        .WithMany("Qualifies")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("entities_library.login.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Movie");
 
                     b.Navigation("User");
                 });
@@ -291,7 +311,7 @@ namespace daolibrary.Migrations
 
             modelBuilder.Entity("entities_library.movie.Movie", b =>
                 {
-                    b.HasOne("entities_library.movie.Genero", "Genre")
+                    b.HasOne("entities_library.movie.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -303,9 +323,9 @@ namespace daolibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("entities_library.Qualify.Qualify", "Star")
+                    b.HasOne("entities_library.login.User", "User")
                         .WithMany()
-                        .HasForeignKey("StarId");
+                        .HasForeignKey("UserId");
 
                     b.HasOne("entities_library.file_system.FileEntity", "Video")
                         .WithMany()
@@ -317,7 +337,7 @@ namespace daolibrary.Migrations
 
                     b.Navigation("Image");
 
-                    b.Navigation("Star");
+                    b.Navigation("User");
 
                     b.Navigation("Video");
                 });
@@ -334,6 +354,8 @@ namespace daolibrary.Migrations
             modelBuilder.Entity("entities_library.movie.Movie", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Qualifies");
                 });
 #pragma warning restore 612, 618
         }
