@@ -6,12 +6,9 @@ namespace web_api.dto.qualify;
 
 public class QualifyRequestDTO : RequestDTO
 {
-    public required Person Name {get; set;}
+    public required int userId {get; set;}
 
-    public required int Star {get; set;}
+    public required int star {get; set;}
 
-    public required long MovieId {get; set;}
-
-    public required Movie Movie{get; set;}
-
+    public required long movieId {get; set;}
 }
