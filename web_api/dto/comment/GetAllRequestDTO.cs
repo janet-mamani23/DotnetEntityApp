@@ -2,7 +2,7 @@ using web_api.dto.common;
 
 namespace web_api.dto.movie
 {
-    public class MovieGetAllRequestDTO: ResponseDTO
+    public class GetAllRequestDTO
     {
         public string? query {get; set;} = null;   //query sirve para filtrar
         public int page {get; set;} = 1;

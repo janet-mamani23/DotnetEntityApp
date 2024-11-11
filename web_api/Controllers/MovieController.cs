@@ -27,26 +27,26 @@ public class MovieController: ControllerBase
     }
 
     [HttpGet(Name = "movies")]  //lo unico que cambia son los parametros, es una pelicula para todos.
-    public async Task<IActionResult> GetAllMovies(  [FromQuery] MoviesRequestDTO moviesRequestDTO,  [FromQuery] MovieGetAllRequestDTO request)
+    public async Task<IActionResult> GetAllMovies( [FromQuery] GetAllMoviesRequestDTO requestMovie)
     {
         IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
 
         var (movies, totalRecords) = await daoMovie.GetAll(
-            request.query,
-            request.page,
-            request.pageSize);
+            requestMovie.query,
+            requestMovie.page,
+            requestMovie.pageSize);
 
-        if (!string.IsNullOrEmpty(moviesRequestDTO.Genre) && moviesRequestDTO.Genre.ToLower() != "all") //aca no especifico el genero
+        if (!string.IsNullOrEmpty(requestMovie.Genre) && requestMovie.Genre.ToLower() != "all") //aca no especifico el genero
         {
-            movies = movies.Where(m => m.Genre.Name == moviesRequestDTO.Genre).ToList(); // caso contrario se filtra por genero
+            movies = movies.Where(m => m.Genre.Name == requestMovie.Genre).ToList(); // caso contrario se filtra por genero
         }
 
-        if (moviesRequestDTO.HasOscar)
+        if (requestMovie.HasOscar)
         {
             movies = movies.Where(m => m.HasOscar).ToList(); // Filtra solo las que tienen Oscar
         }
 
-        if (moviesRequestDTO.IsTopRated)
+        if (requestMovie.IsTopRated)
         {
             movies = movies.OrderByDescending(m => m.Qualifies).ToList(); // Ordena de mayor a menor calificación
         }
