@@ -13,13 +13,13 @@ public class ApplicationDbContext: DbContext
     : base (options)
     {}
 
-    public DbSet<Comment>? Comments {get;}
-    public DbSet<FileEntity> ? Files {get;}
-    public DbSet<FileType>? FileTypes {get;}
-    public DbSet<Person>? Persons {get;}
-    public DbSet<User>? Users {get;}
-    public DbSet<UserBan>? UserBans {get;}
-    public DbSet<Genre>? Genres {get;}
-    public DbSet<Movie>? Movies {get;} //repositorio de daos movie
-    public DbSet<Qualify>? Qualifies {get;}
+    public DbSet<Comment>? Comments {get; set;}
+    public DbSet<FileEntity> ? Files {get; set;}
+    public DbSet<FileType>? FileTypes {get; set;}
+    public DbSet<Person>? Persons {get; set;}
+    public DbSet<User>? Users {get; set;}
+    public DbSet<UserBan>? UserBans {get; set;}
+    public DbSet<Genre>? Genres {get; set;}
+    public DbSet<Movie>? Movies {get; set;} //repositorio de daos movie
+    public DbSet<Qualify>? Qualifies {get; set;}
 }

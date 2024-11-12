@@ -19,7 +19,8 @@ public class User : Person
 
     public virtual bool IsPassword(string password)
     {
-        return this.encrypt(password) == this.Password;
+        string passencrypt = this.encrypt(password);
+        return passencrypt == this.Password;
     }
 
     private string encrypt(string password)
@@ -31,6 +32,7 @@ public class User : Person
             var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
 
             // Convierte el hash a una cadena hexadecimal
+
             return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
         }
         //TODO - todos: Averiguar como encriptar.
