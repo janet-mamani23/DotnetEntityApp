@@ -103,12 +103,13 @@ public class UserController : ControllerBase
             Id = id,
             Name = userPostRequestDTO.Name,
             LastName = userPostRequestDTO.LastName,
-            Email = userPostRequestDTO.Email
+            Email = userPostRequestDTO.Email,
+            Success = true,
         });
     }
 
 
-    [HttpGet(Name = "GetAll")]
+    [HttpGet(Name = "GetAllUsers")]
     public async Task<IActionResult> Get(
         [FromQuery]UserGetAllRequestDTO request)
     {

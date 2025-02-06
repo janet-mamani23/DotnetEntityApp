@@ -1,5 +1,7 @@
+using System.Net;
 using dao_library.Interfaces.movie;
 using entities_library.movie;
+using Microsoft.EntityFrameworkCore;
 
 namespace dao_library.entity_framework.ef_movie;
 
@@ -12,23 +14,65 @@ public class DAOEFGenre: IDAOGenre
         this.context = context;
     }
 
-    public Task Delete(Genre genre)
+    public async Task<bool> Delete(long id)
     {
-        throw new NotImplementedException();
+        if (context.Genres == null)
+        {
+            throw new InvalidOperationException("La colección de géneros es nula.");
+        }
+        var genre = await context.Genres.FindAsync(id);
+        if (genre != null)
+        {
+            context.Genres.Remove(genre);
+            await context.SaveChangesAsync();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    public Task<IEnumerable<Genre>> GetAll()
+    public async Task<IEnumerable<Genre?>> GetAll()
     {
-        throw new NotImplementedException();
+        try{
+            if (context.Genres == null)
+            {
+                throw new InvalidOperationException("La colección de géneros es nula.");
+            }
+            var genres = await context.Genres.ToListAsync();
+            return genres;
+            }
+        catch (Exception ex)
+            {
+                Console.WriteLine($"Error getAll genre: {ex.Message}");
+                return Enumerable.Empty<Genre?>();
+            }
     }
 
-    public Task<Genre> GetById(long id)
+    public async Task<Genre?> GetById(long? id)
     {
-        throw new NotImplementedException();
+        if (id == null) return null;
+        if (context.Genres == null) return null;
+        Genre? genreId = await context.Genres
+            .Where(genreId => genreId.Id == id)
+            .FirstOrDefaultAsync();
+
+        return genreId;
+
     }
 
-    public Task Save(Genre genre)
-    {
-        throw new NotImplementedException();
+    public async Task<long?>Save(Genre genre)
+    {   
+        try{
+            context.Genres?.Add(genre);
+            await context.SaveChangesAsync(); 
+            return genre.Id; 
+            }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving genre: {ex.Message}");
+            return null;
+        }
     }
 }

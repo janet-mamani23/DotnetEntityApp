@@ -34,7 +34,9 @@ public class DAOEFUser : IDAOUser
 
     public Task<(IEnumerable<User>, int)> GetAll(string? query, int page, int pageSize)
     {
+        //TODO
         throw new NotImplementedException();
+
     }
 
     public async Task<User?> GetById(long? id)
@@ -62,8 +64,8 @@ public class DAOEFUser : IDAOUser
 
     public async Task<long> Save(User user)
     {
-        context.Users.Add(user);
-       await context.SaveChangesAsync(); // Guarda el usuario en la base de datos
-       return user.Id; // Retorna el ID del usuario guardado
+        context.Users?.Add(user);
+        await context.SaveChangesAsync(); // Guarda el usuario en la base de datos
+        return user.Id; // Retorna el ID del usuario guardado
     }
 }

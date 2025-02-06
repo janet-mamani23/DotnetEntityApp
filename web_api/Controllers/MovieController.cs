@@ -114,9 +114,10 @@ public class MovieController: ControllerBase
         public async Task<IActionResult> Post(MovieRequestDTO movieRequestDTO)
         {
             IDAOMovie daoMovie = daoFactory.CreateDAOMovie(); //usamos la interfaz para crear un movie/post
-            Genre genre = await daoFactory.CreateDAOGenre().GetById(movieRequestDTO.GenreId); //obtengo el objeto Genre
-
-            Movie? movie = await daoMovie.Create(movieRequestDTO.TitleMovie, genre); //aseguramos que la peli esta asociado a un gnre
+            IDAOGenre daoGenre = daoFactory.CreateDAOGenre();
+           
+            Genre? genre = await daoGenre.GetById(movieRequestDTO.GenreId); //obtengo el objeto Genre
+            Movie movie = await daoMovie.Create(movieRequestDTO.TitleMovie, genre); //aseguramos que la peli esta asociado a un gnre
 
             if (movie != null && movie.Title == movieRequestDTO.TitleMovie)
             {

@@ -16,14 +16,23 @@ public class DAOEFQualify: IDAOQualify
         this.context = context;
     }
 
-    public Task<Qualify> GetById(long id)
+    public async Task<Qualify?> GetById(long? id)
     {
-        Qualify? qualify = context.Qualifies?.Find(id);
-        return Task.FromResult(qualify);
+        if (id == null) return null;
+        if (context.Qualifies == null) return null;
+        Qualify? qualifyId = await context.Qualifies
+            .Where(qualifyId => qualifyId.Id == id)
+            .FirstOrDefaultAsync();
+
+        return qualifyId;
     }
 
     public async Task Delete(long id)
     {
+        if (context.Qualifies == null)
+        {
+            throw new InvalidOperationException("La colección de géneros es nula.");
+        }
         var qualify = await context.Qualifies.FindAsync(id);
         if (qualify != null)
         {
