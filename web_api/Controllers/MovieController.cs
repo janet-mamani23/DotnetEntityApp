@@ -113,21 +113,6 @@ public class MovieController: ControllerBase
     [HttpPost(Name = "CreateMovie")]
         public async Task<IActionResult> Post(MovieRequestDTO movieRequestDTO)
         {
-            IDAOMovie daoMovie = daoFactory.CreateDAOMovie(); //usamos la interfaz para crear un movie/post
-            IDAOGenre daoGenre = daoFactory.CreateDAOGenre();
-           
-            Genre? genre = await daoGenre.GetById(movieRequestDTO.GenreId); //obtengo el objeto Genre
-            Movie movie = await daoMovie.Create(movieRequestDTO.TitleMovie, genre); //aseguramos que la peli esta asociado a un gnre
-
-            if (movie != null && movie.Title == movieRequestDTO.TitleMovie)
-            {
-                return BadRequest(new ErrorResponseDTO
-                {
-                    Success = false,
-                    Message = "There is already a post with that title." //ya hay un post con ese titulo
-                });
-            }
-
             if(movieRequestDTO == null)
             {
                 return BadRequest(new ErrorResponseDTO
@@ -146,8 +131,8 @@ public class MovieController: ControllerBase
                 });
             }
 
-            // corroboramos si existe la pelicula;
-            Movie? existingMovie = await daoMovie.GetByTitle(movieRequestDTO.TitleMovie);
+            IDAOMovie daoMovie = daoFactory.CreateDAOMovie(); //usamos la interfaz para crear un movie/post
+            Movie? existingMovie = await daoMovie.GetByTitle(movieRequestDTO.TitleMovie);  // corroboramos si existe la pelicula;
 
             if(existingMovie != null)
             {
@@ -158,8 +143,19 @@ public class MovieController: ControllerBase
                 });
             }
 
-            FileType imageType = await this.daoFactory.CreateDAOFileType().GetById(1);
-            FileType videoType = await this.daoFactory.CreateDAOFileType().GetById(2);
+            Genre? genre = await daoFactory.CreateDAOGenre().GetById(movieRequestDTO.GenreId); //obtengo el objeto Genre
+            
+            if (genre == null)
+            {
+             return BadRequest(new ErrorResponseDTO
+             {
+                Success = false,
+                Message = "Invalid genre selected." // Género inválido.
+                });
+            }
+            
+            FileType imageType = await daoFactory.CreateDAOFileType().GetById(1);
+            FileType videoType = await daoFactory.CreateDAOFileType().GetById(2);
             
             FileEntity image = new FileEntity {
                 Path = movieRequestDTO.ImageUrl,
@@ -167,18 +163,16 @@ public class MovieController: ControllerBase
                 Id = 0
             };
 
-            await this.daoFactory.CreateDAOFileEntity().Save(image);
+            await daoFactory.CreateDAOFileEntity().Save(image);
 
             FileEntity video = new FileEntity {
                 Path = movieRequestDTO.VideoUrl,
                 FileType = videoType,
                 Id = 0
             };
+            await daoFactory.CreateDAOFileEntity().Save(video);
 
-            await this.daoFactory.CreateDAOFileEntity().Save(video);
-
-            //creo una nueva entidad
-            Movie newMovie = new Movie
+            Movie newMovie = new Movie   //creo una nueva entidad
             {
                 Title = movieRequestDTO.TitleMovie,
                 Description = movieRequestDTO.DescriptionMovie,
@@ -187,9 +181,8 @@ public class MovieController: ControllerBase
                 Video = video,
                 
             };
-
-            await daoMovie.Save(newMovie);
-
+            await daoMovie.Create(newMovie);
+            
             return Ok(new MovieResponseDTO
             {
                 Success = true,
@@ -201,5 +194,31 @@ public class MovieController: ControllerBase
                 ImageUrl = newMovie.GetImage(),
                 VideoUrl= newMovie.GetVideo(),
             });   
+        }
+
+        [HttpDelete(Name = "DeleteMovie")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
+            
+            // Buscamos si la película existe
+            Movie? movie = await daoMovie.GetById(id);
+            
+            if (movie == null)
+            {
+                return NotFound(new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = "The movie was not found." // La película no fue encontrada.
+                });
+            }
+
+            await daoMovie.Delete(id);  // Eliminamos la películac
+
+            return Ok(new MovieResponseDTO
+            {
+                Success = true,
+                Message = "The movie was deleted successfully." // La película se eliminó con éxito.
+            });
         }
 }   
