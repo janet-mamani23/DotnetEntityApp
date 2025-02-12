@@ -21,17 +21,18 @@ public class DAOEFMovie: IDAOMovie
         }
         await context.Movies.AddAsync(movie); // Agrega la película al contexto
         await context.SaveChangesAsync(); // Guarda los cambios en la base de datos
-        return movie;;
+
+        return movie;
     }
 
-    public Task<Movie> Create(string title, Genre genre)
+    public async Task <bool> Delete (long id)
     {
-        throw new NotImplementedException();
-    }
+        var movie = await context.Movies.FindAsync(id);
+        if (movie == null) return false;
 
-    public Task Delete(Movie movie)
-    {
-        throw new NotImplementedException();
+        context.Movies.Remove(movie);
+        await context.SaveChangesAsync();
+        return true; //Retorna true indicando éxito de la eliminacion.
     }
 
     public Task<Movie?> Get(string title, Genre genre)
@@ -84,17 +85,14 @@ public class DAOEFMovie: IDAOMovie
         return movie;
     }
 
-    public Task<Movie?> GetByTitle(string title)
+    public async Task<Movie?> GetByTitle(string title)
+    {
+        return await context.Movies.FirstOrDefaultAsync(m => m.Title == title);
+    }
+
+    public Task Save(Movie movie)
     {
         throw new NotImplementedException();
-    }
-    public async Task Save(Movie movie)
-    {  
-        if (movie == null) throw new ArgumentNullException(nameof(movie));
-        if (context.Movies == null) throw new InvalidOperationException("Movies DbSet is not initialized.");
-
-        await context.Movies.AddAsync(movie);
-        await context.SaveChangesAsync();
     }
 
     public Task Update(Movie movie)
