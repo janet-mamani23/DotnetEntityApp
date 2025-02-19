@@ -3,11 +3,9 @@ using web_api.dto.qualify;
 using Microsoft.AspNetCore.Mvc;
 using dao_library.Interfaces;
 using dao_library.Interfaces.login;
-using entities_library.login;
-using web_api.dto.login;
 using entities_library.Qualify;
 using dao_library.Interfaces.movie;
-
+using web_api.dto.common;
 namespace web_api.controllers
 {
     [ApiController]
@@ -27,45 +25,47 @@ namespace web_api.controllers
         [HttpPost(Name = "CreateQualify")]
         public async Task<IActionResult> CreateQualify([FromBody] QualifyRequestDTO qualifyRequest)
         {
-            IDAOQualify DAOQualify = daoFactory.CreateDAOQualify();
+            IDAOQualify daoQualify = daoFactory.CreateDAOQualify();
 
-            // 1. Verificar si el usuario está logueado
             IDAOUser daoUser = daoFactory.CreateDAOUser();
-            User user = await daoUser.GetById(qualifyRequest.userId);
+            var user = await daoUser.GetById(qualifyRequest.UserId);
 
             if (user == null)
             {
-                return Unauthorized("User not logged in.");
+                return Unauthorized("Se necesita estar logueado para calificar la pelicula.");
             }
 
-            // Obtener la película a calificar desde el DAO
             IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
-            var movie = await daoMovie.GetById(qualifyRequest.movieId);
+            var movie = await daoMovie.GetById(qualifyRequest.MovieId);
             if (movie == null)
             {
-                return NotFound("Movie not found.");
+                return NotFound(new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = "Error la pelicula no existe."
+                });
             }
 
             // 2. Verificar si el usuario ya ha calificado esta película
             bool hasQualified = 
-                await this.daoFactory.CreateDAOQualify()
+                await daoFactory.CreateDAOQualify()
                 .HasUserQualifiedMovie(user, movie);
 
             if (hasQualified)
             {
-                return BadRequest("The user has already rated this movie.");
+                return BadRequest("Este usuario ya ha calificado la pelicula.");
             }
 
             // 3. Crear la nueva calificación
             var qualify = new Qualify
             {
                 User = user,
-                Stars = qualifyRequest.star, // Calificación
+                Stars = qualifyRequest.Star, // Calificación
                 Movie = movie
             };
 
             // 4. Guardar la calificación en la base de datos
-            await this.daoFactory.CreateDAOQualify().Save(qualify);
+            await daoQualify.Save(qualify);
 
             // 5. Obtener el nuevo promedio de calificaciones
             var averageStars = qualify.Movie.GetAverage(); // Llama al método de la entidad Movie para obtener el promedio
@@ -73,10 +73,10 @@ namespace web_api.controllers
             return Ok(new QualifyResponseDTO 
             {
                 Success = true,
-                Message = "Rating created successfully",
-                id = qualify.Id,
-                star = qualify.Stars,
-                averageStars = (int)averageStars
+                Message = "Calificación guardada.",
+                Id = qualify.Id,
+                Star = qualify.Stars,
+                AverageStars = (double)averageStars
             });
         }
     }

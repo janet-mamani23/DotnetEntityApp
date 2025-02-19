@@ -23,7 +23,8 @@ public class LoginController : ControllerBase
         this.daoFactory = daoFactory;
     }
 
-    [HttpPost(Name = "Login")]
+    [HttpPost]
+    [Route("Login")]
     public async Task<IActionResult> Post(LoginRequestDTO loginRequestDTO)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
@@ -34,16 +35,23 @@ public class LoginController : ControllerBase
         );
 
         if( user != null &&
-            user.IsPassword(loginRequestDTO.PasswordUser))
+            user.VerifyPassword(loginRequestDTO.PasswordUser))
         {
+            web_api.helpers.VisitCounter visitCounter = web_api.helpers.VisitCounter.GetInstance();
+            if(visitCounter != null)
+            {
+                visitCounter.GetNextNumber();
+            }
             return Ok(new LoginResponseDTO 
             {
                 Success = true,
-                Message = "Login Sucess",
+                Message = "Login Exitoso.",
                 Id = user.Id,
                 NameUser = user.Name,
+                LastnameUser = user.LastName,
+                DescriptionUser = user.Description,
                 EmailUser = user.Email,
-                UrlAvatar = "",
+                UrlAvatar = user.GetUrlAvatar(),
     
             });
         }
@@ -54,4 +62,29 @@ public class LoginController : ControllerBase
             Message = "Invalid mail or password"
         });
     }
+
+    [HttpPost]
+    [Route("LogOut")]
+    public IActionResult LogOut()
+    {
+        try
+        {
+            web_api.helpers.VisitCounter visitCounter = web_api.helpers.VisitCounter.GetInstance();
+            visitCounter.GetRestarNumber();
+            return Ok(new ResponseDTO
+            { 
+                Success = true,
+                Message = "Sesion cerrada." 
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+           return Conflict(new ErrorResponseDTO
+            {
+                Success = false,
+                Message = ex.Message 
+            });
+        }
+    }
 }
+    

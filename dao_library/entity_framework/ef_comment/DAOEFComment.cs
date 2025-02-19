@@ -1,9 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using dao_library.Interfaces.comment;
 using entities_library.comment;
-using entities_library.login;
 using entities_library.movie;
-using System.Security.Cryptography.X509Certificates;
+
 
 
 namespace dao_library.entity_framework.ef_comment;
@@ -19,11 +18,14 @@ public class DAOEFComment: IDAOComment
 
     public async Task Delete(long id)
     {
-        var comment = await context.Comments.FindAsync(id);
-        if (comment != null)
+        if (context.Comments != null)
         {
-            context.Comments.Remove(comment);
-            await context.SaveChangesAsync();
+            var comment = await context.Comments.FindAsync(id);
+            if (comment != null)
+            {
+                context.Comments.Remove(comment);
+                await context.SaveChangesAsync();
+            }
         }
         else
         {
@@ -38,24 +40,31 @@ public class DAOEFComment: IDAOComment
     )
     {
         IQueryable<Comment>? commentQuery = context.Comments;
-        
-        commentQuery = commentQuery.Where(p => p.Movie == movie);
-        
-        int totalRecords = await commentQuery.CountAsync();
+        if (commentQuery != null)
+        {   commentQuery = commentQuery.Where(p => p.Movie == movie);
+            
+            int totalRecords = await commentQuery.CountAsync();
 
-        var comment = await commentQuery
-        .Skip((page - 1)* pageSize)
-        .Take(pageSize)
-        .ToListAsync();
+            var comment = await commentQuery
+            .Skip((page - 1)* pageSize)
+            .Take(pageSize)
+            .ToListAsync();
 
-        return (comment, totalRecords);    
+            return (comment, totalRecords); 
+        }  
+        else 
+        {
+            throw new InvalidOperationException("La colección de comentarios es nula.");
+        }
     }
 
-    public Task<Comment> GetById(long id)
+    /*public async Task<List<Comment>> GetById(long id)
     {
-        Comment? comment = context.Comments?.Find(id);
-        return Task.FromResult(comment);
-    }
+        List<Comment?> comments = await context.Comments
+            .Where(c => c.Movie == id)
+            .ToListAsync();
+        return comments;
+    }*/
 
     public async Task Save(Comment comment)
     {
@@ -66,12 +75,13 @@ public class DAOEFComment: IDAOComment
 
     public async Task Update(long id, string newText)
     {
-        var comment = await context.Comments.FindAsync(id);
-        if (comment != null)
-        {
-            comment.Text = newText;
-
-            await context.SaveChangesAsync();
+        if (context.Comments != null)
+        {   var comment = await context.Comments.FindAsync(id);
+            if (comment != null )
+            {
+                comment.Text = newText;
+                await context.SaveChangesAsync();
+            }
         }
         else
         {

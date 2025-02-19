@@ -50,8 +50,8 @@ public class CommentController : ControllerBase
         IDAOUser daoUser = daoFactory.CreateDAOUser();
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
 
-        User user = await daoUser.GetById(requestPostCommentDTO.idUser);
-        Movie movie = await daoMovie.GetById(requestPostCommentDTO.idMovie); 
+        var user = await daoUser.GetById(requestPostCommentDTO.idUser);
+        var movie = await daoMovie.GetById(requestPostCommentDTO.idMovie); 
         
         if (user == null || movie == null)
         {
@@ -61,20 +61,20 @@ public class CommentController : ControllerBase
                 Message = "Usuario o película no encontrados"
             });
         }
-        
 
         Comment comment = new Comment{
             Text= requestPostCommentDTO.text,
             User = user,
             Movie = movie,
             CreatedAt = DateTime.Now,
-            Id = 0
-
-
         };
         
         await daoComment.Save(comment);
-        return CreatedAtAction(nameof(Post), new { id = comment.Id }, comment);
+        return Ok(new ResponseDTO
+        {
+            Success = true,
+            Message = "Comentario creado"
+        });
     }
 
 
@@ -86,11 +86,19 @@ public class CommentController : ControllerBase
         try
         {
             await daoComment.Delete(id);
-            return NoContent();
+            return Ok(new ResponseDTO
+            {
+                Success = true,
+                Message = "Comentario eliminado."
+            });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return NotFound(new { message = ex.Message });
+            return NotFound(new ErrorResponseDTO
+            {
+                Success = false,
+                Message = "Error al borrar el comentario."
+            });
         }
     }
 
@@ -103,19 +111,32 @@ public class CommentController : ControllerBase
         try
         {
             await daoComment.Update(requestPutCommentDTO.idComment, requestPutCommentDTO.text);
-            return NoContent(); 
+            return Ok(new ResponseDTO
+            {
+                Success = true,
+                Message = "Comentario actualizado."
+            }); 
         }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = ex.Message }); 
         }
     }
-    //TODO - Enzo
-    [HttpGet]
+
+    /*[HttpGet]
     public async Task<ActionResult> Get(GetCommentsRequestDTO request)
     {
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
         Movie movie = await daoMovie.GetById(request.movieId); 
+
+        if(movie == null)
+            {
+                return StatusCode(500, new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = "La película no se encontró." 
+                });
+            }
 
         IDAOComment daoComment = daoFactory.CreateDAOComment();
     
@@ -142,6 +163,8 @@ public class CommentController : ControllerBase
         };
 
         return Ok(response);
-    }
+    }*/
+
+    //TODO bannear usuario.
     
 }

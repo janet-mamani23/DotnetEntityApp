@@ -14,60 +14,73 @@ public class DAOEFMovie: IDAOMovie
         this.context = context;
     }
 
-    public async Task<Movie> Create(Movie movie)
+    public async Task<Movie?> Save(Movie movie)
     {
         if(context.Movies == null){
             throw new InvalidOperationException("Movies is null.");
         }
         await context.Movies.AddAsync(movie); // Agrega la película al contexto
         await context.SaveChangesAsync(); // Guarda los cambios en la base de datos
-        return movie;;
+        return movie;
     }
 
-    public Task<Movie> Create(string title, Genre genre)
+    public async Task<bool> Delete(long id)
     {
-        throw new NotImplementedException();
+        if (context.Movies == null)
+        {
+            throw new InvalidOperationException("La colección de peliculas es nula.");
+        }
+        var movie = await context.Movies.FindAsync(id);
+        if (movie != null)
+        {
+            context.Movies.Remove(movie);
+            await context.SaveChangesAsync();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    public Task Delete(Movie movie)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Movie?> Get(string title, Genre genre)
-    {
-        throw new NotImplementedException();
-    }
 
     public async Task<(IEnumerable<Movie>movies, int totalRecords)> GetAll(
-        string? query, 
+        string query, 
         int page, 
         int pageSize)
     {
         if (context.Movies == null)
         {
-            return (Enumerable.Empty<Movie>(),0); // si mi context.movie es null devuelve una lista vacia.
+           throw new InvalidOperationException("La colección de peliculas es nula.");
         }
+        var lowerQuery = query.ToLower();
 
         IQueryable<Movie> moviesQuery = context.Movies;
-        if (query != null)
+        if (query == "all")
         {
-            moviesQuery = moviesQuery.Where(m => 
-                m.Title.Contains(query) || m.Description.Contains(query)
-            );
+            var movies =  await moviesQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+            int totalRecords = await moviesQuery.CountAsync(); 
+            return (movies, totalRecords);
         }
-        int totalRecords = await moviesQuery.CountAsync(); // Obtener el número total de películas antes de aplicar paginación
-
-        var movies = await moviesQuery // Aplicar la paginación
-            .Skip((page - 1) * pageSize) // Salta las películas de las páginas anteriores
-            .Take(pageSize) // Tomar el número de películas especificadas por pageSize
-            .ToListAsync(); // Ejecutar la consulta
-
-        // Retornar las películas paginadas y el total de registros
-        return (movies, totalRecords);
+        else
+        {
+            long result = long.Parse(query);
+            moviesQuery = moviesQuery.Where(m => 
+                m.Genre.Id == result
+            );
+            var movies =  await moviesQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+            int totalRecords = await moviesQuery.CountAsync(); 
+            return (movies, totalRecords);
+        }  
     }
 
-    public async Task<Movie> GetById(long id)
+    public async Task<Movie?> GetById(long id)
     {
         if (context.Movies == null) 
         {
@@ -78,9 +91,8 @@ public class DAOEFMovie: IDAOMovie
         
         if (movie == null)
         {
-            throw new KeyNotFoundException($"Movie with Id {id} not found");
+            return null;
         }
-        
         return movie;
     }
 
@@ -88,15 +100,26 @@ public class DAOEFMovie: IDAOMovie
     {
         throw new NotImplementedException();
     }
-    public async Task Save(Movie movie)
-    {  
-        if (movie == null) throw new ArgumentNullException(nameof(movie));
-        if (context.Movies == null) throw new InvalidOperationException("Movies DbSet is not initialized.");
 
-        await context.Movies.AddAsync(movie);
-        await context.SaveChangesAsync();
+    public async Task<Movie?> ExistMovie(string title)
+    {
+        if (context.Movies == null) 
+        {
+            throw new InvalidOperationException("Movies set is not initialized.");
+        }
+        
+        Movie? movie = await context.Movies
+        .FirstOrDefaultAsync(m => m.Title == title);
+        if(movie != null)
+            {
+                return movie;
+            }
+        else
+            {
+                return null;
+            }
     }
-
+    //TODO completar
     public Task Update(Movie movie)
     {
         throw new NotImplementedException();
