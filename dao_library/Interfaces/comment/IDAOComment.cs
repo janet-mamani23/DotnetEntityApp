@@ -12,7 +12,7 @@ public interface IDAOComment
         int page,
         int pageSize
     );
-    Task<Comment> GetById(long id);
+    //Task<Comment> GetById(long id);
     Task Save(Comment comment);
     
     //NO PROGRAMAR

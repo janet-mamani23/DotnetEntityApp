@@ -1,5 +1,6 @@
 using dao_library.Interfaces.login;
 using entities_library.login;
+using Microsoft.EntityFrameworkCore;
 
 namespace dao_library.entity_framework.ef_login;
 
@@ -17,9 +18,21 @@ public class DAOEFUserBan : IDAOUserBan
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<UserBan>> GetAll()
+    public async Task<IEnumerable<UserBan>> GetAll()
     {
-        throw new NotImplementedException();
+         try{
+            if (context.UserBans == null)
+            {
+                throw new InvalidOperationException("La colección de Baneos es nula.");
+            }
+            var userBan = await context.UserBans.ToListAsync();
+            return userBan;
+            }
+        catch (Exception ex)
+            {
+                Console.WriteLine($"Error getAll genre: {ex.Message}");
+                return Enumerable.Empty<UserBan>();
+            }
     }
 
     public Task<UserBan> GetById(long id)

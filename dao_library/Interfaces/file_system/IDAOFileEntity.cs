@@ -6,7 +6,7 @@ public interface IDAOFileEntity
 {
     Task<IEnumerable<FileEntity>> GetAll();
     Task<FileEntity> GetById(long id);
-    Task Save(FileEntity fileEntity);
+    Task <FileEntity>Save(FileEntity fileEntity);
     
     //NO PROGRAMAR
     Task Delete(FileEntity fileEntity);

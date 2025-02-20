@@ -11,41 +11,39 @@ public class Movie
     public long Id {get; set;}
     public string Title {get; set;} = "";
     public  string Description {get; set;}  = "";
-    //Encapsulamiento: 
+
     public virtual required Genre Genre {get; set;}
-    //Genre es un atributo de Genero, osea Genero no es una propiedad de pelicula por que es un objeto. pelicula y genero son dos entities.
+
     public virtual required FileEntity Image{get; set;}
     public virtual required FileEntity Video{get; set;}
-    public virtual User? User { get; set; }
     public virtual List<Comment> Comments { get; set; } = new List<Comment>();
     public virtual List<Qualify> Qualifies { get; set; } = new List<Qualify>();
-    public bool HasOscar { get; set; } // Indica si la película ha ganado un Oscar
+    public bool HasOscar { get; set; } 
 
     public virtual double GetAverage()
     {
-        if (Qualifies.Count == 0) return 0; // Evita la división por 0
+        if (Qualifies.Count == 0) return 0;
 
-        double suma = 0; // Inicializamos la suma
-        foreach(Qualify star in Qualifies) // Iteramos sobre la lista de calificaciones
+        double suma = 0; 
+        foreach(Qualify star in Qualifies) 
         {
-           suma += star.Stars; // Sumamos las calificaciones de qualify
+           suma += star.Stars; 
         }
-
-        double average = suma / Qualifies.Count; // Calculamos el promedio
-        return average; // Retornamos el promedio
+        double average = suma / Qualifies.Count; 
+        return average; 
     }
 
     public string GetImage()
     {
         if(this.Image != null)
         return this.Image.Path;
-        return "";  //AGREGAR UNA URL GENERICO
+        return "https://static.vecteezy.com/system/resources/previews/007/126/836/original/film-clapperboard-icon-vector.jpg"; 
     }
 
     public string GetVideo()
     {
         if(this.Video != null)
         return this.Video.Path;
-        return ""; //AGREGAR UNA URL GENERICO
+        return "https://th.bing.com/th/id/OIP.wdY_mizIyp59YDFR48VaRAHaHE?rs=1&pid=ImgDetMain"; 
     }
 }

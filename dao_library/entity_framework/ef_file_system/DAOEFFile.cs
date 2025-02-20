@@ -37,8 +37,4 @@ public class DAOEFFile: IDAOFileEntity
         return fileEntity;
     }
 
-    Task IDAOFileEntity.Save(FileEntity fileEntity)
-    {
-        throw new NotImplementedException();
-    }
 }

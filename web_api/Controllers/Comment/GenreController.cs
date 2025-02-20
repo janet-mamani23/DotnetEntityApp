@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using dao_library.Interfaces;
+using web_api.dto;
 using web_api.dto.genre;
 using dao_library.Interfaces.movie;
 using entities_library.movie;
@@ -52,7 +53,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpDelete(Name = "DeleteGenre")]
-    public async Task<IActionResult> Delete(RequestDeleteGenreDTO request)
+    public async Task<IActionResult> Delete(RequestDeleteDTO request)
     {
         IDAOGenre daoGenre = daoFactory.CreateDAOGenre();
         try{
@@ -70,6 +71,5 @@ public class GenreController : ControllerBase
         {
             return StatusCode(500,  $"Internal server error: {ex.Message}");
         }
-        
     }
 }
