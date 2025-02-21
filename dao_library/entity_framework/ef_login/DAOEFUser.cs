@@ -93,14 +93,13 @@ public class DAOEFUser : IDAOUser
         return userId;
     }
 
-    public async Task<User?> GetByUsername(string username)
+    public async Task<User?> GetByUsername(string userName, string lastName)
     {
-        if (username == null) return null;
+        if (userName == null) return null;
         if (context.Users == null) return null;
 
         User? user = await context.Users
-            .Where(user => user.Email.ToLower() == username.ToLower())
-            .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(user => user.Name == userName && user.LastName == lastName);
 
         return user;
     }

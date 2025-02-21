@@ -1,10 +1,11 @@
-/*using dao_library.entity_framework;
+using dao_library.entity_framework;
 using dao_library.Interfaces;
 using dao_library.Interfaces.login;
 using entities_library.login;
 using Microsoft.AspNetCore.Mvc;
 using web_api.dto.common;
 using web_api.dto.login;
+using web_api.dto.UserBanned;
 
 
 namespace web_api.Controllers;
@@ -15,6 +16,7 @@ public class UserBanController : ControllerBase
 {
     private readonly ILogger<UserBanController> _logger;
     private readonly IDAOFactory daoFactory;
+    private readonly Timer _timer;
 
     public UserBanController(
         ILogger<UserBanController> logger,
@@ -22,15 +24,16 @@ public class UserBanController : ControllerBase
     {
         _logger = logger;
         this.daoFactory = daoFactory;
+        _timer = new Timer(VerifyBansCallback, null, 0, 3600000);
     }     
 
-    [HttpPut]
+    [HttpPost]
     [Route("BanUser")]
     public async Task<IActionResult> Banned(UserRequestBannedDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
         IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan();
-        User? user = await daoUser.GetByUsername(request.NameUser);
+        User? user = await daoUser.GetByUsername(request.NameUser, request.LastNameUser);
         if (user != null)
         {
             try
@@ -70,35 +73,65 @@ public class UserBanController : ControllerBase
         }
     }
 
-    public void VerifyBans(IEnumerable<UserBan> userBans)
+    private async Task VerifyBans(IEnumerable<UserBan> usersBans)
     {
         IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan();
-        var usersBans = daoUserBan.GetAll();
         foreach (var userBan in usersBans)
         {
-            if (userBan.CheckBanStatus())
-            {
-                userBan.User.UserStatus = UserStatus.Active;// Actualizar el estado del usuario en la base de datos, etc.
-            }
+            var userCheck = userBan.CheckBanStatus(); 
+            if(userCheck == true)
+            {          
+                await daoUserBan.Delete(userBan.Id);               
+            }        
         }
     }
 
-    // Método para iniciar una tarea programada.
-    public void StartBanVerificationTask()
+    private async void VerifyBansCallback(object? state)
     {
-        Timer timer = new Timer(VerifyBansCallback, null, 0, 3600000); // 3600000 ms = 1 hora
+        try
+        {
+            IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan();
+            var usersBans = await daoUserBan.GetAll();
+            await VerifyBans(usersBans);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en VerifyBansCallback: {ex.Message}");
+        }
     }
 
-    // Callback del temporizador.
-    private void VerifyBansCallback(object state)
+    [HttpGet]
+    [Route("GetAllUserBanned")]
+    public async Task<IActionResult>Get()
     {
-        var userBans = GetAllUserBansFromDatabase();
-        VerifyBans(userBans);
+        IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan();
+        
+        try
+        {
+            var usersBans = await daoUserBan.GetAll();
+            List<GetAllResponseDTO> response = new List<GetAllResponseDTO>();
+            foreach (var userBan in usersBans)
+            {
+                {
+                    response.Add(new GetAllResponseDTO
+                    {
+                        Id = userBan.User.Id,
+                        NameUser = userBan.User.Name,
+                        LastName = userBan.User.LastName,
+                        Avatar = userBan.User.GetUrlAvatar()
+                    });
+                }
+            }
+            return Ok(response);
+        }
+        catch  (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = ex.Message 
+                });
+            }
     }
-
-    // Método para obtener todos los baneos de usuarios desde la base de datos.
-    private IEnumerable<UserBan> GetAllUserBansFromDatabase()
-    {
-        // Implementa la lógica para obtener todos los registros de UserBan desde la base de datos.
-    }
-}*/
+}
+//TODO probar metodos de aqui.

@@ -12,7 +12,7 @@ public interface IDAOUser
         int pageSize
     );
 
-    Task<User?> GetByUsername(string username);
+    Task<User?> GetByUsername(string userName, string lastName);
 
     Task<User?> GetById(long id);
     Task <long> Save(User user);

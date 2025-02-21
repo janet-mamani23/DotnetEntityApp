@@ -9,5 +9,5 @@ public interface IDAOUserBan
     Task Save(UserBan userBan);
     
     //NO PROGRAMAR
-    Task Delete(UserBan userBan);
+    Task Delete(long id);
 }

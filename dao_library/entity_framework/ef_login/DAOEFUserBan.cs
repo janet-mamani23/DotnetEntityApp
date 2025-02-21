@@ -13,9 +13,22 @@ public class DAOEFUserBan : IDAOUserBan
         this.context = context;
     }
 
-    public Task Delete(UserBan userBan)
+    public async Task Delete(long id)
     {
-        throw new NotImplementedException();
+        if (context.UserBans == null)
+        {
+            throw new InvalidOperationException("La colección de Userbans es nula.");
+        }
+        var userBan = await context.UserBans.FindAsync(id);
+        if (userBan != null)
+        {
+            context.UserBans.Remove(userBan);
+            await context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new InvalidOperationException("Usuario banneado no encontrado");
+        }
     }
 
     public async Task<IEnumerable<UserBan>> GetAll()
