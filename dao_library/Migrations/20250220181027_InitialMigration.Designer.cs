@@ -11,8 +11,8 @@ using dao_library;
 namespace daolibrary.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241111234304_initial")]
-    partial class initial
+    [Migration("20250220181027_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -205,9 +205,6 @@ namespace daolibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("VideoId")
                         .HasColumnType("bigint");
 
@@ -216,8 +213,6 @@ namespace daolibrary.Migrations
                     b.HasIndex("GenreId");
 
                     b.HasIndex("ImageId");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("VideoId");
 
@@ -243,7 +238,7 @@ namespace daolibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("userStatus")
+                    b.Property<int>("UserStatus")
                         .HasColumnType("int");
 
                     b.HasIndex("AvatarId");
@@ -323,10 +318,6 @@ namespace daolibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("entities_library.login.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.HasOne("entities_library.file_system.FileEntity", "Video")
                         .WithMany()
                         .HasForeignKey("VideoId")
@@ -336,8 +327,6 @@ namespace daolibrary.Migrations
                     b.Navigation("Genre");
 
                     b.Navigation("Image");
-
-                    b.Navigation("User");
 
                     b.Navigation("Video");
                 });

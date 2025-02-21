@@ -56,28 +56,34 @@ public class DAOEFMovie: IDAOMovie
         var lowerQuery = query.ToLower();
 
         IQueryable<Movie> moviesQuery = context.Movies;
-        if (query == "all")
+        if (query.ToLower() == "all")
         {
             var movies =  await moviesQuery
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-            int totalRecords = await moviesQuery.CountAsync(); 
-            return (movies, totalRecords);
+            int totalRecordS = await moviesQuery.CountAsync(); 
+            return (movies, totalRecordS);
+        }
+        // Intentar buscar por género, si el query es numérico
+        if (long.TryParse(query, out long genreId))
+        {
+            // Filtra por género si el query es un número válido
+            moviesQuery = moviesQuery.Where(m => m.Genre.Id == genreId);
         }
         else
         {
-            long result = long.Parse(query);
-            moviesQuery = moviesQuery.Where(m => 
-                m.Genre.Id == result
-            );
-            var movies =  await moviesQuery
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-            int totalRecords = await moviesQuery.CountAsync(); 
-            return (movies, totalRecords);
-        }  
+            // De lo contrario, buscar por título (nombre de la película)
+            var lowerQuerY = query.ToLower(); // Asegurarse de que la búsqueda sea insensible a mayúsculas/minúsculas
+            moviesQuery = moviesQuery.Where(m => m.Title.ToLower().Contains(lowerQuery));
+        }
+        var movieS =  await moviesQuery
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+        int totalRecords = await moviesQuery.CountAsync(); 
+        return (movieS, totalRecords);
+         
     }
 
     public async Task<Movie?> GetById(long id)

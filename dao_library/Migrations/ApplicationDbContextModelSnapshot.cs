@@ -202,9 +202,6 @@ namespace daolibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("VideoId")
                         .HasColumnType("bigint");
 
@@ -213,8 +210,6 @@ namespace daolibrary.Migrations
                     b.HasIndex("GenreId");
 
                     b.HasIndex("ImageId");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("VideoId");
 
@@ -240,7 +235,7 @@ namespace daolibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("userStatus")
+                    b.Property<int>("UserStatus")
                         .HasColumnType("int");
 
                     b.HasIndex("AvatarId");
@@ -320,10 +315,6 @@ namespace daolibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("entities_library.login.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.HasOne("entities_library.file_system.FileEntity", "Video")
                         .WithMany()
                         .HasForeignKey("VideoId")
@@ -333,8 +324,6 @@ namespace daolibrary.Migrations
                     b.Navigation("Genre");
 
                     b.Navigation("Image");
-
-                    b.Navigation("User");
 
                     b.Navigation("Video");
                 });

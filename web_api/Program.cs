@@ -13,6 +13,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configuración de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000") // El origen de tu frontend
+               .AllowAnyMethod()  // Permitir cualquier método (GET, POST, etc.)
+               .AllowAnyHeader(); // Permitir cualquier encabezado
+    });
+});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseMySql(
     "Server=localhost;Database=Red_Poderosa;Uid=root;Pwd=2103;",
@@ -34,6 +45,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Agregar CORS a la pipeline
+app.UseCors("AllowLocalhost");
 
 app.UseAuthorization();
 
