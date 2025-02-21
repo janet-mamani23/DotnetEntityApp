@@ -49,6 +49,7 @@ app.UseHttpsRedirection();
 // Agregar CORS a la pipeline
 app.UseCors("AllowLocalhost");
 
+
 app.UseAuthorization();
 
 app.MapControllers();
