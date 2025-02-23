@@ -2,14 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using dao_library.Interfaces;
 using web_api.dto.common;
 using web_api.dto.comment;
-using entities_library.login;
 using dao_library.Interfaces.comment;
 using entities_library.comment;
 using dao_library.Interfaces.login;
 using dao_library.Interfaces.movie;
-using entities_library.movie;
-using web_api.Controllers.comment;
-
 
 namespace web_api.Controllers;
 
@@ -122,49 +118,4 @@ public class CommentController : ControllerBase
             return StatusCode(500, new { message = ex.Message }); 
         }
     }
-
-    /*[HttpGet]
-    public async Task<ActionResult> Get(GetCommentsRequestDTO request)
-    {
-        IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
-        Movie movie = await daoMovie.GetById(request.movieId); 
-
-        if(movie == null)
-            {
-                return StatusCode(500, new ErrorResponseDTO
-                {
-                    Success = false,
-                    Message = "La película no se encontró." 
-                });
-            }
-
-        IDAOComment daoComment = daoFactory.CreateDAOComment();
-    
-        var (comments, totalRecords) = await daoComment.GetAll(movie, request.page, request.pageSize);
-
-        List<GetCommentsResponseDTO> data = new List<GetCommentsResponseDTO>();
-    
-        foreach( Comment comment  in comments) 
-        {
-            data.Add(new GetCommentsResponseDTO 
-            {
-                avatarUser = comment.UrlAvatar(),
-                nameUser = comment.GetName(),
-                textComment = comment.Text
-            });
-         } 
-
-        var response = new
-        {
-            TotalRecords = totalRecords,
-            Page = request.page,
-            PageSize = request.pageSize,
-            Comments = data
-        };
-
-        return Ok(response);
-    }*/
-
-    //TODO bannear usuario.
-    
 }

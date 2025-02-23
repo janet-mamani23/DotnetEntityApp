@@ -31,7 +31,7 @@ public class DAOEFQualify: IDAOQualify
     {
         if (context.Qualifies == null)
         {
-            throw new InvalidOperationException("La colección de géneros es nula.");
+            throw new InvalidOperationException("La colección de Calificaciones es nula.");
         }
         var qualify = await context.Qualifies.FindAsync(id);
         if (qualify != null)

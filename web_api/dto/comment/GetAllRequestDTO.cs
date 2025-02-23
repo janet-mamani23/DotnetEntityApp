@@ -4,9 +4,9 @@ namespace web_api.dto.movie
 {
     public class GetAllRequestDTO
     {
-        public required string query {get; set;}   //query sirve para filtrar
-        public int page {get; set;} = 1;
-        public int pageSize {get; set;} = 10;
+        public required string Query {get; set;}   //query sirve para filtrar
+        public int Page {get; set;} = 1;
+        public int PageSize {get; set;} = 10;
 
     }
 }

@@ -42,4 +42,8 @@ public bool CheckBanStatus()
         }
         return false;
     }
+public void DissBanned()
+{
+    User.UserStatus = UserStatus.Active;
+}
 }
