@@ -21,4 +21,5 @@ public interface IDAOUser
     Task <bool> Delete(long id);
     Task<User?>Get(string emailUser, string password);
     Task Update(long userId, string name, string lastName, DateTime birthdate, string email, string description);
+    Task UpdateStatus(long id, string cadena);
 }

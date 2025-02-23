@@ -10,7 +10,6 @@ using entities_library.file_system;
 using entities_library.comment;
 using dao_library.Interfaces.file_system;
 
-
 namespace web_api.Controllers;
 
 [ApiController]
@@ -42,9 +41,9 @@ public class MovieController: ControllerBase
         {
             
             var (movies, totalRecords) = await daoMovie.GetAll(
-                requestMovie.query,
-                requestMovie.page,
-                requestMovie.pageSize);
+                requestMovie.Query,
+                requestMovie.Page,
+                requestMovie.PageSize);
 
             var moviesResponse = movies.Select(movi => new MoviesResponseDTO
             {
@@ -56,8 +55,8 @@ public class MovieController: ControllerBase
                 {
                     Movies = moviesResponse,
                     TotalRecords = totalRecords,
-                    Page = requestMovie.page,
-                    PageSize = requestMovie.pageSize,
+                    Page = requestMovie.Page,
+                    PageSize = requestMovie.PageSize,
                     Success = true,
                     Message = "Lista peliculas entregada."
                 };
@@ -72,44 +71,6 @@ public class MovieController: ControllerBase
             });
             }
     }
-
-    /*[HttpGet]
-    [Route("all")] 
-    public async Task<IActionResult> GetAllMovies( [FromQuery] GetAllRequestDTO requestMovie)
-    {
-        IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
-        try
-        {
-            var (movies, totalRecords) = await daoMovie.GetAllMovies(
-                requestMovie.page,
-                requestMovie.pageSize);
-
-            var moviesResponse = movies.Select(movi => new MoviesResponseDTO
-            {
-                Id = movi.Id,
-                ImageUrl = movi.Image.Path,
-                Name = movi.Title,
-            }).ToList();
-            var response = new MovieGetAllResponseDTO
-                {
-                    Movies = moviesResponse,
-                    TotalRecords = totalRecords,
-                    Page = requestMovie.page,
-                    PageSize = requestMovie.pageSize,
-                    Success = true,
-                    Message = "Lista peliculas entregada."
-                };
-            return Ok(response);
-        }
-        catch  (InvalidOperationException ex)
-            {
-                return Conflict(new ErrorResponseDTO
-            {
-                Success = false,
-                Message = ex.Message 
-            });
-            }
-    }*/
 
     [HttpPost(Name = "CreateMovie")]
     public async Task<IActionResult> Post(MovieRequestDTO movieRequestDTO)

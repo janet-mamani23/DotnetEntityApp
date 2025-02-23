@@ -31,30 +31,39 @@ public class DAOEFUserBan : IDAOUserBan
         }
     }
 
-    public async Task<IEnumerable<UserBan>> GetAll()
+    public async Task<(IEnumerable<UserBan>usersBan, int totalBan)> GetAll()
     {
          try{
             if (context.UserBans == null)
             {
                 throw new InvalidOperationException("La colección de Baneos es nula.");
             }
-            var userBan = await context.UserBans.ToListAsync();
-            return userBan;
+            IQueryable<UserBan> usersBanQuery= context.UserBans;
+            var usersBan = await usersBanQuery.ToListAsync();
+            int totalBan = await usersBanQuery.CountAsync();
+            return (usersBan, totalBan);
             }
-        catch (Exception ex)
+        catch (Exception)
             {
-                Console.WriteLine($"Error getAll genre: {ex.Message}");
-                return Enumerable.Empty<UserBan>();
+                int totalBan = 0;
+                return (Enumerable.Empty<UserBan>(), totalBan);
             }
     }
 
-    public Task<UserBan> GetById(long id)
+    public async Task<UserBan?> GetByName(string name, string lastName)
     {
-        throw new NotImplementedException();
+        if (name == null) return null;
+        if (context.UserBans == null) return null;
+
+        UserBan? userBan = await context.UserBans
+                    .FirstOrDefaultAsync(userban => userban.User.Name == name && userban.User.LastName == lastName);
+
+        return userBan;
     }
 
-    public Task Save(UserBan userBan)
+    public async Task Save(UserBan userBan)
     {
-        throw new NotImplementedException();
+        context.UserBans?.Add(userBan);
+        await context.SaveChangesAsync();
     }
 }

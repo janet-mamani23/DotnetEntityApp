@@ -100,15 +100,14 @@ public class DAOEFUser : IDAOUser
 
         User? user = await context.Users
                     .FirstOrDefaultAsync(user => user.Name == userName && user.LastName == lastName);
-
         return user;
     }
 
     public async Task<long> Save(User user)
     {
         context.Users?.Add(user);
-        await context.SaveChangesAsync(); // Guarda el usuario en la base de datos
-        return user.Id; // Retorna el ID del usuario guardado
+        await context.SaveChangesAsync();
+        return user.Id; 
     }
     public async Task Update(long userId, string name, string lastName, DateTime birthdate, string email, string description)
     {
@@ -127,6 +126,31 @@ public class DAOEFUser : IDAOUser
                 user.Description = description;
            }
            await context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new InvalidOperationException("La coleccion de usuarios es nula.");
+        }      
+    }
+
+    public async Task UpdateStatus(long userId,string cadena)
+    {
+        if (context.Users != null)
+        {   
+            User? user = await context.Users
+            .Where(user => user.Id == userId)
+            .FirstOrDefaultAsync();
+           
+           if(user != null && cadena == "activate")
+           {
+                user.UserStatus = UserStatus.Banned;
+                await context.SaveChangesAsync();
+           }  
+           if(user != null && cadena == "deactivate")
+           {
+                user.UserStatus = UserStatus.Active;
+                await context.SaveChangesAsync();
+           }
         }
         else
         {

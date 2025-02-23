@@ -1,12 +1,9 @@
-using dao_library.entity_framework;
 using dao_library.Interfaces;
 using dao_library.Interfaces.login;
 using entities_library.login;
 using Microsoft.AspNetCore.Mvc;
 using web_api.dto.common;
-using web_api.dto.login;
 using web_api.dto.UserBanned;
-
 
 namespace web_api.Controllers;
 
@@ -16,7 +13,7 @@ public class UserBanController : ControllerBase
 {
     private readonly ILogger<UserBanController> _logger;
     private readonly IDAOFactory daoFactory;
-    private readonly Timer _timer;
+    //private readonly Timer _timer;
 
     public UserBanController(
         ILogger<UserBanController> logger,
@@ -24,7 +21,7 @@ public class UserBanController : ControllerBase
     {
         _logger = logger;
         this.daoFactory = daoFactory;
-        _timer = new Timer(VerifyBansCallback, null, 0, 3600000);
+        //_timer = new Timer(VerifyBansCallback, null, 0, 3600000);
     }     
 
     [HttpPost]
@@ -38,7 +35,6 @@ public class UserBanController : ControllerBase
         {
             try
             {
-                //crear el UserBan(con sus propiedades)
                 var userBan = new UserBan
                 {
                     User = user,
@@ -46,12 +42,13 @@ public class UserBanController : ControllerBase
                 };
 
                 userBan.SetBanDuration();
-                user.UserStatus = UserStatus.Banned;
-                await daoUser.Save(user);
+                await daoUser.UpdateStatus(user.Id,"activate");
+                await daoUserBan.Save(userBan);
+
                 return Ok(new ResponseDTO
                 {
                     Success = true,
-                    Message = "Usuario baneado."
+                    Message = "Usuario banneado con éxito."
                 });
             }
             catch  (InvalidOperationException ex)
@@ -91,7 +88,7 @@ public class UserBanController : ControllerBase
         try
         {
             IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan();
-            var usersBans = await daoUserBan.GetAll();
+            var (usersBans,totalBan) = await daoUserBan.GetAll();
             await VerifyBans(usersBans);
         }
         catch (Exception ex)
@@ -108,7 +105,7 @@ public class UserBanController : ControllerBase
         
         try
         {
-            var usersBans = await daoUserBan.GetAll();
+            var (usersBans, totalBan) = await daoUserBan.GetAll();
             List<GetAllResponseDTO> response = new List<GetAllResponseDTO>();
             foreach (var userBan in usersBans)
             {
@@ -118,11 +115,18 @@ public class UserBanController : ControllerBase
                         Id = userBan.User.Id,
                         NameUser = userBan.User.Name,
                         LastName = userBan.User.LastName,
-                        Avatar = userBan.User.GetUrlAvatar()
+                        Avatar = userBan.User.GetUrlAvatar(),
+                        Success = true,
+                        Message = "Este usuario está banneado."
                     });
                 }
             }
-            return Ok(response);
+            return Ok(new TotalResponseDTO
+            {
+                UsersBan = response,
+                Success = true,
+                Message = $"Total de usuarios banneados {totalBan}."
+            });
         }
         catch  (InvalidOperationException ex)
             {
@@ -133,5 +137,38 @@ public class UserBanController : ControllerBase
                 });
             }
     }
+
+    [HttpPut]
+    [Route("PutBanner")]
+    public async Task<IActionResult> Put(UserRequestBannedDTO request)
+    {
+        IDAOUser daoUser = daoFactory.CreateDAOUser();
+        IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan(); 
+        var user = await daoUser.GetByUsername(request.NameUser, request.LastNameUser);
+        var userBan = await daoUserBan.GetByName(request.NameUser, request.LastNameUser);
+        if(userBan != null && user != null)
+        {
+            userBan.DissBanned();
+            await daoUserBan.Delete(userBan.Id);
+            await daoUser.UpdateStatus(user.Id,"deactivate");
+            return Ok(new GetAllResponseDTO
+            {
+                Id = user.Id,
+                NameUser = user.Name,
+                LastName = user.LastName,
+                Avatar = user.GetUrlAvatar(),
+                Success = true,
+                Message = "Usuario desbaneado."
+            });
+        }
+        else
+        {
+            return NotFound(new ResponseDTO
+            {
+                Success = false,
+                Message = "El usuario no existe registrado."
+            });
+        }    
+    }
 }
-//TODO probar metodos de aqui.
+//TODO - aplicar servicio de autoverificacion de banneo.
