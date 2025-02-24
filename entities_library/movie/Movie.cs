@@ -11,9 +11,7 @@ public class Movie
     public long Id {get; set;}
     public string Title {get; set;} = "";
     public  string Description {get; set;}  = "";
-
     public virtual required Genre Genre {get; set;}
-
     public virtual required FileEntity Image{get; set;}
     public virtual required FileEntity Video{get; set;}
     public virtual List<Comment> Comments { get; set; } = new List<Comment>();

@@ -1,6 +1,7 @@
 using dao_library.Interfaces.comment;
 using dao_library.Interfaces.movie;
 using entities_library.movie;
+using entities_library.Qualify;
 using Microsoft.EntityFrameworkCore;
 
 namespace dao_library.entity_framework.ef_movie;
@@ -126,9 +127,23 @@ public class DAOEFMovie: IDAOMovie
             }
     }
     //TODO completar
-    public Task Update(Movie movie)
+    public async Task Update(long id, Qualify qualify)
     {
-        throw new NotImplementedException();
+       if(context.Movies == null){
+            throw new InvalidOperationException("La coleccion de Movies es nula.");
+        }
+        Movie? movie = await context.Movies
+        .FirstOrDefaultAsync(m => m.Id == id);
+        if(movie != null)
+        {   
+            movie.Qualifies.Add(qualify);
+            context.Movies.Update(movie);
+            await context.SaveChangesAsync(); 
+        }
+        else
+        {
+            throw new InvalidOperationException("Pelicula no encontrada.");
+        }
     }
 
 }

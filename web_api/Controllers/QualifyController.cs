@@ -26,11 +26,10 @@ namespace web_api.controllers
         public async Task<IActionResult> CreateQualify([FromBody] QualifyRequestDTO qualifyRequest)
         {
             IDAOQualify daoQualify = daoFactory.CreateDAOQualify();
-
             IDAOUser daoUser = daoFactory.CreateDAOUser();
-            var user = await daoUser.GetById(qualifyRequest.UserId);
+            var user = await daoUser.GetById(qualifyRequest.UserId);//TODO ¿COMO OBTENGO EL ID DEL USUARIO QUE ESTA DANDO EL CLICK EN LAS ESTRELLAS?
 
-            if (user == null)
+            if (user == null || user.UserStatus == entities_library.login.UserStatus.Banned)
             {
                 return Unauthorized("Se necesita estar logueado para calificar la pelicula.");
             }
@@ -46,7 +45,6 @@ namespace web_api.controllers
                 });
             }
 
-            // 2. Verificar si el usuario ya ha calificado esta película
             bool hasQualified = 
                 await daoFactory.CreateDAOQualify()
                 .HasUserQualifiedMovie(user, movie);
@@ -56,19 +54,16 @@ namespace web_api.controllers
                 return BadRequest("Este usuario ya ha calificado la pelicula.");
             }
 
-            // 3. Crear la nueva calificación
             var qualify = new Qualify
             {
                 User = user,
-                Stars = qualifyRequest.Star, // Calificación
+                Stars = qualifyRequest.Star,
                 Movie = movie
             };
 
-            // 4. Guardar la calificación en la base de datos
             await daoQualify.Save(qualify);
-
-            // 5. Obtener el nuevo promedio de calificaciones
-            var averageStars = qualify.Movie.GetAverage(); // Llama al método de la entidad Movie para obtener el promedio
+            await daoMovie.Update(movie.Id, qualify);
+            var averageStars = movie.GetAverage(); 
             
             return Ok(new QualifyResponseDTO 
             {

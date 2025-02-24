@@ -4,10 +4,10 @@ namespace dao_library.Interfaces.login;
 
 public interface IDAOUserBan
 {
-    Task<IEnumerable<UserBan>> GetAll();
-    Task<UserBan> GetById(long id);
+    Task<(IEnumerable<UserBan> usersBan, int totalBan)> GetAll();
+    Task<UserBan?> GetByName(string name, string lastName);
     Task Save(UserBan userBan);
     
     //NO PROGRAMAR
-    Task Delete(UserBan userBan);
+    Task Delete(long id);
 }

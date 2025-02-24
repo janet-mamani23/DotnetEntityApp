@@ -34,8 +34,7 @@ public class LoginController : ControllerBase
             loginRequestDTO.PasswordUser
         );
 
-        if( user != null &&
-            user.VerifyPassword(loginRequestDTO.PasswordUser))
+        if( user != null && user.VerifyPassword(loginRequestDTO.PasswordUser))
         {
             web_api.helpers.VisitCounter visitCounter = web_api.helpers.VisitCounter.GetInstance();
             if(visitCounter != null)

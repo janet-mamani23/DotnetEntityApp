@@ -13,6 +13,8 @@ namespace daolibrary.Migrations
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250220181027_InitialMigration")]
     partial class InitialMigration
+    [Migration("20241111234304_initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
