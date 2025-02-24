@@ -26,10 +26,10 @@ public void SetBanDuration()
                 EndtDateTime = StartDateTime.Value.AddDays(7);
                 break;
             case "Publicidad no autorizada":
-                EndtDateTime = StartDateTime.Value.AddDays(3);
+                EndtDateTime = StartDateTime.Value.AddDays(4);
                 break;
             default:
-                EndtDateTime = StartDateTime.Value.AddDays(1); 
+                EndtDateTime = StartDateTime.Value.AddMinutes(1); 
                 break;
         }
     }

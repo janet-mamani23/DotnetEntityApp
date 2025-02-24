@@ -270,28 +270,9 @@ public class MovieController: ControllerBase
         IDAOGenre daoGenre = daoFactory.CreateDAOGenre();
         IDAOFileEntity daoFileEntity = daoFactory.CreateDAOFileEntity();
         IDAOFileType fileType = daoFactory.CreateDAOFileType();
-
-        /* TODO- COMO IDENTIFICAR EL PROPIO USUARIO? ...
-
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-        if (userIdClaim == null)
-        {
-            return Unauthorized(new ErrorResponseDTO
-        {
-            Success = false,
-            Message = "Id user no encontrado."
-        });
-        }
-        long userId = long.Parse(userIdClaim.Value);*/
-
         try
         {
             var movie = await daoMovie.GetById(request.MovieId);
-            /*var updateRequest = new MovieRequestUpdateDTO
-            {
-                MovieId = request.MovieId, 
-                HasOscar = request.HasOscar
-            };*/
             var genre = await daoGenre.GetById(request.GenreId);
             var imageType = await fileType.GetById(1);
             var videoType = await fileType.GetById(2);
