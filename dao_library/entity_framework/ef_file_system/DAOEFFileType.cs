@@ -6,7 +6,6 @@ namespace dao_library.entity_framework.ef_file_system;
 
 public class DAOEFFileType: IDAOFileType
 {
-    //TODO COMPLETAR METODOS
     private readonly ApplicationDbContext context;
 
     public DAOEFFileType(ApplicationDbContext context)

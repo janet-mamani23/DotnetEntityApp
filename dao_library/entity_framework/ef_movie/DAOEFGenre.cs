@@ -1,4 +1,3 @@
-using System.Net;
 using dao_library.Interfaces.movie;
 using entities_library.movie;
 using Microsoft.EntityFrameworkCore;

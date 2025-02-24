@@ -160,19 +160,6 @@ public class UserController : ControllerBase
     public async Task<IActionResult> PutUser([FromBody]UserPutRequestDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
-        /* TODO- COMO IDENTIFICAR EL PROPIO USUARIO? ...
-
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-        if (userIdClaim == null)
-        {
-            return Unauthorized(new ErrorResponseDTO
-        {
-            Success = false,
-            Message = "Id user no encontrado."
-        });
-        }
-        long userId = long.Parse(userIdClaim.Value);*/
-
         try{
             await daoUser.Update(request.IdUser, request.Name,request.LastName,request.Birthdate,request.Email,request.Description);
             return Ok(new ResponseDTO
@@ -232,7 +219,6 @@ public class UserController : ControllerBase
     } 
 
     [HttpDelete(Name = "DeleteUser")]
-    //TODO, ELIMINAR POR ID? COMO OBTENGO ESE ID CUANDO EL PROPIO USUARIO QUIERE ELIMINAR SU CUENTA.
     public async Task<IActionResult> Delete(RequestDeleteDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();

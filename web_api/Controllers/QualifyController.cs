@@ -27,7 +27,7 @@ namespace web_api.controllers
         {
             IDAOQualify daoQualify = daoFactory.CreateDAOQualify();
             IDAOUser daoUser = daoFactory.CreateDAOUser();
-            var user = await daoUser.GetById(qualifyRequest.UserId);//TODO ¿COMO OBTENGO EL ID DEL USUARIO QUE ESTA DANDO EL CLICK EN LAS ESTRELLAS?
+            var user = await daoUser.GetById(qualifyRequest.UserId);
 
             if (user == null || user.UserStatus == entities_library.login.UserStatus.Banned)
             {

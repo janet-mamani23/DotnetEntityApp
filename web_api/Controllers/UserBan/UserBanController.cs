@@ -70,7 +70,8 @@ public class UserBanController : ControllerBase
         }
     }
 
-    private async Task VerifyBans(IEnumerable<UserBan> usersBans)
+    [NonAction]
+    public async Task VerifyBans(IEnumerable<UserBan> usersBans)
     {
         IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan();
         foreach (var userBan in usersBans)
@@ -83,7 +84,8 @@ public class UserBanController : ControllerBase
         }
     }
 
-    private async void VerifyBansCallback(object? state)
+    [NonAction]
+    public async Task VerifyBansCallback()
     {
         try
         {
@@ -171,4 +173,3 @@ public class UserBanController : ControllerBase
         }    
     }
 }
-//TODO - aplicar servicio de autoverificacion de banneo.

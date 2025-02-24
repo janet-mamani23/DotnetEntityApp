@@ -2,7 +2,10 @@ using dao_library;
 using dao_library.entity_framework;
 using dao_library.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using web_api.Services;
+using web_api.Controllers;
+using dao_library.Interfaces.login;
+using dao_library.entity_framework.ef_login;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,9 @@ options.UseMySql(
 );
 
 builder.Services.AddScoped<IDAOFactory, DAOEFFactory>();
-
+builder.Services.AddScoped<IDAOUserBan, DAOEFUserBan>(); 
+builder.Services.AddScoped<UserBanController>();
+builder.Services.AddHostedService<VerifyBansService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
