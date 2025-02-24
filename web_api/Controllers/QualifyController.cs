@@ -62,7 +62,7 @@ namespace web_api.controllers
             };
 
             await daoQualify.Save(qualify);
-            await daoMovie.Update(movie.Id, qualify);
+            await daoMovie.UpdateQualify(movie.Id, qualify);
             var averageStars = movie.GetAverage(); 
             
             return Ok(new QualifyResponseDTO 
