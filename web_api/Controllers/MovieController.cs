@@ -236,8 +236,9 @@ public class MovieController: ControllerBase
         {
             commentsResponse.Add(new CommentResponseDTO
             {
-                Id = comment.Id,
+                IdComment = comment.Id,
                 AvatarUser = comment.UrlAvatar(),
+                IdUser = comment.User.Id,
                 UserName = comment.GetName(),
                 Text = comment.Text,
                 CreatedAt = comment.CreatedAt

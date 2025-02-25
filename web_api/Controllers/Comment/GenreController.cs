@@ -5,9 +5,7 @@ using web_api.dto.genre;
 using dao_library.Interfaces.movie;
 using entities_library.movie;
 using web_api.dto.login;
-using dao_library.entity_framework.ef_movie;
-
-
+using web_api.dto.common;
 
 namespace web_api.Controllers;
 
@@ -53,18 +51,26 @@ public class GenreController : ControllerBase
     }
 
     [HttpDelete(Name = "DeleteGenre")]
-    public async Task<IActionResult> Delete(RequestDeleteDTO request)
+    public async Task<IActionResult> Delete([FromBody]RequestDeleteDTO request)
     {
         IDAOGenre daoGenre = daoFactory.CreateDAOGenre();
         try{
             var success = await daoGenre.Delete(request.Id);
             if (success)
                 {
-                    return Ok("Eliminación exitosa");
+                    return Ok(new ResponseDTO
+                    {
+                        Success = true,
+                        Message = "Eliminación exitosa."
+                    });
                 }
             else
                 {
-                    return NotFound("Género no encontrado");
+                    return NotFound(new ResponseDTO
+                    {
+                        Success = false,
+                        Message = "Género no encontrado"
+                    });
                 }
             }
         catch (Exception ex)
