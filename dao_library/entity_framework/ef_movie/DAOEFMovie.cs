@@ -1,5 +1,6 @@
 using dao_library.Interfaces.comment;
 using dao_library.Interfaces.movie;
+using entities_library.file_system;
 using entities_library.movie;
 using entities_library.Qualify;
 using Microsoft.EntityFrameworkCore;
@@ -126,8 +127,7 @@ public class DAOEFMovie: IDAOMovie
                 return null;
             }
     }
-    //TODO completar
-    public async Task Update(long id, Qualify qualify)
+    public async Task UpdateQualify(long id, Qualify qualify)
     {
        if(context.Movies == null){
             throw new InvalidOperationException("La coleccion de Movies es nula.");
@@ -146,4 +146,40 @@ public class DAOEFMovie: IDAOMovie
         }
     }
 
+    public async Task Update(long movieId, string? title, string? description, Genre? genre, FileEntity? image, FileEntity? video, bool oscar)
+    {
+        if (context.Movies != null)
+        {   
+            Movie? movie = await context.Movies
+            .Where(movie => movie.Id == movieId)
+            .FirstOrDefaultAsync();
+           
+           if (movie != null)
+            {
+                if (title != null)
+                    movie.Title = title;
+
+                if (description != null)
+                    movie.Description = description;
+
+                if (genre != null)
+                    movie.Genre = genre;
+
+                if (image != null)
+                    movie.Image = image;
+
+                if (video != null)
+                    movie.Video = video;
+
+                movie.HasOscar = oscar; 
+
+                await context.SaveChangesAsync();
+            }
+        }
+        else
+        {
+            throw new InvalidOperationException("La coleccion de usuarios es nula.");
+        }      
+        
+    }
 }

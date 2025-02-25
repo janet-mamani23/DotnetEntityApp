@@ -70,7 +70,8 @@ public class UserBanController : ControllerBase
         }
     }
 
-    private async Task VerifyBans(IEnumerable<UserBan> usersBans)
+    [NonAction]
+    public async Task VerifyBans(IEnumerable<UserBan> usersBans)
     {
         IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan();
         foreach (var userBan in usersBans)
@@ -83,7 +84,8 @@ public class UserBanController : ControllerBase
         }
     }
 
-    private async void VerifyBansCallback(object? state)
+    [NonAction]
+    public async Task VerifyBansCallback()
     {
         try
         {
@@ -140,7 +142,7 @@ public class UserBanController : ControllerBase
 
     [HttpPut]
     [Route("PutBanner")]
-    public async Task<IActionResult> Put(UserRequestBannedDTO request)
+    public async Task<IActionResult> Put(UpdateBannedDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
         IDAOUserBan daoUserBan = daoFactory.CreateDAOUserBan(); 
@@ -149,7 +151,7 @@ public class UserBanController : ControllerBase
         if(userBan != null && user != null)
         {
             userBan.DissBanned();
-            await daoUserBan.Delete(userBan.Id);
+            await daoUserBan.Delete(user.Id);
             await daoUser.UpdateStatus(user.Id,"deactivate");
             return Ok(new GetAllResponseDTO
             {
@@ -166,9 +168,8 @@ public class UserBanController : ControllerBase
             return NotFound(new ResponseDTO
             {
                 Success = false,
-                Message = "El usuario no existe registrado."
+                Message = "El usuario no existe."
             });
         }    
     }
 }
-//TODO - aplicar servicio de autoverificacion de banneo.
