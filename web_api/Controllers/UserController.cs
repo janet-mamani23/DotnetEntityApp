@@ -142,7 +142,7 @@ public class UserController : ControllerBase
                 Page = request.Page,
                 PageSize = request.PageSize,
                 Success = true,
-                Message = "Usuarios encontrados."
+                Message = $"Usuarios encontrados {totalRecords}."
             };
             return Ok(response);
         }
@@ -160,19 +160,6 @@ public class UserController : ControllerBase
     public async Task<IActionResult> PutUser([FromBody]UserPutRequestDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
-        /* TODO- COMO IDENTIFICAR EL PROPIO USUARIO? ...
-
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-        if (userIdClaim == null)
-        {
-            return Unauthorized(new ErrorResponseDTO
-        {
-            Success = false,
-            Message = "Id user no encontrado."
-        });
-        }
-        long userId = long.Parse(userIdClaim.Value);*/
-
         try{
             await daoUser.Update(request.IdUser, request.Name,request.LastName,request.Birthdate,request.Email,request.Description);
             return Ok(new ResponseDTO
@@ -193,12 +180,12 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("GetUser")]
-    public async Task<IActionResult> GetUser()
+    public async Task<IActionResult> GetUser([FromQuery]UserGetRequestDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
-        long idUser = 1;
+        
         try{
-            var user = await daoUser.GetById(idUser);
+            var user = await daoUser.GetById(request.UserId);
             if(user != null)
             {   return Ok(new LoginResponseDTO
                     {
@@ -232,7 +219,6 @@ public class UserController : ControllerBase
     } 
 
     [HttpDelete(Name = "DeleteUser")]
-    //TODO, ELIMINAR POR ID? COMO OBTENGO ESE ID CUANDO EL PROPIO USUARIO QUIERE ELIMINAR SU CUENTA.
     public async Task<IActionResult> Delete(RequestDeleteDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();

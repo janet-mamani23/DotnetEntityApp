@@ -109,7 +109,7 @@ public class DAOEFUser : IDAOUser
         await context.SaveChangesAsync();
         return user.Id; 
     }
-    public async Task Update(long userId, string name, string lastName, DateTime birthdate, string email, string description)
+    public async Task Update(long userId, string? name, string? lastName, DateTime? birthdate, string? email, string? description)
     {
         if (context.Users != null)
         {   
@@ -119,13 +119,23 @@ public class DAOEFUser : IDAOUser
            
            if(user != null)
            {
-                user.Name = name;
-                user.LastName = lastName;
-                user.Birthdate = birthdate;
-                user.Email = email;
-                user.Description = description;
-           }
-           await context.SaveChangesAsync();
+                if (name != null)
+                    user.Name = name;
+
+                if (lastName != null)
+                    user.LastName = lastName;
+
+                if (birthdate != null)
+                    user.Birthdate = (DateTime)birthdate;
+                    
+                if(email != null)
+                    user.Email = email;
+
+                if (description != null)
+                    user.Description = description;
+                    
+                await context.SaveChangesAsync();
+           } 
         }
         else
         {
