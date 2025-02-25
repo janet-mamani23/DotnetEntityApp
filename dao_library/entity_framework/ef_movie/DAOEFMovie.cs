@@ -89,7 +89,7 @@ public class DAOEFMovie: IDAOMovie
             throw new InvalidOperationException("Movies set is not initialized.");
         }
         Movie? movie = await context.Movies
-        .FirstOrDefaultAsync(m => m.Id == id);
+        .FindAsync(id);
         
         if (movie == null)
         {

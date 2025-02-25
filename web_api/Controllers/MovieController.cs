@@ -74,7 +74,7 @@ public class MovieController: ControllerBase
     }
 
     [HttpPost(Name = "CreateMovie")]
-    public async Task<IActionResult> Post(MovieRequestDTO movieRequestDTO)
+    public async Task<IActionResult> Post([FromBody]MovieRequestDTO movieRequestDTO)
     {
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie(); 
         IDAOGenre daoGenre = daoFactory.CreateDAOGenre();
@@ -165,12 +165,13 @@ public class MovieController: ControllerBase
         }
     }
 
-    [HttpDelete(Name = "DeleteMovie")]
-    public async Task<IActionResult> Delete(RequestDeleteDTO request)
+    [HttpDelete]
+    [Route("DeleteMovie")]
+    public async Task<IActionResult> Delete([FromBody]RequestDeleteDTO request)
     {
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
-        try
-        {
+        
+        
             var movie = await daoMovie.GetById(request.Id);
             if(movie == null)
                 {
@@ -187,7 +188,7 @@ public class MovieController: ControllerBase
                     return Ok(new MoviesResponseDTO
                         {
                             Id = request.Id,
-                            ImageUrl = movie.Image.Path,
+                            ImageUrl = movie.GetImage(),
                             Name = movie.Title,
                             Success = true,
                             Message = "Pelicula eliminada."
@@ -196,17 +197,13 @@ public class MovieController: ControllerBase
             else
                 {
                 return StatusCode(500, new ErrorResponseDTO
-                    {
-                        Success = false,
-                        Message = "No se pudo eliminar la pelicula." 
-                    });
+                {
+                    Success = false,
+                    Message = $"Nose pudo eliminar la pelicula",
+                });
                 }
-        }
-        
-        catch (Exception ex)
-        {
-            return StatusCode(500,  $"Internal server error: {ex.Message}");
-        }
+    
+    
     }
  
     [HttpGet]
