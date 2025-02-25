@@ -36,7 +36,7 @@ public class GenreController : ControllerBase
        
         return Ok(new ResponsePostGenreDTO
         {
-            GenreName = RequestDTO.Name,
+            genreName = RequestDTO.Name,
             Success = true,
             Message = "Registro exitoso"
         }

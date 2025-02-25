@@ -33,7 +33,7 @@ public class CommentController : ControllerBase
             });
         }
 
-        if(string.IsNullOrEmpty(requestPostCommentDTO.Text))
+        if(string.IsNullOrEmpty(requestPostCommentDTO.text))
         {
             return BadRequest(new ErrorResponseDTO
             {
@@ -46,8 +46,8 @@ public class CommentController : ControllerBase
         IDAOUser daoUser = daoFactory.CreateDAOUser();
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
 
-        var user = await daoUser.GetById(requestPostCommentDTO.IdUser);
-        var movie = await daoMovie.GetById(requestPostCommentDTO.IdMovie); 
+        var user = await daoUser.GetById(requestPostCommentDTO.idUser);
+        var movie = await daoMovie.GetById(requestPostCommentDTO.idMovie); 
         
         if (user == null || movie == null)
         {
@@ -59,7 +59,7 @@ public class CommentController : ControllerBase
         }
 
         Comment comment = new Comment{
-            Text= requestPostCommentDTO.Text,
+            Text= requestPostCommentDTO.text,
             User = user,
             Movie = movie,
             CreatedAt = DateTime.Now,
@@ -106,7 +106,7 @@ public class CommentController : ControllerBase
 
         try
         {
-            await daoComment.Update(requestPutCommentDTO.IdComment, requestPutCommentDTO.Text);
+            await daoComment.Update(requestPutCommentDTO.idComment, requestPutCommentDTO.text);
             return Ok(new ResponseDTO
             {
                 Success = true,

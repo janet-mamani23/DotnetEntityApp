@@ -50,7 +50,6 @@ public class MovieController: ControllerBase
                 Id = movi.Id,
                 ImageUrl = movi.GetImage(),
                 Name = movi.Title,
-                Success = true
             }).ToList();
             var response = new MovieGetAllResponseDTO
                 {
@@ -142,17 +141,16 @@ public class MovieController: ControllerBase
         var result = await daoMovie.Save(movie); 
         if (result != null)
         {
-            return Ok(new MovieResponsePostDTO
+            return Ok(new MovieResponseDTO
             {
+                Success = true,
+                Message = "Película creada con éxito.",
                 Id = movie.Id,
                 Title = movie.Title,
-                Genre = movie.Genre.Name,
                 Description = movie.Description,
+                Genre = movie.Genre.Name,
                 ImageUrl = movie.GetImage(),
                 VideoUrl = movie.GetVideo(),
-                HasOscar = movie.HasOscar,
-                Success = true,
-                Message = "Película creada con éxito."
             });
         }
         else
@@ -184,7 +182,7 @@ public class MovieController: ControllerBase
             var success = await daoMovie.Delete(request.Id);
             if (success)
                 {
-                    return Ok(new MoviesResponseDTO
+                    return Ok(new MovieDeleteResponseDTO
                         {
                             Id = request.Id,
                             ImageUrl = movie.Image.Path,
@@ -259,60 +257,9 @@ public class MovieController: ControllerBase
             VideoUrl = movie.GetVideo(),
             //Star = movie.Star?.Star, Como se representa con respecto a el front las estrellas.
             AverageQualify = averageRating,
-            HasOscar = movie.HasOscar,
             Comments = commentsResponse,
              });
     }
-
-    [HttpPut]
-    [Route("UpdateMovie")]
-    public async Task<IActionResult> UpdateMovie([FromBody]MovieRequestUpdateDTO request)
-    {
-        IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
-        IDAOGenre daoGenre = daoFactory.CreateDAOGenre();
-        IDAOFileEntity daoFileEntity = daoFactory.CreateDAOFileEntity();
-        IDAOFileType fileType = daoFactory.CreateDAOFileType();
-        try
-        {
-            var movie = await daoMovie.GetById(request.MovieId);
-            var genre = await daoGenre.GetById(request.GenreId);
-            var imageType = await fileType.GetById(1);
-            var videoType = await fileType.GetById(2);
-            FileEntity? image = null;
-            FileEntity? video = null;
-            if(request.ImageUrl != null)
-            {
-                image = new FileEntity  
-                {
-                    Path = request.ImageUrl,
-                    FileType = imageType,
-                };
-            }
-            if(request.VideoUrl != null)
-            {
-                video = new FileEntity 
-                {
-                    Path = request.VideoUrl,
-                    FileType = videoType,
-                };
-            }
-            await daoMovie.Update(request.MovieId, request.TitleMovie, request.DescriptionMovie, genre,image,video, request.HasOscar);
-            return Ok(new ResponseDTO
-                {
-                    Success = true,
-                    Message = "Datos actualizados."
-                });
-            }
-        catch  (InvalidOperationException ex)
-            {
-                return Conflict(new ErrorResponseDTO
-            {
-                Success = false,
-                Message = ex.Message 
-            });
-            }
-    }
-
 
     
     /*[HttpGet("{id}", Name = "MovieId")]  // Obtener los detalles de una película por su ID

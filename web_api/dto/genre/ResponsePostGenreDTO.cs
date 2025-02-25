@@ -4,5 +4,5 @@ namespace web_api.dto.login;
 
 public class ResponsePostGenreDTO : ResponseDTO
 {
-    public string GenreName {get; set;} = "";
+    public string genreName {get; set;} = "";
 }

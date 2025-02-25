@@ -27,7 +27,7 @@ namespace web_api.controllers
         {
             IDAOQualify daoQualify = daoFactory.CreateDAOQualify();
             IDAOUser daoUser = daoFactory.CreateDAOUser();
-            var user = await daoUser.GetById(qualifyRequest.UserId);
+            var user = await daoUser.GetById(qualifyRequest.UserId);//TODO ¿COMO OBTENGO EL ID DEL USUARIO QUE ESTA DANDO EL CLICK EN LAS ESTRELLAS?
 
             if (user == null || user.UserStatus == entities_library.login.UserStatus.Banned)
             {
@@ -62,7 +62,7 @@ namespace web_api.controllers
             };
 
             await daoQualify.Save(qualify);
-            await daoMovie.UpdateQualify(movie.Id, qualify);
+            await daoMovie.Update(movie.Id, qualify);
             var averageStars = movie.GetAverage(); 
             
             return Ok(new QualifyResponseDTO 

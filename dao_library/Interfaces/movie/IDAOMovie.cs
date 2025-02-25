@@ -1,6 +1,5 @@
 using entities_library.movie;
 using entities_library.Qualify;
-using entities_library.file_system;
 
 namespace dao_library.Interfaces.movie;
 
@@ -14,9 +13,9 @@ public interface IDAOMovie
 
     Task<Movie?> GetById(long id); //obtengo por id
     Task <Movie?> Save(Movie movie); //quiero guardar mi movie desde mi office
-    Task UpdateQualify (long id, Qualify qualify); //quiero actualizar mi movie desde mi officce
+    Task Update(long id, Qualify qualify); //quiero actualizar mi movie desde mi officce
     
-    Task Update (long movieId, string? title, string? description, Genre? genre, FileEntity? image, FileEntity? video, bool oscar);
+    //NO PROGRAMAR
     Task<bool> Delete(long id); //quiero eliminar mi movie desde mi office
     Task<Movie?> GetByTitle(string title);
     Task<Movie?> ExistMovie (string title);
