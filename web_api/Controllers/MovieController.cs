@@ -50,6 +50,7 @@ public class MovieController: ControllerBase
                 Id = movi.Id,
                 ImageUrl = movi.GetImage(),
                 Name = movi.Title,
+                Success = true
             }).ToList();
             var response = new MovieGetAllResponseDTO
                 {
@@ -141,16 +142,17 @@ public class MovieController: ControllerBase
         var result = await daoMovie.Save(movie); 
         if (result != null)
         {
-            return Ok(new MovieResponseDTO
+            return Ok(new MovieResponsePostDTO
             {
-                Success = true,
-                Message = "Película creada con éxito.",
                 Id = movie.Id,
                 Title = movie.Title,
-                Description = movie.Description,
                 Genre = movie.Genre.Name,
+                Description = movie.Description,
                 ImageUrl = movie.GetImage(),
                 VideoUrl = movie.GetVideo(),
+                HasOscar = movie.HasOscar,
+                Success = true,
+                Message = "Película creada con éxito."
             });
         }
         else
@@ -182,7 +184,7 @@ public class MovieController: ControllerBase
             var success = await daoMovie.Delete(request.Id);
             if (success)
                 {
-                    return Ok(new MovieDeleteResponseDTO
+                    return Ok(new MoviesResponseDTO
                         {
                             Id = request.Id,
                             ImageUrl = movie.Image.Path,

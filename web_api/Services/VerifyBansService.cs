@@ -17,7 +17,7 @@ namespace web_api.Services
             while (!stoppingToken.IsCancellationRequested)
             {
                 await VerifyBansAsync();
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
             }
         }
 

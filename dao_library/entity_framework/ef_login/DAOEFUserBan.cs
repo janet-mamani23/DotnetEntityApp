@@ -13,16 +13,18 @@ public class DAOEFUserBan : IDAOUserBan
         this.context = context;
     }
 
-    public async Task Delete(long id)
+    public async Task Delete(long idUser)
     {
         if (context.UserBans == null)
         {
             throw new InvalidOperationException("La colección de Userbans es nula.");
         }
-        var userBan = await context.UserBans.FindAsync(id);
-        if (userBan != null)
+        var userBans = await context.UserBans
+                                .Where(ub => ub.User.Id == idUser)
+                                .ToListAsync();
+        if (userBans.Any())
         {
-            context.UserBans.Remove(userBan);
+            context.UserBans.RemoveRange(userBans);
             await context.SaveChangesAsync();
         }
         else

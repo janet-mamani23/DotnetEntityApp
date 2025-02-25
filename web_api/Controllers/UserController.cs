@@ -142,7 +142,7 @@ public class UserController : ControllerBase
                 Page = request.Page,
                 PageSize = request.PageSize,
                 Success = true,
-                Message = "Usuarios encontrados."
+                Message = $"Usuarios encontrados {totalRecords}."
             };
             return Ok(response);
         }
@@ -180,12 +180,12 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("GetUser")]
-    public async Task<IActionResult> GetUser()
+    public async Task<IActionResult> GetUser([FromQuery]UserGetRequestDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
-        long idUser = 1;
+        
         try{
-            var user = await daoUser.GetById(idUser);
+            var user = await daoUser.GetById(request.UserId);
             if(user != null)
             {   return Ok(new LoginResponseDTO
                     {
