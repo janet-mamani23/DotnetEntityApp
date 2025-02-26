@@ -28,7 +28,7 @@ public class Movie
            suma += star.Stars; 
         }
         double average = suma / Qualifies.Count; 
-        return average; 
+        return Math.Round(average,1); 
     }
 
     public string GetImage()

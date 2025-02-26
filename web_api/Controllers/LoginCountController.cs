@@ -28,7 +28,7 @@ public class LoginCountController : ControllerBase
             { 
                 NumberLogin = logins,
                 Success = true,
-                Message = "Estas son el total de sesiones activas en la app." 
+                Message = $"Estas son el total de sesiones activas en la app {logins}." 
             });
     }
 }

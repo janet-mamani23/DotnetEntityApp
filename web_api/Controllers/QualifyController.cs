@@ -69,7 +69,7 @@ namespace web_api.controllers
             {
                 Success = true,
                 Message = "Calificación guardada.",
-                Id = qualify.Id,
+                IdQualify = qualify.Id,
                 Star = qualify.Stars,
                 AverageStars = (double)averageStars
             });
