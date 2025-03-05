@@ -118,6 +118,9 @@ public class UserBanController : ControllerBase
                         NameUser = userBan.User.Name,
                         LastName = userBan.User.LastName,
                         Avatar = userBan.User.GetUrlAvatar(),
+                        StartTime = userBan.StartDateTime,
+                        EndTime = userBan.EndtDateTime,
+                        Reason = userBan.Reason,
                         Success = true,
                         Message = "Este usuario está banneado."
                     });
@@ -153,7 +156,7 @@ public class UserBanController : ControllerBase
             userBan.DissBanned();
             await daoUserBan.Delete(user.Id);
             await daoUser.UpdateStatus(user.Id,"deactivate");
-            return Ok(new GetAllResponseDTO
+            return Ok(new PutResponseDTO
             {
                 Id = user.Id,
                 NameUser = user.Name,
