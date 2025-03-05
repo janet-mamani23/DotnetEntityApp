@@ -58,11 +58,12 @@ public class DAOEFUser : IDAOUser
         IQueryable<User> listUsers = context.Users;
         if (query == "all")
         {
+            long totalRecords = await listUsers.CountAsync(); 
             var users =  await listUsers
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
-            long totalRecords = await listUsers.CountAsync(); 
+            
             return (users, totalRecords);
         }
         else
@@ -79,10 +80,51 @@ public class DAOEFUser : IDAOUser
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-                return (users, totalRecords);
+            return (users, totalRecords);
         }  
     }
 
+public async Task<(IEnumerable<User> users, long totalRecords)> GetAllAdmin(string query, int page, int pageSize)
+    {
+        
+        if (context.Users == null)
+        {
+           throw new InvalidOperationException("La colección de usuarios es nula.");
+        }
+        var lowerQuery = query.ToLower();
+
+        IQueryable<User> listUsers = context.Users;
+        if (query == "all")
+        {
+            long totalRecords = await listUsers
+                      .Where(user => user.IsAdmin)
+                      .CountAsync();
+
+            var admins = await listUsers
+                      .Where(user => user.IsAdmin)
+                      .Skip((page - 1) * pageSize)
+                      .Take(pageSize)
+                      .ToListAsync();
+        
+            return (admins, totalRecords);    
+        }
+        else
+        {
+            var filteredUsers = listUsers.Where(m => 
+                m.Name.Contains(lowerQuery) && m.IsAdmin);
+
+            int totalRecords = filteredUsers.Count();
+            if(totalRecords == 0)
+            {   
+                throw new InvalidOperationException("No hay usuarios con ese nombre.");
+            }
+            var users =  await filteredUsers
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (users, totalRecords);
+        }  
+    }
     public async Task<User?> GetById(long id)
     {
         if (context.Users == null) return null;
