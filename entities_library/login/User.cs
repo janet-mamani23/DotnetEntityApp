@@ -10,6 +10,8 @@ public class User : Person
     public virtual FileEntity? Avatar {get; set;}
     public string Description {get; set;} = "";
 
+    public bool IsAdmin { get; set; } = false;
+
     #region Methods
     public void SetPassword(string password)
     {

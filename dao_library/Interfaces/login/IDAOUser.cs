@@ -11,7 +11,11 @@ public interface IDAOUser
         int page,
         int pageSize
     );
-
+    Task<(IEnumerable<User> users, long totalRecords)> GetAllAdmin(
+        string query,
+        int page,
+        int pageSize
+    );
     Task<User?> GetByUsername(string userName, string lastName);
 
     Task<User?> GetById(long id);
