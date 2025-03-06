@@ -215,7 +215,7 @@ public class AdminController : ControllerBase
             }
     } 
 
-    [HttpDelete(Name = "DeleteAmdin")]
+    [HttpDelete(Name = "DeleteAdmin")]
     public async Task<IActionResult> Delete(RequestDeleteDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
