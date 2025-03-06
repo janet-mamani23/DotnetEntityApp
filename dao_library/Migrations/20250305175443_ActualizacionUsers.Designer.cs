@@ -11,8 +11,8 @@ using dao_library;
 namespace daolibrary.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250305142830_AddIsAdminProperty")]
-    partial class AddIsAdminProperty
+    [Migration("20250305175443_ActualizacionUsers")]
+    partial class ActualizacionUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
