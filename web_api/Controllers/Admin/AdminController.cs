@@ -88,6 +88,7 @@ public class AdminController : ControllerBase
             Name = userPostRequestDTO.Name,
             LastName = userPostRequestDTO.LastName,
             Email = userPostRequestDTO.Email,
+            Password = userPostRequestDTO.Password,
             Birthdate = (DateTime)userPostRequestDTO.Birthdate,
             Description = userPostRequestDTO.Description,
             IsAdmin = true
