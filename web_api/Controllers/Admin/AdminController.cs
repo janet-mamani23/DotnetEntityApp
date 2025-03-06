@@ -153,6 +153,99 @@ public class AdminController : ControllerBase
             }
     }
 
+    [HttpPut(Name = "PutAdmin")]
+    public async Task<IActionResult> PutUser([FromBody]UserPutRequestDTO request)
+    {
+        IDAOUser daoUser = daoFactory.CreateDAOUser();
+        try{
+            await daoUser.Update(request.IdUser, request.Name,request.LastName,request.Birthdate,request.Email,request.Description);
+            return Ok(new ResponseDTO
+                {
+                    Success = true,
+                    Message = "Datos actualizados."
+                });
+            }
+        catch  (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponseDTO
+            {
+                Success = false,
+                Message = ex.Message 
+            });
+            }
+    }
+
+     [HttpGet]
+    [Route("GetAdmin")]
+    public async Task<IActionResult> GetUser([FromQuery]UserGetRequestDTO request)
+    {
+        IDAOUser daoUser = daoFactory.CreateDAOUser();
+        
+        try{
+            var user = await daoUser.GetById(request.UserId);
+            if(user != null)
+            {   return Ok(new LoginResponseDTO
+                    {
+                        Id = user.Id,
+                        NameUser = user.Name,
+                        LastnameUser = user.LastName,
+                        DescriptionUser = user.Description,
+                        UrlAvatar = user.GetUrlAvatar(),
+                        EmailUser = user.Email,
+                        Success = true,
+                        Message = "Usuario encontrado."
+                    });
+            }
+            else
+                {
+                    return NotFound( new ErrorResponseDTO
+                    {
+                        Success = false,
+                        Message = "Usuario no encontrado."
+                    });
+                }
+            }
+        catch  (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = ex.Message 
+                });
+            }
+    } 
+
+    [HttpDelete(Name = "DeleteAmdin")]
+    public async Task<IActionResult> Delete(RequestDeleteDTO request)
+    {
+        IDAOUser daoUser = daoFactory.CreateDAOUser();
+        try
+        {
+            var success = await daoUser.Delete(request.Id);
+            if (success)
+                {
+                    return Ok(new ResponseDTO
+                        {
+                            Success = true,
+                            Message = "Usuario eliminado."
+                        }
+                        );
+                }
+            else
+                {
+                return NotFound(new ErrorResponseDTO
+                    {
+                        Success = false,
+                        Message = "No se pudo eliminar el usuario ya que no esta registrado." 
+                    });
+                }
+        }
+        
+        catch (Exception ex)
+        {
+            return StatusCode(500,  $"Internal server error: {ex.Message}");
+        }
+    } 
 
 
 }
