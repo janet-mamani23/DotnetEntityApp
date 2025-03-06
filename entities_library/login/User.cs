@@ -9,7 +9,6 @@ public class User : Person
     public virtual UserStatus UserStatus { get; set; } = UserStatus.Active;
     public virtual FileEntity? Avatar {get; set;}
     public string Description {get; set;} = "";
-
     public bool IsAdmin { get; set; } = false;
 
     #region Methods

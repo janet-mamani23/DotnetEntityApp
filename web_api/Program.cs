@@ -6,6 +6,7 @@ using web_api.Services;
 using web_api.Controllers;
 using dao_library.Interfaces.login;
 using dao_library.entity_framework.ef_login;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,21 @@ builder.Services.AddScoped<IDAOFactory, DAOEFFactory>();
 builder.Services.AddScoped<IDAOUserBan, DAOEFUserBan>(); 
 builder.Services.AddScoped<UserBanController>();
 builder.Services.AddHostedService<VerifyBansService>();
+
+builder.Services.AddCors(options => 
+{
+    options.AddPolicy("AllowAll",
+        policy => 
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
