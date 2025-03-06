@@ -153,7 +153,7 @@ public class AdminController : ControllerBase
             }
     }
 
-    [HttpPut(Name = "PutDateAdmin")]
+    [HttpPut(Name = "PutAdmin")]
     public async Task<IActionResult> PutUser([FromBody]UserPutRequestDTO request)
     {
         IDAOUser daoUser = daoFactory.CreateDAOUser();
@@ -175,7 +175,7 @@ public class AdminController : ControllerBase
             }
     }
 
-    [HttpGet]
+     [HttpGet]
     [Route("GetAdmin")]
     public async Task<IActionResult> GetUser([FromQuery]UserGetRequestDTO request)
     {
@@ -245,7 +245,8 @@ public class AdminController : ControllerBase
         {
             return StatusCode(500,  $"Internal server error: {ex.Message}");
         }
-    }  
+    } 
+
 
 }
 

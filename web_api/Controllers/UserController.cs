@@ -93,7 +93,8 @@ public class UserController : ControllerBase
             LastName = userPostRequestDTO.LastName,
             Email = userPostRequestDTO.Email,
             Birthdate = (DateTime)userPostRequestDTO.Birthdate,
-            Description = userPostRequestDTO.Description
+            Description = userPostRequestDTO.Description,
+            IsAdmin = false
         };
         user.SetPassword(userPostRequestDTO.Password);
 

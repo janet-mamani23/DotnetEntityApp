@@ -6,6 +6,7 @@ using web_api.Services;
 using web_api.Controllers;
 using dao_library.Interfaces.login;
 using dao_library.entity_framework.ef_login;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
