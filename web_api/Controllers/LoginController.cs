@@ -33,32 +33,41 @@ public class LoginController : ControllerBase
             loginRequestDTO.EmailUser,
             loginRequestDTO.PasswordUser
         );
-
-        if( user != null && user.VerifyPassword(loginRequestDTO.PasswordUser))
+        if(user != null)
         {
-            web_api.helpers.VisitCounter visitCounter = web_api.helpers.VisitCounter.GetInstance();
-            if(visitCounter != null)
+            if(user.UserStatus == UserStatus.Active && user.VerifyPassword(loginRequestDTO.PasswordUser))
             {
-                visitCounter.GetNextNumber();
-            }
-            return Ok(new LoginResponseDTO 
-            {
-                Success = true,
-                Message = "Login Exitoso.",
-                Id = user.Id,
-                NameUser = user.Name,
-                LastnameUser = user.LastName,
-                DescriptionUser = user.Description,
-                EmailUser = user.Email,
-                UrlAvatar = user.GetUrlAvatar(),
-    
-            });
-        }
+                web_api.helpers.VisitCounter visitCounter = web_api.helpers.VisitCounter.GetInstance();
+                if(visitCounter != null)
+                {
+                    visitCounter.GetNextNumber();
+                }
+                return Ok(new LoginResponseDTO 
+                {
+                    Success = true,
+                    Message = "Login Exitoso.",
+                    Id = user.Id,
+                    NameUser = user.Name,
+                    LastnameUser = user.LastName,
+                    DescriptionUser = user.Description,
+                    EmailUser = user.Email,
+                    UrlAvatar = user.GetUrlAvatar(),
         
+                });
+            }
+            else
+            {
+                return Unauthorized(new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = "El usuario se encuentra banneado"
+                });
+            }
+        }  
         return Unauthorized(new ErrorResponseDTO
         {
             Success = false,
-            Message = "Invalid mail or password"
+            Message = "Email o pasword incorrecto"
         });
     }
 
