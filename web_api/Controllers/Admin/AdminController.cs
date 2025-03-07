@@ -82,7 +82,7 @@ public class AdminController : ControllerBase
         }
 
         IDAOUser daoUser = daoFactory.CreateDAOUser();
-
+        // Se crea un objeto de tipo User (este es el objeto)
         var user = new User
         {
             Name = userPostRequestDTO.Name,
@@ -93,8 +93,9 @@ public class AdminController : ControllerBase
             Description = userPostRequestDTO.Description,
             IsAdmin = true
         };
+        // Aquí se llama a un método del objeto 'user'
         user.SetPassword(userPostRequestDTO.Password);
-
+        // Se guarda el objeto 'user' en la base de datos
         long id = await daoUser.Save(user);
 
         return Ok(new UserPostResponseDTO
