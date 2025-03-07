@@ -316,19 +316,30 @@ public class MovieController: ControllerBase
     }
 
 
-    
-    /*[HttpGet("{id}", Name = "MovieId")]  // Obtener los detalles de una película por su ID
-    public async Task<IActionResult> GetMovieById(long id)
+       [HttpGet]
+    [Route("CommentsMovie")]   
+    public async Task<IActionResult> CommentsMovie([FromQuery]MovieCommentsRequestDTO search)
     {
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
-        Movie movie = await daoMovie.GetById(id);
-
-        if (movie == null)// Verifico si la película existe
+        if (string.IsNullOrEmpty(search.Title))
         {
-            return NotFound("The requested movie was not found.");
+            return BadRequest((new ErrorResponseDTO
+            {
+                Success = false,
+                Message = "Se necesita pasar todos los campos." 
+            }));
         }
 
-        double averageRating = movie.GetAverage();   // Obtener promedio de calificaciones usando el método GetAverage
+        var movie = await daoMovie.ExistMovie(search.Title);
+
+        if(movie == null)
+            {
+                return StatusCode(500, new ErrorResponseDTO
+                {
+                    Success = false,
+                    Message = "La película no se encontró." 
+                });
+            }
 
         List<CommentResponseDTO> commentsResponse = new List<CommentResponseDTO>();
         
@@ -336,28 +347,15 @@ public class MovieController: ControllerBase
         {
             commentsResponse.Add(new CommentResponseDTO
             {
-                Id = comment.Id,
+                IdComment = comment.Id,
                 AvatarUser = comment.UrlAvatar(),
+                IdUser = comment.User.Id,
                 UserName = comment.GetName(),
                 Text = comment.Text,
                 CreatedAt = comment.CreatedAt
             });
         }
-
-        return Ok (new MovieResponseDTO
-        {
-            Success = true,
-            Message = "The movies is: ",
-            Id = movie.Id,
-            Title = movie.Title,
-            Genre = movie.Genre.Name,
-            Description = movie.Description, 
-            ImageUrl = movie.Image?.Path,
-            VideoUrl = movie.Video?.Path,
-            //Star = movie.Star?.Star, Como se representa con respecto a el front las estrellas.
-            AverageQualify = averageRating,
-            Comments = commentsResponse,
-             });
-    }*/
+        return Ok (commentsResponse);
+    }
 
 }   
