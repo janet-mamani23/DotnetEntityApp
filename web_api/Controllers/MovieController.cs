@@ -213,7 +213,11 @@ public class MovieController: ControllerBase
         IDAOMovie daoMovie = daoFactory.CreateDAOMovie();
         if (string.IsNullOrEmpty(search.Title))
         {
-            return BadRequest(new { Message = "El nombre de la película no puede estar vacío" });
+            return BadRequest((new ErrorResponseDTO
+            {
+                Success = false,
+                Message = "Se necesita pasar todos los campos." 
+            }));
         }
 
         var movie = await daoMovie.ExistMovie(search.Title);

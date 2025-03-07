@@ -73,6 +73,18 @@ public class DAOEFMovie: IDAOMovie
             // Filtra por género si el query es un número válido
             moviesQuery = moviesQuery.Where(m => m.Genre.Id == genreId);
         }
+        if(query == "oscar")
+        {
+            moviesQuery = moviesQuery.Where(m => 
+                m.HasOscar == true
+            );
+            var movies =  await moviesQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+            int totalRecords = await moviesQuery.CountAsync(); 
+            return (movies, totalRecords);
+        }
         else
         {
             // De lo contrario, buscar por título (nombre de la película)
