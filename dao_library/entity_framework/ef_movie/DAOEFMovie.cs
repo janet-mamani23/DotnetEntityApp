@@ -67,6 +67,18 @@ public class DAOEFMovie: IDAOMovie
             int totalRecords = await moviesQuery.CountAsync(); 
             return (movies, totalRecords);
         }
+        if(query == "oscar")
+        {
+            moviesQuery = moviesQuery.Where(m => 
+                m.HasOscar == true
+            );
+            var movies =  await moviesQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+            int totalRecords = await moviesQuery.CountAsync(); 
+            return (movies, totalRecords);
+        }
         else
         {
             long result = long.Parse(query);
