@@ -316,7 +316,7 @@ public class MovieController: ControllerBase
     }
 
 
-       [HttpGet]
+    [HttpGet]
     [Route("CommentsMovie")]   
     public async Task<IActionResult> CommentsMovie([FromQuery]MovieCommentsRequestDTO search)
     {
@@ -340,10 +340,11 @@ public class MovieController: ControllerBase
                     Message = "La película no se encontró." 
                 });
             }
+        var (comments, totalRecords) = await daoMovie.GetCommentsForMovie(search.Title,search.Page,search.PageSize);
 
         List<CommentResponseDTO> commentsResponse = new List<CommentResponseDTO>();
         
-        foreach (Comment comment in movie.Comments)
+        foreach (Comment comment in comments)
         {
             commentsResponse.Add(new CommentResponseDTO
             {
@@ -352,10 +353,17 @@ public class MovieController: ControllerBase
                 IdUser = comment.User.Id,
                 UserName = comment.GetName(),
                 Text = comment.Text,
-                CreatedAt = comment.CreatedAt
+                CreatedAt = comment.CreatedAt,
             });
         }
-        return Ok (commentsResponse);
+        /* var response = new MovieCommentsResponseDTO
+                {
+                    Comments = commentsResponse,
+                    TotalRecord = totalRecords,
+                    Success = true,
+                    Message = "Lista peliculas entregada."
+                }; */
+        return Ok(commentsResponse);
     }
 
 }   
