@@ -1,5 +1,6 @@
 using dao_library.Interfaces.comment;
 using dao_library.Interfaces.movie;
+using entities_library.comment;
 using entities_library.file_system;
 using entities_library.movie;
 using entities_library.Qualify;
@@ -213,6 +214,32 @@ public class DAOEFMovie: IDAOMovie
             .ToListAsync();
 
         return (movies, totalRecords);
+    }
+    public async Task<(IEnumerable<Comment> comments, int totalRecords)> GetCommentsForMovie(
+    string movieTitle, 
+    int page, 
+    int pageSize)
+    {
+        if (context.Movies == null || context.Comments == null)
+            {
+                throw new InvalidOperationException("Las colecciones de películas o comentarios son nulas.");
+            }
+        // Buscar la película por título e incluir los comentarios
+        var movie = await context.Movies
+            .Include(m => m.Comments)
+            .FirstOrDefaultAsync(m => m.Title.ToLower() == movieTitle.ToLower());
+        if (movie == null)
+            {
+                throw new InvalidOperationException("No se encontró la película.");
+            }
+        // Paginación de los comentarios
+        IQueryable<Comment> commentsQuery = context.Comments;
+        var comments = await commentsQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        int totalRecords = await commentsQuery.CountAsync(); 
+        return (comments, totalRecords);
     }
 
 }

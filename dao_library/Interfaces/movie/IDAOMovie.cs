@@ -1,7 +1,7 @@
 using entities_library.movie;
 using entities_library.Qualify;
 using entities_library.file_system;
-
+using entities_library.comment;
 namespace dao_library.Interfaces.movie;
 
 public interface IDAOMovie
@@ -26,5 +26,8 @@ public interface IDAOMovie
     Task<bool> Delete(long id); //quiero eliminar mi movie desde mi office
     Task<Movie?> GetByTitle(string title);
     Task<Movie?> ExistMovie (string title);
-
+    Task<(IEnumerable<Comment> comments, int totalRecords)> GetCommentsForMovie(
+    string movieTitle, 
+    int page, 
+    int pageSize);
 }  

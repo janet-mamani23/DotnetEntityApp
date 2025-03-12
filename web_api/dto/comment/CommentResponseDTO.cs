@@ -9,7 +9,5 @@ public class CommentResponseDTO
     public long IdUser {get;set;}  
     public string? UserName { get; set; }   
     public required string Text { get; set; }
-    public DateTime CreatedAt { get; set; }
-       
-   
+    public DateTime CreatedAt { get; set; } 
 }
