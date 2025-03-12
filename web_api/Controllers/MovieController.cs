@@ -398,13 +398,6 @@ public class MovieController: ControllerBase
                 CreatedAt = comment.CreatedAt,
             });
         }
-        /* var response = new MovieCommentsResponseDTO
-                {
-                    Comments = commentsResponse,
-                    TotalRecord = totalRecords,
-                    Success = true,
-                    Message = "Lista peliculas entregada."
-                }; */
         return Ok(commentsResponse);
     }
 
