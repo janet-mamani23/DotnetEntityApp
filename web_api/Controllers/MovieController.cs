@@ -73,6 +73,48 @@ public class MovieController: ControllerBase
             }
     }
 
+    [HttpGet]
+    [Route("MovieOscar")] 
+    public async Task<IActionResult> GetMoviesOscar( [FromQuery] GetAllRequestDTO requestMovie)
+    {
+        IDAOMovie daoMovie = this.daoFactory.CreateDAOMovie();
+
+        try
+        {
+            
+            var (movies, totalRecords) = await daoMovie.GetAllOscar(
+                requestMovie.Query,
+                requestMovie.Page,
+                requestMovie.PageSize);
+
+            var moviesResponse = movies.Select(movi => new MoviesResponseDTO
+            {
+                Id = movi.Id,
+                ImageUrl = movi.GetImage(),
+                Name = movi.Title,
+                Success = true
+            }).ToList();
+            var response = new MovieGetAllResponseDTO
+                {
+                    Movies = moviesResponse,
+                    TotalRecords = totalRecords,
+                    Page = requestMovie.Page,
+                    PageSize = requestMovie.PageSize,
+                    Success = true,
+                    Message = "Lista peliculas Oscar entregada."
+                };
+            return Ok(response);
+        }
+        catch  (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponseDTO
+            {
+                Success = false,
+                Message = ex.Message 
+            });
+            }
+    }
+
     [HttpPost(Name = "CreateMovie")]
     public async Task<IActionResult> Post([FromBody]MovieRequestDTO movieRequestDTO)
     {

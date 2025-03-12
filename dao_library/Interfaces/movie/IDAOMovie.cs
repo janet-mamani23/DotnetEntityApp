@@ -12,6 +12,12 @@ public interface IDAOMovie
         int pageSize
     ); 
 
+    Task<(IEnumerable<Movie> movies, int totalRecords)> GetAllOscar(
+        string query,
+        int page,
+        int pageSize
+    );
+
     Task<Movie?> GetById(long id); //obtengo por id
     Task <Movie?> Save(Movie movie); //quiero guardar mi movie desde mi office
     Task UpdateQualify (long id, Qualify qualify); //quiero actualizar mi movie desde mi officce
