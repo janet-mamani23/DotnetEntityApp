@@ -196,6 +196,7 @@ public class UserController : ControllerBase
                         DescriptionUser = user.Description,
                         UrlAvatar = user.GetUrlAvatar(),
                         EmailUser = user.Email,
+                        Birthdate = user.Birthdate,
                         Success = true,
                         Message = "Usuario encontrado."
                     });
