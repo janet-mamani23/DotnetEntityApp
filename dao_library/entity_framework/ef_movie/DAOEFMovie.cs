@@ -196,13 +196,14 @@ public class DAOEFMovie: IDAOMovie
                 throw new InvalidOperationException("No se encontró la película.");
             }
         // Paginación de los comentarios
-        IQueryable<Comment> commentsQuery = context.Comments;
-        var comments = await commentsQuery
+        var commentsQuery = movie.Comments.AsQueryable();
+        var pagedComments = await Task.Run(()=> commentsQuery
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
-        int totalRecords = await commentsQuery.CountAsync(); 
-        return (comments, totalRecords);
+            .ToList());
+            
+        int totalRecords =  commentsQuery.Count(); 
+        return (pagedComments, totalRecords);
     }
 
     public IQueryable<Movie> ApplyFilters(string query)

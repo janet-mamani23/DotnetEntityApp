@@ -16,4 +16,6 @@ public class LoginResponseDTO : ResponseDTO
 
     public string EmailUser {get; set;} = "";
 
+    public DateTime? Birthdate { get; set; } 
+
 }
