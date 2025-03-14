@@ -30,6 +30,10 @@ public class VisitCounter
     }
     public long GetRestarNumber()
     {
-        return --this.Number;
+        if (this.Number > 0) 
+        {
+            this.Number--; // ✅ Solo resta si hay sesiones activas
+        }
+        return this.Number; // Siempre devuelve 0 o mayor
     }
 }
