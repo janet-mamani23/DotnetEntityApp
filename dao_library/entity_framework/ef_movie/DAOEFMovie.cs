@@ -56,33 +56,19 @@ public class DAOEFMovie: IDAOMovie
         {
            throw new InvalidOperationException("La colección de peliculas es nula.");
         }
-        var lowerQuery = query.ToLower();
+        // Paso 1: Aplicar los filtros usando el mismo método ApplyFilters
+        var filteredMoviesQuery = ApplyFilters(query);
 
-        IQueryable<Movie> moviesQuery = context.Movies;
-        if (query == "all")
-        {
-            var movies =  await moviesQuery
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-            int totalRecords = await moviesQuery.CountAsync(); 
-            return (movies, totalRecords);
-        }
-        
-        else
-        {
-            long result = long.Parse(query);
-            moviesQuery = moviesQuery.Where(m => 
-                m.Genre.Id == result
-            );
-            var movies =  await moviesQuery
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-            int totalRecords = await moviesQuery.CountAsync(); 
-            return (movies, totalRecords);
-        }  
+        // Paso 2: Obtener el total de registros
+        int totalRecords = await GetTotalRecords(filteredMoviesQuery);
+
+        // Paso 3: Aplicar la paginación
+        var movies = await ApplyPagination(filteredMoviesQuery, page, pageSize).ToListAsync();
+
+        // Retornar las películas y el total de registros
+        return (movies, totalRecords);
     }
+    
     public async Task<Movie?> GetById(long id)
     {
         if (context.Movies == null) 
@@ -178,41 +164,18 @@ public class DAOEFMovie: IDAOMovie
         
     }
 
-    public async Task<(IEnumerable<Movie> movies, int totalRecords)> GetAllOscar(
-        string query, 
-        int page, 
-        int pageSize)
+    public async Task<(IEnumerable<Movie> movies, int totalRecords)> GetAllOscar(string query, int page, int pageSize)
     {
-        if (context.Movies == null)
-        {
-            return (Enumerable.Empty<Movie>(), 0);
-        }
+        // Paso 1: Aplicar los filtros
+        var filteredMoviesQuery = ApplyFilters(query);
 
-        IQueryable<Movie> moviesQuery = context.Movies;
+        // Paso 2: Obtener el total de registros
+        int totalRecords = await GetTotalRecords(filteredMoviesQuery);
 
-        if (query.ToLower() == "oscar")
-        {
-            moviesQuery = moviesQuery.Where(m => m.HasOscar == true);
-        }
-        else if (long.TryParse(query, out long genreId))
-        {
-            moviesQuery = moviesQuery.Where(m => m.Genre.Id == genreId && m.HasOscar == true);
-        }
-        else
-        {
-            // Si la query no es "oscar" ni un número válido, retorna vacío.
-            return (Enumerable.Empty<Movie>(), 0);
-        }
+        // Paso 3: Aplicar la paginación
+        var movies = await ApplyPagination(filteredMoviesQuery, page, pageSize).ToListAsync();
 
-        // Obtener total de registros antes de la paginación
-        int totalRecords = await moviesQuery.CountAsync(); 
-
-        // Aplicar paginación
-        var movies = await moviesQuery
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-
+        // Retornar las películas y el total de registros
         return (movies, totalRecords);
     }
     public async Task<(IEnumerable<Comment> comments, int totalRecords)> GetCommentsForMovie(
@@ -242,4 +205,50 @@ public class DAOEFMovie: IDAOMovie
         return (comments, totalRecords);
     }
 
+    public IQueryable<Movie> ApplyFilters(string query)
+    {
+        // Verificar que el contexto y las películas no sean nulos
+        if (context?.Movies == null)
+        {
+            return Enumerable.Empty<Movie>().AsQueryable();
+        }
+
+        if (string.IsNullOrEmpty(query)  || query == "all")
+        {
+            return context.Movies;
+        }
+
+        IQueryable<Movie> moviesQuery = context.Movies;
+
+        string lowerQuery = query.ToLower(); // Convertir una sola vez
+        
+
+        if (lowerQuery == "oscar")
+        {
+            moviesQuery = moviesQuery.Where(m => m.HasOscar); // Simplificar la condición booleana
+        }
+        else if (long.TryParse(query, out long genreId))
+        {
+            moviesQuery = moviesQuery.Where(m => m.Genre != null && m.Genre.Id == genreId && m.HasOscar); // Validar que Genre no sea nulo
+        }
+        else
+        {
+            moviesQuery = moviesQuery.Where(m => false); // Retornar vacío si no es un filtro válido
+        }
+
+        // Ejecutamos la consulta asincrónicamente
+        return moviesQuery;
+    }
+    public async Task<int>GetTotalRecords(IQueryable<Movie> filteredMoviesQuery)
+    {
+        return await filteredMoviesQuery.CountAsync(); // Contar directamente en la base de datos
+    }
+
+    public IQueryable<Movie> ApplyPagination(IQueryable<Movie> filteredMoviesQuery, int page, int pageSize)
+    {
+        page = page < 1 ? 1 : page; // Asegurarse de que la página no sea menor que 1
+        return filteredMoviesQuery
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize);  // No llamar a ToList() aquí para mantenerlo como IQueryable
+    }
 }

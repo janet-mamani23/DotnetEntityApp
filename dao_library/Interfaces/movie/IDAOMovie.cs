@@ -21,7 +21,6 @@ public interface IDAOMovie
     Task<Movie?> GetById(long id); //obtengo por id
     Task <Movie?> Save(Movie movie); //quiero guardar mi movie desde mi office
     Task UpdateQualify (long id, Qualify qualify); //quiero actualizar mi movie desde mi officce
-    
     Task Update (long movieId, string? title, string? description, Genre? genre, FileEntity? image, FileEntity? video, bool oscar);
     Task<bool> Delete(long id); //quiero eliminar mi movie desde mi office
     Task<Movie?> GetByTitle(string title);
@@ -30,4 +29,4 @@ public interface IDAOMovie
     string movieTitle, 
     int page, 
     int pageSize);
-}  
+}
